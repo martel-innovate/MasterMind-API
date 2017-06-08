@@ -1,6 +1,4 @@
 language: ruby
-rvm:
-  - 2.2
 
 script:
   - bin/rake db:migrate RAILS_ENV=test
