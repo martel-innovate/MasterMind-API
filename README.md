@@ -1,25 +1,25 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
 # MasterMind-API
+This repository contains the project for the API of the MasterMind application for managing the IoT Stack of Fiware.
+
+## Requirements
+This projects requires Ruby 2.2 or higher, and Rails 5
+
+## Installation and testing
+
+To install the project dependencies:
+
+```
+bundle install
+```
+
+To perform a migration of the database:
+
+```
+rails db:migrate
+```
+
+To run the test suite:
+
+```
+bundle exec rspec
+```
