@@ -2,7 +2,7 @@
 This repository contains the project for the API of the MasterMind application for managing the IoT Stack of Fiware.
 
 ## Requirements
-This projects requires Ruby 2.2 or higher, and Rails 5
+This projects requires Ruby 2.2.5 or higher, and Rails 5
 
 ## Installation and testing
 
