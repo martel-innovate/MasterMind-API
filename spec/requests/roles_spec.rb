@@ -1,0 +1,97 @@
+require 'rails_helper'
+
+RSpec.describe 'Roles API' do
+  # Initialize the test data
+  let!(:project) { create(:project) }
+  let!(:actor) { create(:actor, project_id: project.id) }
+  let!(:role_level) { create(:role_level) }
+  let!(:roles) { create_list(:role, 20, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }
+  let(:project_id) { project.id }
+  let(:actor_id) { actor.id }
+  let(:role_level_id) { role_level.id }
+  let(:id) { roles.first.id }
+
+  # Test suite for GET /projects/:project_id/roles
+  describe 'GET /projects/:project_id/roles' do
+    before { get "/projects/#{project_id}/roles" }
+
+    context 'when project exists' do
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns all project roles' do
+        expect(json.size).to eq(20)
+      end
+    end
+
+    context 'when project does not exist' do
+      let(:project_id) { 0 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Project/)
+      end
+    end
+  end
+
+  # Test suite for GET /projects/:project_id/roles/:id
+  describe 'GET /projects/:project_id/roles/:id' do
+    before { get "/projects/#{project_id}/roles/#{id}" }
+
+    context 'when project actor exists' do
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the role' do
+        expect(json['id']).to eq(id)
+      end
+    end
+
+    context 'when project role does not exist' do
+      let(:id) { 0 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Role/)
+      end
+    end
+  end
+
+  # Test suite for PUT /projects/:project_id/roles
+  describe 'POST /projects/:project_id/roles' do
+    let(:valid_attributes) { { actor_id: actor_id, role_level_id: role_level_id } }
+
+    context 'when request attributes are valid' do
+      before { post "/projects/#{project_id}/roles", params: valid_attributes }
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when an invalid request' do
+      before { post "/projects/#{project_id}/actors", params: {} }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+    end
+  end
+
+  # Test suite for DELETE /projects/:id
+  describe 'DELETE /projects/:id' do
+    before { delete "/projects/#{project_id}/roles/#{id}" }
+
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
+    end
+  end
+end
