@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  #skip_before_action :authorize_request
   before_action :set_project, only: [:show, :update, :destroy]
 
   # GET /projects
@@ -9,7 +10,7 @@ class ProjectsController < ApplicationController
 
   # POST /projects
   def create
-    @project = Project.create!(project_params)
+    @project = current_actor.projects.create!(project_params)
     json_response(@project, :created)
   end
 

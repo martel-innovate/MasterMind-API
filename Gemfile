@@ -16,6 +16,10 @@ gem 'puma', '~> 3.7'
 gem 'active_model_serializers', '~> 0.10.0'
 # Pagination
 gem 'will_paginate', '~> 3.1.0'
+# JWT Tokens
+gem 'jwt'
+# Oauth
+gem 'oauth2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

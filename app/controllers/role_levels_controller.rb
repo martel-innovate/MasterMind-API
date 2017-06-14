@@ -1,4 +1,5 @@
 class RoleLevelsController < ApplicationController
+  skip_before_action :authorize_request
   before_action :set_role_level, only: [:show, :update, :destroy]
 
   # GET /role_levels

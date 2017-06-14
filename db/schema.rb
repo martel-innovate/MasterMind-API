@@ -10,15 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608085919) do
+ActiveRecord::Schema.define(version: 20170614100817) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
     t.string "fullname"
-    t.integer "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_actors_on_project_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -26,6 +24,8 @@ ActiveRecord::Schema.define(version: 20170608085919) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "actor_id"
+    t.index ["actor_id"], name: "index_projects_on_actor_id"
   end
 
   create_table "role_levels", force: :cascade do |t|

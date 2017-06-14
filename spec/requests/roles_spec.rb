@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Roles API' do
   # Initialize the test data
-  let!(:project) { create(:project) }
-  let!(:actor) { create(:actor, project_id: project.id) }
+  let!(:actor) { create(:actor) }
+  let!(:project) { create(:project, actor_id: actor.id) }
   let!(:role_level) { create(:role_level) }
   let!(:roles) { create_list(:role, 20, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }
   let(:project_id) { project.id }
@@ -78,7 +78,7 @@ RSpec.describe 'Roles API' do
     end
 
     context 'when an invalid request' do
-      before { post "/projects/#{project_id}/actors", params: {} }
+      before { post "/actors", params: {} }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
