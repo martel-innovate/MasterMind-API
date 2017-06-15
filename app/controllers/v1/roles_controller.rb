@@ -1,4 +1,4 @@
-class RolesController < ApplicationController
+class V1::RolesController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_project
   before_action :set_project_role, only: [:show, :update, :destroy]

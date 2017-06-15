@@ -1,8 +1,15 @@
 Rails.application.routes.draw do
-  get 'auth/login', to: 'authentication#authenticate'
-  resources :actors
-  resources :projects do
-    resources :roles
+  namespace :v2 do
+    resources :projects, only: :index
   end
-  resources :role_levels
+
+  namespace :v1 do
+    resources :actors
+    resources :role_levels
+    resources :projects do
+      resources :roles
+    end
+  end
+
+  get 'auth/login', to: 'authentication#authenticate'
 end

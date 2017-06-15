@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe RolesController, type: :controller do
+RSpec.describe V1::RolesController, type: :controller do
 
 end

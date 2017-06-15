@@ -6,8 +6,8 @@ RSpec.describe 'Actors API' do
   let(:id) { actors.first.id }
 
   # Test suite for GET /actors
-  describe 'GET /actors' do
-    before { get "/actors" }
+  describe 'GET /v1/actors' do
+    before { get "/v1/actors" }
 
     context 'when actors exists' do
       it 'returns status code 200' do
@@ -20,9 +20,9 @@ RSpec.describe 'Actors API' do
     end
   end
 
-  # Test suite for GET /actors/:id
-  describe 'GET /actors/:id' do
-    before { get "/actors/#{id}" }
+  # Test suite for GET /v1/actors/:id
+  describe 'GET /v1/actors/:id' do
+    before { get "/v1/actors/#{id}" }
 
     context 'when actor exists' do
       it 'returns status code 200' do
@@ -48,11 +48,11 @@ RSpec.describe 'Actors API' do
   end
 
   # Test suite for POST /actors
-  describe 'POST /actors' do
+  describe 'POST /v1/actors' do
     let(:valid_attributes) { { email: 'someone@hotmail.com', fullname: 'Someone' } }
 
     context 'when request attributes are valid' do
-      before { post "/actors", params: valid_attributes }
+      before { post "/v1/actors", params: valid_attributes }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -60,7 +60,7 @@ RSpec.describe 'Actors API' do
     end
 
     context 'when an invalid request' do
-      before { post "/actors", params: {} }
+      before { post "/v1/actors", params: {} }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -73,10 +73,10 @@ RSpec.describe 'Actors API' do
   end
 
   # Test suite for PUT /actors/:id
-  describe 'PUT /actors/:id' do
+  describe 'PUT /v1/actors/:id' do
     let(:valid_attributes) { { email: 'someoneElse@hotmail.com' } }
 
-    before { put "/actors/#{id}", params: valid_attributes }
+    before { put "/v1/actors/#{id}", params: valid_attributes }
 
     context 'when actor exists' do
       it 'returns status code 204' do
@@ -103,8 +103,8 @@ RSpec.describe 'Actors API' do
   end
 
   # Test suite for DELETE /actors/:id
-  describe 'DELETE /actors/:id' do
-    before { delete "/actors/#{id}" }
+  describe 'DELETE /v1/actors/:id' do
+    before { delete "/v1/actors/#{id}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
