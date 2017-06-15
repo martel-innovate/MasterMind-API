@@ -12,8 +12,8 @@ RSpec.describe 'Roles API' do
   let(:id) { roles.first.id }
 
   # Test suite for GET /projects/:project_id/roles
-  describe 'GET /projects/:project_id/roles' do
-    before { get "/projects/#{project_id}/roles" }
+  describe 'GET /v1/projects/:project_id/roles' do
+    before { get "/v1/projects/#{project_id}/roles" }
 
     context 'when project exists' do
       it 'returns status code 200' do
@@ -39,8 +39,8 @@ RSpec.describe 'Roles API' do
   end
 
   # Test suite for GET /projects/:project_id/roles/:id
-  describe 'GET /projects/:project_id/roles/:id' do
-    before { get "/projects/#{project_id}/roles/#{id}" }
+  describe 'GET /v1/projects/:project_id/roles/:id' do
+    before { get "/v1/projects/#{project_id}/roles/#{id}" }
 
     context 'when project actor exists' do
       it 'returns status code 200' do
@@ -66,11 +66,11 @@ RSpec.describe 'Roles API' do
   end
 
   # Test suite for PUT /projects/:project_id/roles
-  describe 'POST /projects/:project_id/roles' do
+  describe 'POST /v1/projects/:project_id/roles' do
     let(:valid_attributes) { { actor_id: actor_id, role_level_id: role_level_id } }
 
     context 'when request attributes are valid' do
-      before { post "/projects/#{project_id}/roles", params: valid_attributes }
+      before { post "/v1/projects/#{project_id}/roles", params: valid_attributes }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -78,7 +78,7 @@ RSpec.describe 'Roles API' do
     end
 
     context 'when an invalid request' do
-      before { post "/actors", params: {} }
+      before { post "/v1/actors", params: {} }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -87,8 +87,8 @@ RSpec.describe 'Roles API' do
   end
 
   # Test suite for DELETE /projects/:id
-  describe 'DELETE /projects/:id' do
-    before { delete "/projects/#{project_id}/roles/#{id}" }
+  describe 'DELETE /v1/projects/:id' do
+    before { delete "/v1/projects/#{project_id}/roles/#{id}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

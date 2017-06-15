@@ -6,9 +6,9 @@ RSpec.describe 'Role Levels API', type: :request do
   let(:role_level_id) { role_levels.first.id }
 
   # Test suite for GET /role_levels
-  describe 'GET /role_levels' do
+  describe 'GET /v1/role_levels' do
     # make HTTP get request before each example
-    before { get '/role_levels' }
+    before { get '/v1/role_levels' }
 
     it 'returns role_levels' do
       # Note `json` is a custom helper to parse JSON responses
@@ -22,8 +22,8 @@ RSpec.describe 'Role Levels API', type: :request do
   end
 
   # Test suite for GET /role_levels/:id
-  describe 'GET /role_levels/:id' do
-    before { get "/role_levels/#{role_level_id}" }
+  describe 'GET /v1/role_levels/:id' do
+    before { get "/v1/role_levels/#{role_level_id}" }
 
     context 'when the record exists' do
       it 'returns the role levels' do
@@ -50,12 +50,12 @@ RSpec.describe 'Role Levels API', type: :request do
   end
 
   # Test suite for POST /todos
-  describe 'POST /role_levels' do
+  describe 'POST /v1/role_levels' do
     # valid payload
     let(:valid_attributes) { { name: 'Admin'} }
 
     context 'when the request is valid' do
-      before { post '/role_levels', params: valid_attributes }
+      before { post '/v1/role_levels', params: valid_attributes }
 
       it 'creates a role level' do
         expect(json['name']).to eq('Admin')
@@ -68,11 +68,11 @@ RSpec.describe 'Role Levels API', type: :request do
   end
 
   # Test suite for PUT /role_levels/:id
-  describe 'PUT /role_levels/:id' do
+  describe 'PUT /v1/role_levels/:id' do
     let(:valid_attributes) { { name: 'User' } }
 
     context 'when the record exists' do
-      before { put "/role_levels/#{role_level_id}", params: valid_attributes }
+      before { put "/v1/role_levels/#{role_level_id}", params: valid_attributes }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -85,8 +85,8 @@ RSpec.describe 'Role Levels API', type: :request do
   end
 
   # Test suite for DELETE /todos/:id
-  describe 'DELETE /role_levels/:id' do
-    before { delete "/role_levels/#{role_level_id}" }
+  describe 'DELETE /v1/role_levels/:id' do
+    before { delete "/v1/role_levels/#{role_level_id}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

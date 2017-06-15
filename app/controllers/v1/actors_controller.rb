@@ -1,4 +1,4 @@
-class ActorsController < ApplicationController
+class V1::ActorsController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_actor, only: [:show, :update, :destroy]
 

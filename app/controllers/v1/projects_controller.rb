@@ -1,4 +1,4 @@
-class ProjectsController < ApplicationController
+class V1::ProjectsController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project, only: [:show, :update, :destroy]
 
