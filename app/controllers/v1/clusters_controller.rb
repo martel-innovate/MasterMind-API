@@ -1,7 +1,7 @@
 class V1::ClustersController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_project
-  before_action :set_project_cluster, only: [:show, :update, :destroy]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
 
   # GET /projects/:project_id/clusters
   def index
@@ -31,6 +31,36 @@ class V1::ClustersController < ApplicationController
     head :no_content
   end
 
+  # GET /projects/:project_id/clusters/:id/info
+  def info
+    tempdir = set_tls_certs_dir()
+
+    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker info`
+
+    remove_tls_certs_dir(tempdir)
+    json_response({status: status})
+  end
+
+  # GET /projects/:project_id/clusters/:id/version
+  def version
+    tempdir = set_tls_certs_dir()
+
+    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker version`
+
+    remove_tls_certs_dir(tempdir)
+    json_response({status: status})
+  end
+
+  # GET /projects/:project_id/clusters/:id/testcompose
+  def testcompose
+    tempdir = set_tls_certs_dir()
+
+    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/test.yml test`
+
+    remove_tls_certs_dir(tempdir)
+    json_response({status: status})
+  end
+
   private
 
   def cluster_params
@@ -44,4 +74,30 @@ class V1::ClustersController < ApplicationController
   def set_project_cluster
     @cluster = @project.clusters.find_by!(id: params[:id]) if @project
   end
+
+  def set_tls_certs_dir()
+    tempdir = Dir.mktmpdir()
+
+    cert = File.new(File.join(tempdir, "cert.pem"), "w+")
+    cert.puts(@cluster.cert.gsub("\\n", "\n"))
+    cert.close
+
+    key = File.new(File.join(tempdir, "/key.pem"), "w+")
+    key.puts(@cluster.key.gsub("\\n", "\n"))
+    key.close
+
+    ca = File.new(File.join(tempdir, "/ca.pem"), "w+")
+    ca.puts(@cluster.ca.gsub("\\n", "\n"))
+    ca.close
+
+    return tempdir
+  end
+
+  def remove_tls_certs_dir(tempdir)
+    FileUtils.remove_entry_secure(tempdir+"/cert.pem")
+    FileUtils.remove_entry_secure(tempdir+"/key.pem")
+    FileUtils.remove_entry_secure(tempdir+"/ca.pem")
+    FileUtils.remove_entry_secure(tempdir)
+  end
+
 end

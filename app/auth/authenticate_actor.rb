@@ -16,14 +16,10 @@ class AuthenticateActor
     response = token.get('/user', :params => { 'access_token' => token.token })
     email = JSON.parse(response.body)["email"]
     fullname = JSON.parse(response.body)["displayName"]
-    puts email
-    puts fullname
     actor = Actor.find_by(email: email)
-    puts actor
     if actor.nil?
       actor = Actor.create!(email: email, fullname: fullname)
     end
-    puts actor
     return JsonWebToken.encode(actor_id: actor.id)
   rescue ActiveRecord::RecordNotFound => e
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
