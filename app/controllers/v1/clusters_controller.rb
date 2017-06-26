@@ -78,15 +78,15 @@ class V1::ClustersController < ApplicationController
   def set_tls_certs_dir()
     tempdir = Dir.mktmpdir()
 
-    cert = File.new(tempdir+"/cert.pem", "w+")
+    cert = File.new(File.join(tempdir, "cert.pem"), "w+")
     cert.puts(@cluster.cert.gsub("\\n", "\n"))
     cert.close
 
-    key = File.new(tempdir+"/key.pem", "w+")
+    key = File.new(File.join(tempdir, "/key.pem"), "w+")
     key.puts(@cluster.key.gsub("\\n", "\n"))
     key.close
 
-    ca = File.new(tempdir+"/ca.pem", "w+")
+    ca = File.new(File.join(tempdir, "/ca.pem"), "w+")
     ca.puts(@cluster.ca.gsub("\\n", "\n"))
     ca.close
 
