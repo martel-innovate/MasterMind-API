@@ -1,7 +1,7 @@
 class V1::ClustersController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_project
-  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
 
   # GET /projects/:project_id/clusters
   def index
@@ -46,6 +46,16 @@ class V1::ClustersController < ApplicationController
     tempdir = set_tls_certs_dir()
 
     status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker version`
+
+    remove_tls_certs_dir(tempdir)
+    json_response({status: status})
+  end
+
+  # GET /projects/:project_id/clusters/:id/testcompose
+  def testcompose
+    tempdir = set_tls_certs_dir()
+
+    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/test.yml test`
 
     remove_tls_certs_dir(tempdir)
     json_response({status: status})

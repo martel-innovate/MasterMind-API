@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
     get '/projects/:project_id/clusters/:id/info', to: 'clusters#info'
     get '/projects/:project_id/clusters/:id/version', to: 'clusters#version'
+    get '/projects/:project_id/clusters/:id/testcompose', to: 'clusters#testcompose'
   end
 
   get 'auth/login', to: 'authentication#authenticate'
