@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  fiware-sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    ports:
+      - "8666:8666"
+    environment:
+      - STH_HOST=0.0.0.0
+      - DB_URI=mongo:27017
+
+  mongo:
+    image: mongo:3.2
