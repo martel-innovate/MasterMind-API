@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :actors
     resources :role_levels
+    resources :service_types
     resources :projects do
       resources :roles
       resources :clusters
