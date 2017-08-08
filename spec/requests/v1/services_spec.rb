@@ -8,6 +8,7 @@ RSpec.describe 'Services API' do
   let(:project_id) { project.id }
   let!(:services) { create_list(:service, 10, project_id: project.id, service_type_id: service_type.id) }
   let(:id) {services.first.id}
+  let(:service_type_id) { service_type.id }
 
   # Test suite for GET /projects/:project_id/services
   describe 'GET /v1/projects/:project_id/services' do
@@ -65,7 +66,7 @@ RSpec.describe 'Services API' do
 
   # Test suite for PUT /projects/:project_id/services
   describe 'POST /v1/projects/:project_id/services' do
-   let(:valid_attributes) { { configuration: 'TestConf', status: 'active', managed: 'true', endpoint: 'test', docker_service_id: '0123456789', latitude: '33.7787', longitude: '-116.3598'} }
+   let(:valid_attributes) { { configuration: 'TestConf', status: 'active', managed: 'true', endpoint: 'test', docker_service_id: '0123456789', latitude: '33.7787', longitude: '-116.3598', service_type_id: service_type_id} }
 
     context 'when request attributes are valid' do
       before { post "/v1/projects/#{project_id}/services", params: valid_attributes }

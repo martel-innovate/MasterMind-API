@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :service do
+    project_id nil
+    service_type_id nil
     configuration { Faker::Lorem.word }
     status { Faker::Lorem.word }
     managed { Faker::Lorem.word }
