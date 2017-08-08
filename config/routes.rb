@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :role_levels
     resources :service_types
     resources :projects do
+      resources :services
       resources :roles
       resources :clusters
     end
