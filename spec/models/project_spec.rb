@@ -6,4 +6,5 @@ RSpec.describe Project, type: :model do
   it { should belong_to(:actor) }
   it { should have_many(:roles) }
   it { should have_many(:clusters) }
+  it { should have_many(:services) }
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616133923) do
+ActiveRecord::Schema.define(version: 20170706125337) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
@@ -56,6 +56,32 @@ ActiveRecord::Schema.define(version: 20170616133923) do
     t.index ["actor_id"], name: "index_roles_on_actor_id"
     t.index ["project_id"], name: "index_roles_on_project_id"
     t.index ["role_level_id"], name: "index_roles_on_role_level_id"
+  end
+
+  create_table "service_types", force: :cascade do |t|
+    t.string "service_protocol_type"
+    t.string "ngsi_version"
+    t.text "configuration_template"
+    t.text "deploy_template"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.text "configuration"
+    t.string "status"
+    t.boolean "managed"
+    t.text "endpoint"
+    t.float "latitude"
+    t.float "longitude"
+    t.integer "project_id"
+    t.integer "service_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "docker_service_id"
+    t.index ["project_id"], name: "index_services_on_project_id"
+    t.index ["service_type_id"], name: "index_services_on_service_type_id"
   end
 
 end
