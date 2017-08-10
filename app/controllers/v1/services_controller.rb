@@ -35,7 +35,7 @@ class V1::ServicesController < ApplicationController
 
   def service_params
     params.permit(:configuration, :status, :managed, :endpoint,
-    :docker_service_id, :latitude, :longitude)
+    :docker_service_id, :latitude, :longitude, :service_type_id)
   end
 
   def set_service
