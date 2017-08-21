@@ -5,6 +5,8 @@ RSpec.describe 'Projects API', type: :request do
   let(:actor) { create(:actor) }
   let!(:projects) { create_list(:project, 10, actor_id: actor.id) }
   let(:project_id) { projects.first.id }
+  let(:role_level) { create(:role_level, name: "admin") }
+  let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /projects

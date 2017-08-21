@@ -16,17 +16,20 @@ class V1::ProjectsController < ApplicationController
 
   # GET /projects/:id
   def show
+    authorize @project
     json_response(@project)
   end
 
   # PUT /projects/:id
   def update
+    authorize @project
     @project.update(project_params)
     head :no_content
   end
 
   # DELETE /projects/:id
   def destroy
+    authorize @project
     @project.destroy
     head :no_content
   end

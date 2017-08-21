@@ -1,32 +1,37 @@
 class V1::ClustersController < ApplicationController
-  skip_before_action :authorize_request
+  #skip_before_action :authorize_request
   before_action :set_project
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
 
   # GET /projects/:project_id/clusters
   def index
+    authorize @project
     json_response(@project.clusters)
   end
 
   # GET /projects/:project_id/clusters/:id
   def show
+    authorize @project
     json_response(@cluster)
   end
 
   # POST /projects/:project_id/clusters
   def create
+    authorize @project
     @project.clusters.create!(cluster_params)
     json_response(@project, :created)
   end
 
   # PUT /projects/:project_id/clusters/:id
   def update
+    authorize @project
     @cluster.update(cluster_params)
     head :no_content
   end
 
   # DELETE /projects/:project_id/clusters/:id
   def destroy
+    authorize @project
     @cluster.destroy
     head :no_content
   end
