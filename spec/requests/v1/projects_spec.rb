@@ -106,7 +106,7 @@ RSpec.describe 'Projects API', type: :request do
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /v1/projects/:id' do
-    before { delete "/v1/projects/#{project_id}", headers: headers }
+    before { delete "/v1/projects/#{projects.first.id}", headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
