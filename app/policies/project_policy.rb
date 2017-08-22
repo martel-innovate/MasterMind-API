@@ -27,6 +27,9 @@ class ProjectPolicy
   end
 
   def currentActorRole
+    if (Role.find_by_actor_id_and_project_id(actor.id, project.id)).nil?
+      return "none"
+    end
     return (RoleLevel.find((Role.find_by_actor_id_and_project_id(actor.id, project.id)).role_level_id)).name
   end
 end

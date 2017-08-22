@@ -51,6 +51,14 @@ RSpec.describe 'Projects API', type: :request do
         expect(response.body).to match(/Couldn't find Project/)
       end
     end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
   end
 
   # Test suite for POST /todos
@@ -102,14 +110,34 @@ RSpec.describe 'Projects API', type: :request do
         expect(response).to have_http_status(204)
       end
     end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+      before { put "/v1/projects/#{project_id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
   end
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /v1/projects/:id' do
-    before { delete "/v1/projects/#{projects.first.id}", headers: headers }
+    context 'when the actor does have permission' do
+      before { delete "/v1/projects/#{project_id}", headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+      before { put "/v1/projects/#{project_id}", headers: headers }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
     end
   end
 end
