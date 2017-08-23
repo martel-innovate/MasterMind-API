@@ -5,6 +5,8 @@ RSpec.describe 'Projects API', type: :request do
   let(:actor) { create(:actor) }
   let!(:projects) { create_list(:project, 10, actor_id: actor.id) }
   let(:project_id) { projects.first.id }
+  let(:role_level) { create(:role_level, name: "admin") }
+  let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /projects
@@ -47,6 +49,14 @@ RSpec.describe 'Projects API', type: :request do
 
       it 'returns a not found message' do
         expect(response.body).to match(/Couldn't find Project/)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
       end
     end
   end
@@ -100,14 +110,34 @@ RSpec.describe 'Projects API', type: :request do
         expect(response).to have_http_status(204)
       end
     end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+      before { put "/v1/projects/#{project_id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
   end
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /v1/projects/:id' do
-    before { delete "/v1/projects/#{project_id}", headers: headers }
+    context 'when the actor does have permission' do
+      before { delete "/v1/projects/#{project_id}", headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let(:project_id) { 2 }
+      before { put "/v1/projects/#{project_id}", headers: headers }
+
+      it 'returns status code 403' do
+        expect(response).to have_http_status(403)
+      end
     end
   end
 end
