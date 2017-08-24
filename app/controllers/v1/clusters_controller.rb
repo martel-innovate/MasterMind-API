@@ -1,6 +1,6 @@
 class V1::ClustersController < ApplicationController
-  #skip_before_action :authorize_request
-  before_action :set_project
+  skip_before_action :authorize_request
+  before_action :set_project, only: [:show, :update, :destroy, :info, :version, :testcompose]
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
 
   # GET /projects/:project_id/clusters
@@ -58,9 +58,16 @@ class V1::ClustersController < ApplicationController
 
   # GET /projects/:project_id/clusters/:id/testcompose
   def testcompose
+    request.body.rewind
+    requestBody = JSON.parse(request.body.read)
+    envVariables = ""
+    requestBody["environment_variables"].each do |k, v|
+        envVariables = envVariables + k + "=" + v + " "
+    end
+
     tempdir = set_tls_certs_dir()
 
-    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/test.yml test`
+    system(envVariables + "DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/mongo.yml test")
 
     remove_tls_certs_dir(tempdir)
     json_response({status: status})
