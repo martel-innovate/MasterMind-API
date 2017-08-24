@@ -67,7 +67,7 @@ class V1::ClustersController < ApplicationController
 
     tempdir = set_tls_certs_dir()
 
-    system(envVariables + "DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/mongo.yml test")
+    system(envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/mongo.yml test")
 
     remove_tls_certs_dir(tempdir)
     json_response({status: status})
