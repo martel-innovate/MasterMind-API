@@ -1,6 +1,6 @@
 class V1::ClustersController < ApplicationController
-  skip_before_action :authorize_request
-  before_action :set_project, only: [:show, :update, :destroy, :info, :version, :testcompose]
+  #skip_before_action :authorize_request
+  before_action :set_project
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
 
   # GET /projects/:project_id/clusters
