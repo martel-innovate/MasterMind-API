@@ -10,7 +10,7 @@ class V1::ProjectsController < ApplicationController
 
   # POST /projects
   def create
-    @project = current_actor.projects.create!(project_params)
+    @project = Project.create!(project_params)
     json_response(@project, :created)
   end
 

@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Clusters API' do
   # Initialize the test data
   let!(:actor) { create(:actor) }
-  let!(:project) { create(:project, actor_id: actor.id) }
-  let!(:project_unathorised) { create(:project, actor_id: actor.id) }
+  let!(:project) { create(:project) }
+  let!(:project_unathorised) { create(:project) }
   let!(:clusters) { create_list(:cluster, 20, project_id: project.id) }
   let!(:clusters_unathorised) { create_list(:cluster, 20, project_id: project_unathorised.id) }
   let(:project_id) { project.id }
