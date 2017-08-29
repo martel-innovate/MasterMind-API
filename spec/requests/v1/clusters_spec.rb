@@ -5,8 +5,10 @@ RSpec.describe 'Clusters API' do
   let!(:actor) { create(:actor) }
   let!(:project) { create(:project) }
   let!(:project_unathorised) { create(:project) }
-  let!(:clusters) { create_list(:cluster, 20, project_id: project.id) }
-  let!(:clusters_unathorised) { create_list(:cluster, 20, project_id: project_unathorised.id) }
+  let!(:clusters) { create_list(:cluster, 20) }
+  let!(:clusters_unathorised) { create_list(:cluster, 20) }
+  let!(:projects_clusters){project.clusters << clusters}
+  let!(:projects_clusters_unathorised){project_unathorised.clusters << clusters_unathorised}
   let(:project_id) { project.id }
   let(:actor_id) { actor.id }
   let(:id) { clusters.first.id }
