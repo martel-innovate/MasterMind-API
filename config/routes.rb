@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :actors
     resources :role_levels
     resources :service_types
+    resources :clusters
     resources :projects do
       resources :services
       resources :roles
