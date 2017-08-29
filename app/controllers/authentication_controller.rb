@@ -3,7 +3,7 @@ class AuthenticationController < ApplicationController
   # return auth token once actor is authenticated
   def authenticate
     auth_token = AuthenticateActor.new(auth_params[:code]).call
-    puts auth_token
+    #auth_token = JsonWebToken.encode(actor_id: "1")
     json_response(auth_token: auth_token)
   end
 

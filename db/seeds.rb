@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+actor = Actor.create(email: "superadmin@hotmail.com", fullname: "SuperAdmin")
+project = Project.create(name: "SuperProject", description: "A super test Project", actor_id: actor.id)
+role_level_admin = RoleLevel.create(name: "admin")
+role_level_user = RoleLevel.create(name: "user")
+role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: role_level_admin.id)
