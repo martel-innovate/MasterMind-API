@@ -8,6 +8,4 @@
 
 actor = Actor.create(email: "superadmin@hotmail.com", fullname: "SuperAdmin")
 project = Project.create(name: "SuperProject", description: "A super test Project")
-role_level_admin = RoleLevel.create(name: "admin")
-role_level_user = RoleLevel.create(name: "user")
-role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: role_level_admin.id)
+role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)

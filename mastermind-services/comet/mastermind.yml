@@ -1,6 +1,8 @@
-name: STH Comet
+name: comet
 version: any
 description: Short Time Historic Data Management Service
+protocol_type: HTTP
+ngsi_version: 1
 environment_variables:
   - variable: COMET_VERSION
     name: Comet Version

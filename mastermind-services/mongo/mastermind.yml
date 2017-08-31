@@ -1,6 +1,8 @@
-name: Mongo DB
+name: mongo
 version: any
 description: Mongo Database and Controller
+protocol_type: HTTP
+ngsi_version: 1
 environment_variables:
   - variable: MONGO_VERSION
     name: Mongo Version
