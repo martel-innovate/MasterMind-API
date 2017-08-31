@@ -5,7 +5,7 @@ RSpec.describe 'Authentication', type: :request do
   describe 'POST /auth/login' do
     # Create test actor and project
     let(:actor) { create(:actor) }
-    let!(:project) { create(:project, actor_id: actor.id) }
+    let!(:project) { create(:project) }
     # set headers for authorization
     let(:headers) { valid_headers.except('Authorization') }
     # set test valid and invalid credentials

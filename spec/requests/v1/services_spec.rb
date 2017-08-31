@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Services API' do
   # initialize test data
   let!(:actor) { create(:actor) }
-  let!(:project) { create(:project, actor_id: actor.id) }
-  let!(:project_unathorised) { create(:project, actor_id: actor.id) }
+  let!(:project) { create(:project) }
+  let!(:project_unathorised) { create(:project) }
   let!(:service_type) { create(:service_type) }
   let(:project_id) { project.id }
   let!(:services) { create_list(:service, 10, project_id: project.id, service_type_id: service_type.id) }

@@ -10,7 +10,8 @@ class V1::ProjectsController < ApplicationController
 
   # POST /projects
   def create
-    @project = current_actor.projects.create!(project_params)
+    @project = Project.create!(project_params)
+    @role = Role.create(project_id: @project.id, actor_id: current_actor.id, role_level_id: "1")
     json_response(@project, :created)
   end
 

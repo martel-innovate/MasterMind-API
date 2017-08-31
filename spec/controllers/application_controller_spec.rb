@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ApplicationController, type: :controller do
   # Create test actor and project
   let(:actor) { create(:actor) }
-  let!(:project) { create(:project, actor_id: actor.id) }
+  let!(:project) { create(:project) }
    # set headers for authorization
   let(:headers) { { 'Authorization' => token_generator(actor.id) } }
   let(:invalid_headers) { { 'Authorization' => nil } }

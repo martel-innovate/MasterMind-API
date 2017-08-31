@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Roles API' do
   # Initialize the test data
   let!(:actor) { create(:actor) }
-  let!(:project) { create(:project, actor_id: actor.id) }
-  let!(:project_unathorised) { create(:project, actor_id: actor.id) }
+  let!(:project) { create(:project) }
+  let!(:project_unathorised) { create(:project) }
   let!(:role_level) { create(:role_level, name: "admin") }
   let!(:role_level_unathorised) { create(:role_level, name: "nobody") }
   let!(:roles) { create_list(:role, 20, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }

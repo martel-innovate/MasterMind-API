@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Projects API', type: :request do
   # initialize test data
   let(:actor) { create(:actor) }
-  let!(:projects) { create_list(:project, 10, actor_id: actor.id) }
+  let!(:projects) { create_list(:project, 10) }
   let(:project_id) { projects.first.id }
   let(:role_level) { create(:role_level, name: "admin") }
   let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id) }
@@ -65,7 +65,7 @@ RSpec.describe 'Projects API', type: :request do
   describe 'POST /v1/projects' do
     # valid payload
     let(:valid_attributes) do
-      { name: 'Learn Elm', description: 'foobar', actor_id: actor.id.to_s }.to_json
+      { name: 'Learn Elm', description: 'foobar' }.to_json
     end
 
     context 'when the request is valid' do
