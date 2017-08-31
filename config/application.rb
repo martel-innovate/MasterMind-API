@@ -30,26 +30,5 @@ module MastermindApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-
-    config.after_initialize do
-      # Initialising database with service types
-      for path in Dir['mastermind-services/*/']
-        mastermindConf = YAML::load(File.open(path+'mastermind.yml'))
-        dockerCompose = YAML::load(File.open(path+'docker-compose.yml'))
-        serviceType = ServiceType.find_by(name: mastermindConf["name"])
-        if serviceType.nil? then
-          ServiceType.create(name: mastermindConf["name"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(path+'mastermind.yml'), deploy_template: File.read(path+'docker-compose.yml'))
-        end
-      end
-      # Initialising database with role levels
-      adminLevel = RoleLevel.find_by(name: "admin")
-      if adminLevel.nil? then
-        RoleLevel.create(name: "admin")
-      end
-      userLevel = RoleLevel.find_by(name: "user")
-      if adminLevel.nil? then
-        RoleLevel.create(name: "user")
-      end
-    end
   end
 end
