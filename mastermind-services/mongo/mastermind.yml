@@ -1,0 +1,34 @@
+name: Mongo DB
+version: any
+description: Mongo Database and Controller
+environment_variables:
+  - variable: MONGO_VERSION
+    name: Mongo Version
+    description: The version of Mongo DB to use
+    required: true
+    default: latest
+  - variable: REPLICASET_NAME
+    name: Replicaset Name
+    description: The name of the Replica Set to use
+    required: true
+    default: rs
+  - variable: MONGO_PORT
+    name: Mongo Port
+    description: The port to use for Mongo DB
+    required: true
+    default: 27017
+  - variable: OVERLAY_NETWORK_NAME
+    name: Overlay Network Name
+    description: The overlay network in Docker Swarm that Mongo will be in
+    required: true
+    default: mongo_backend
+  - variable: STACK_NAME
+    name: Stack Name
+    description: The name of the docker swarm stack for Mongo
+    required: true
+    default: mongo
+  - variable: STACK_NAME
+    name: Stack Name
+    description: The name of the docker swarm stack for Mongo
+    required: true
+    default: mongo

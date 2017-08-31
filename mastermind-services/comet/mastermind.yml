@@ -1,0 +1,18 @@
+name: STH Comet
+version: any
+description: Short Time Historic Data Management Service
+environment_variables:
+  - variable: COMET_VERSION
+    name: Comet Version
+    description: The version of STH Comet to use
+    required: true
+    default: latest
+  - variable: REPLICASET_NAME
+    name: Replicaset Name
+    description: The name of the Replica Set to use
+    required: true
+    default: rs
+services:
+  - service_type: mongo
+    retrieve: endpoint
+    as: MONGO_SERVICE_URI
