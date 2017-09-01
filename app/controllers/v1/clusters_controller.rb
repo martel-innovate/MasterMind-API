@@ -1,7 +1,7 @@
 class V1::ClustersController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
-  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :testcompose]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy]
 
   # GET /projects/:project_id/clusters
   def index
@@ -56,18 +56,31 @@ class V1::ClustersController < ApplicationController
     json_response({status: status})
   end
 
-  # GET /projects/:project_id/clusters/:id/testcompose
-  def testcompose
-    request.body.rewind
-    requestBody = JSON.parse(request.body.read)
+  # GET /projects/:project_id/clusters/:id/deploy
+  def deploy
+    service = Service.find(params["service_id"])
+    if service.nil? then
+      return
+    end
+
     envVariables = ""
-    requestBody["environment_variables"].each do |k, v|
+
+    begin
+      request.body.rewind
+      body = request.body.read
+      requestBody = JSON.parse(body)
+      requestBody["environment_variables"].each do |k, v|
         envVariables = envVariables + k + "=" + v + " "
+      end
+    rescue JSON::ParserError
+      puts "JSON Invalid or missing, skipping env variables"
+      envVariables = ""
     end
 
     tempdir = set_tls_certs_dir()
 
-    system(envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./test-compose-files/mongo.yml test")
+    cmd = envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./mastermind-services/" + ServiceType.find(service.service_type_id).name+"/docker-compose.yml " + ServiceType.find(service.service_type_id).name
+    status = `#{cmd}`
 
     remove_tls_certs_dir(tempdir)
     json_response({status: status})
