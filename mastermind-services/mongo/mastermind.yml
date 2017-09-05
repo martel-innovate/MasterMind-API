@@ -29,8 +29,3 @@ environment_variables:
     description: The name of the docker swarm stack for Mongo
     required: true
     default: mongo
-  - variable: STACK_NAME
-    name: Stack Name
-    description: The name of the docker swarm stack for Mongo
-    required: true
-    default: mongo
