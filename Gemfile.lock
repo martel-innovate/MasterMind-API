@@ -97,6 +97,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (2.0.3)
+    rack-cors (1.0.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.1.1)
@@ -182,6 +183,7 @@ DEPENDENCIES
   oauth2
   puma (~> 3.7)
   pundit
+  rack-cors
   rails (~> 5.1.1)
   rspec-rails (~> 3.5)
   shoulda-matchers (~> 3.1)
