@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829140956) do
+ActiveRecord::Schema.define(version: 20170912091644) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
@@ -81,6 +81,8 @@ ActiveRecord::Schema.define(version: 20170829140956) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "docker_service_id"
+    t.integer "cluster_id"
+    t.index ["cluster_id"], name: "index_services_on_cluster_id"
     t.index ["project_id"], name: "index_services_on_project_id"
     t.index ["service_type_id"], name: "index_services_on_service_type_id"
   end
