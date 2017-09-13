@@ -66,23 +66,22 @@ class V1::ClustersController < ApplicationController
     envVariables = ""
 
     begin
-      request.body.rewind
-      body = request.body.read
-      requestBody = JSON.parse(body)
-      requestBody["environment_variables"].each do |k, v|
+      serviceConf = JSON.parse(service.configuration)
+      serviceConf.each do |k, v|
         envVariables = envVariables + k + "=" + v + " "
       end
     rescue JSON::ParserError
-      puts "JSON Invalid or missing, skipping env variables"
-      envVariables = ""
+      json_response({status: "Invalid configuration"}, :unprocessable_entity)
     end
 
     tempdir = set_tls_certs_dir()
 
-    cmd = envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./mastermind-services/" + ServiceType.find(service.service_type_id).name+"/docker-compose.yml " + ServiceType.find(service.service_type_id).name
+    serviceTypeName = ServiceType.find(service.service_type_id).name
+    cmd = envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./mastermind-services/" + serviceTypeName + "/docker-compose.yml " + ServiceType.find(service.service_type_id).name
     status = `#{cmd}`
 
     remove_tls_certs_dir(tempdir)
+    service.update({endpoint: @cluster.endpoint, status: "Active", docker_service_id: serviceTypeName})
     json_response({status: status})
   end
 
