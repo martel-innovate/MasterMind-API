@@ -1,0 +1,5 @@
+name: orion
+version: any
+description: Orion Context Broker
+protocol_type: HTTP
+ngsi_version: 1
