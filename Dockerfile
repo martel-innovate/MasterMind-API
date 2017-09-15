@@ -4,6 +4,6 @@ RUN mkdir /mastermind
 WORKDIR /mastermind
 ADD Gemfile /mastermind/Gemfile
 ADD Gemfile.lock /mastermind/Gemfile.lock
-RUN bundle install && rails db:migrate && rails db:seed
+RUN bundle install && rails db:migrate && bin/rails db:migrate RAILS_ENV=development && rails db:seed
 ENTRYPOINT rails s
 ADD . /mastermind
