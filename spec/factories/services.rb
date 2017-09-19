@@ -3,6 +3,7 @@ FactoryGirl.define do
     project_id nil
     service_type_id nil
     cluster_id nil
+    name { Faker::Lorem.word }
     configuration { Faker::Lorem.word }
     status { Faker::Lorem.word }
     managed { Faker::Lorem.word }

@@ -92,7 +92,7 @@ RSpec.describe 'Services API' do
   # Test suite for PUT /projects/:project_id/services
   describe 'POST /v1/projects/:project_id/services' do
    let(:valid_attributes) do
-     { configuration: 'TestConf', status: 'active', managed: 'true', endpoint: 'test', docker_service_id: '0123456789', latitude: '33.7787', longitude: '-116.3598', service_type_id: service_type_id, cluster_id: cluster.id}.to_json
+     { name: 'Test', configuration: 'TestConf', status: 'active', managed: 'true', endpoint: 'test', docker_service_id: '0123456789', latitude: '33.7787', longitude: '-116.3598', service_type_id: service_type_id, cluster_id: cluster.id}.to_json
    end
 
     context 'when request attributes are valid' do

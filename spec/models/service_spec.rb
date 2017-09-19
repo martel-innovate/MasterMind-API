@@ -9,9 +9,10 @@ RSpec.describe Service, type: :model do
 
     # Validation test
     # ensure columns are present before saving
+    it { should validate_presence_of(:name) }
     it { should validate_presence_of(:configuration) }
     it { should validate_presence_of(:status) }
-    it { should validate_presence_of(:managed) }
+    it { should validate_inclusion_of(:managed).in_array([true, false]) }
     it { should validate_presence_of(:endpoint) }
     it { should validate_presence_of(:docker_service_id) }
     it { should validate_presence_of(:latitude) }
