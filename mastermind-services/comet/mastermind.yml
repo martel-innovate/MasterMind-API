@@ -16,5 +16,8 @@ environment_variables:
     default: rs
 services:
   - service_type: mongo
+    name: Mongo
+    description: Mongo database to connect to
+    required: true
     retrieve: endpoint
     as: MONGO_SERVICE_URI

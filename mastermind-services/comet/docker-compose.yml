@@ -5,7 +5,7 @@ services:
     comet:
         image: telefonicaiot/fiware-sth-comet:${COMET_VERSION}
         ports:
-            - "8666:8666"
+            - 8666:8666
         deploy:
             replicas: 1
         environment:
@@ -20,7 +20,7 @@ services:
 networks:
     default:
         driver_opts:
-            com.docker.network.driver.mtu: ${DOCKER_MTU:-1500}
+            com.docker.network.driver.mtu: 1500
     frontend:
         driver: overlay
         external: true
