@@ -3,10 +3,10 @@ version: '3.2'
 services:
 
     mongo:
-      image: mongo:${MONGO_VERSION:-3.2}
-      entrypoint: [ "/usr/bin/mongod", "--replSet", "${REPLICASET_NAME:-rs}", "--journal", "--smallfiles"]
+      image: mongo:${MONGO_VERSION}
+      entrypoint: [ "/usr/bin/mongod", "--replSet", "${REPLICASET_NAME}", "--journal", "--smallfiles"]
       ports:
-        - "${MONGO_PORT:-27017}:27017"
+        - ${MONGO_PORT}:27017
       # The usage of volume provides persistence, but may work correctly only with 1 volume per node (that's why global mode is recommended)
       volumes:
         - mongodata:/data/db
@@ -35,9 +35,9 @@ services:
         # TODO: Avoid exposing the docker socket (security issue)
         - /var/run/docker.sock:/var/run/docker.sock
       environment:
-        - OVERLAY_NETWORK_NAME=${OVERLAY_NETWORK_NAME:-mongo_backend}
-        - MONGO_SERVICE_NAME=${STACK_NAME:-mongo}_mongo
-        - REPLICASET_NAME=${REPLICASET_NAME:-rs}
+        - OVERLAY_NETWORK_NAME=${OVERLAY_NETWORK_NAME}
+        - MONGO_SERVICE_NAME=${STACK_NAME}_mongo
+        - REPLICASET_NAME=${REPLICASET_NAME}
         - MONGO_PORT=27017
       entrypoint: python /src/replica_ctrl.py
       networks:
@@ -65,7 +65,7 @@ volumes:
 networks:
     default:
         driver_opts:
-            com.docker.network.driver.mtu: ${DOCKER_MTU:-1500}
+            com.docker.network.driver.mtu: 1500
     backend:
         driver: overlay
         external: true # uncomment if you want to re-use and existing network! if not it will create a network dedicated to the stack!

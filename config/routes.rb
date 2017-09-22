@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get '/projects/:project_id/clusters/:id/info', to: 'clusters#info'
     get '/projects/:project_id/clusters/:id/version', to: 'clusters#version'
     get '/projects/:project_id/clusters/:id/deploy', to: 'clusters#deploy'
+    get '/projects/:project_id/clusters/:id/deploywithdockerclient', to: 'clusters#deployWithDockerClient'
   end
 
   get 'auth/login', to: 'authentication#authenticate'
