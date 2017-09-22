@@ -59,6 +59,7 @@ class V1::ClustersController < ApplicationController
   # GET /projects/:project_id/clusters/:id/deploy
   def deploy
     require 'rest_client'
+    serviceManagerURI = ENV['SERVICE_MANAGER_URI'] || 'http://localhost:8081/v1/stack'
 
     serviceName = params["service_name"]
     service = Service.find(params["service_id"])
@@ -96,7 +97,7 @@ class V1::ClustersController < ApplicationController
 
     begin
       response = RestClient.post(
-        'http://localhost:8081/v1/stack',
+        serviceManagerURI,
         stack,
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
