@@ -60,7 +60,7 @@ class V1::ClustersController < ApplicationController
   def deploy
     require 'rest_client'
 
-    serviceName = "Mongo"
+    serviceName = params["service_name"]
     service = Service.find(params["service_id"])
     if service.nil? then
       return
@@ -101,8 +101,9 @@ class V1::ClustersController < ApplicationController
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'
       )
-      puts "Deploy Response: " + result
+      puts "Deploy Response: " + response
       json_response(response, :created)
+      service.update({endpoint: @cluster.endpoint, status: "Active", docker_service_id: serviceTypeName})
     rescue RestClient::ExceptionWithResponse => e
       puts e.response
       json_response({message: e.response}, :unprocessable_entity)
