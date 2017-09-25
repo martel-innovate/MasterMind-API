@@ -25,7 +25,7 @@ class V1::RolesController < ApplicationController
   # PUT /projects/:project_id/roles/:id
   def update
     authorize @project
-    @role.update(actor_params)
+    @role.update(role_params)
     head :no_content
   end
 
