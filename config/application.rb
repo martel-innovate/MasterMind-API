@@ -30,6 +30,7 @@ module MastermindApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.logger = Logger.new(STDOUT)
 
     # Allowing cross origin requests (in the future restrict them better)
     config.middleware.insert_before 0, Rack::Cors do

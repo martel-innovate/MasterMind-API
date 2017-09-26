@@ -4,7 +4,8 @@ class AuthenticationController < ApplicationController
   def authenticate
     #auth_token = AuthenticateActor.new(auth_params[:code]).call
     auth_token = JsonWebToken.encode(actor_id: "1")
-    Warning.warn("WARNING: OAUTH CURRENTLY DISABLED\n")
+    #Warning.warn("WARNING: OAUTH CURRENTLY DISABLED\n")
+    logger.debug "WARNING: OAUTH CURRENTLY DISABLED"
     json_response(auth_token: auth_token)
   end
 
