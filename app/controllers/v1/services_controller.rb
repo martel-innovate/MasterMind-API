@@ -18,8 +18,8 @@ class V1::ServicesController < ApplicationController
   # POST /projects/:project_id/services
   def create
     authorize @project
-    @project.services.create!(service_params)
-    json_response(@project, :created)
+    service = @project.services.create!(service_params)
+    json_response(service, :created)
   end
 
   # PUT /projects/:project_id/services/:id
