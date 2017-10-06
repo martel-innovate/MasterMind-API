@@ -1,7 +1,7 @@
 class V1::ClustersController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
-  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack]
 
   # GET /projects/:project_id/clusters
   def index
@@ -56,10 +56,68 @@ class V1::ClustersController < ApplicationController
     json_response({status: status})
   end
 
+  # GET /projects/:project_id/clusters/:id/getstack
+  def getStack
+    require 'rest_client'
+    require 'uri'
+
+    serviceName = params["service_name"]
+    service = Service.find(params["service_id"])
+    if service.nil? then
+      return
+    end
+
+    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/'+serviceName) || ('http://localhost:8081/v1/stack/'+serviceName)
+
+    serviceType = ServiceType.find(service.service_type_id)
+    serviceTypeName = serviceType.name
+    composeData = serviceType.deploy_template
+
+    envVariables = ""
+
+    begin
+      serviceConf = JSON.parse(service.configuration)
+      serviceConf.each do |k, v|
+        envVariables = envVariables + k + ": " + v.to_s + "\n"
+      end
+    rescue JSON::ParserError
+      json_response({message: "Invalid configuration"}, :unprocessable_entity)
+      return
+    end
+
+    envVariables = envVariables.chomp("\n")
+
+    stack = {
+      'name' => serviceName,
+      'engine-url' => @cluster.endpoint,
+      'compose-file' => composeData,
+      'compose-vars' => envVariables,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    begin
+      response = RestClient::Request.execute(
+        method:  :get,
+        url:     serviceManagerURI,
+        payload: stack,
+        headers: { content_type: 'application/json'}
+      )
+      puts "Deploy Response: " + response
+      json_response(response)
+    rescue RestClient::ExceptionWithResponse => e
+      puts "Error: " + e.response
+      json_response({message: e.response}, :unprocessable_entity)
+    end
+  end
+
   # GET /projects/:project_id/clusters/:id/deploy
   def deploy
     require 'rest_client'
-    serviceManagerURI = ENV['SERVICE_MANAGER_URI'] || 'http://localhost:8081/v1/stack'
+    require 'uri'
+
+    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack') || 'http://localhost:8081/v1/stack'
 
     serviceName = params["service_name"]
     service = Service.find(params["service_id"])
@@ -104,7 +162,7 @@ class V1::ClustersController < ApplicationController
       )
       puts "Deploy Response: " + response
       json_response(response, :created)
-      service.update({endpoint: @cluster.endpoint, status: "Active", docker_service_id: serviceTypeName})
+      service.update({endpoint: URI.parse(@cluster.endpoint).host, status: "Active", docker_service_id: serviceName})
     rescue RestClient::ExceptionWithResponse => e
       puts e.response
       json_response({message: e.response}, :unprocessable_entity)
