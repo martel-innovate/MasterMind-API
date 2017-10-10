@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     resources :service_types
     resources :clusters
     resources :projects do
-      resources :services
+      resources :services do
+        resources :ngsi_subscriptions
+      end
       resources :roles
       resources :clusters
     end
