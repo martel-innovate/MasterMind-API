@@ -7,7 +7,7 @@ class CreateNgsiSubscriptions < ActiveRecord::Migration[5.1]
       t.string :reference
       t.string :duration
       t.string :notifyConditions
-      t.string :throttling
+      t.integer :throttling
       t.references :service, foreign_key: true
 
       t.timestamps

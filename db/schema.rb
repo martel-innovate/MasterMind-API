@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009125130) do
+ActiveRecord::Schema.define(version: 20171010130650) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
@@ -37,15 +37,14 @@ ActiveRecord::Schema.define(version: 20171009125130) do
 
   create_table "ngsi_subscriptions", force: :cascade do |t|
     t.string "name"
-    t.string "entities"
-    t.string "attr"
-    t.string "reference"
-    t.string "duration"
-    t.string "notifyConditions"
-    t.string "throttling"
+    t.integer "throttling"
     t.integer "service_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.string "subject"
+    t.string "notification"
+    t.string "expires"
     t.index ["service_id"], name: "index_ngsi_subscriptions_on_service_id"
   end
 
