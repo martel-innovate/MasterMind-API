@@ -70,7 +70,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   private
 
   def subscription_params
-    params.permit(:service_id, :name, :description, :subject, :notification, :expires, :throttling)
+    params.permit(:service_id, :subscription_id, :name, :description, :subject, :notification, :expires, :throttling, :status)
   end
 
   def set_subscription

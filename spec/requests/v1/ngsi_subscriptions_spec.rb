@@ -96,7 +96,7 @@ RSpec.describe 'Services API' do
   # Test suite for POST /projects/:project_id/ngsi_subscriptions
   describe 'POST /v1/projects/:project_id/ngsi_subscriptions' do
    let(:valid_attributes) do
-     { service_id: service_id, name: 'Test', description: 'Test', subject: '{}', notification: '{}', expires: 'sometime', throttling: '5'}.to_json
+     { service_id: service_id, subscription_id: 'foobar', name: 'Test', description: 'Test', subject: '{}', notification: '{}', expires: 'sometime', throttling: '5', status: 'inactive'}.to_json
    end
 
     context 'when request attributes are valid' do

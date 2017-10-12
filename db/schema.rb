@@ -41,10 +41,12 @@ ActiveRecord::Schema.define(version: 20171010130650) do
     t.integer "service_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subscription_id"
     t.string "description"
     t.string "subject"
     t.string "notification"
     t.string "expires"
+    t.string "status"
     t.index ["service_id"], name: "index_ngsi_subscriptions_on_service_id"
   end
 
