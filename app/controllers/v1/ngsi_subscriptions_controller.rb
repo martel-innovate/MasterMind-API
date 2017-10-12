@@ -61,7 +61,9 @@ class V1::NgsiSubscriptionsController < ApplicationController
         subscriptionJSON,
         'Content-Type' => 'application/json'
       )
-      json_response(response, :created)
+      subId = URI(response.headers[:location]).path.split('/').last
+      @subscription.update(status: "Active", subscription_id: subId)
+      json_response({subId: subId}, :created)
     rescue RestClient::ExceptionWithResponse => e
       json_response({message: e.response}, :unprocessable_entity)
     end
