@@ -98,16 +98,16 @@ class V1::ClustersController < ApplicationController
     }.to_json
 
     begin
-      response = RestClient::Request.execute(
-        method:  :get,
-        url:     serviceManagerURI,
-        payload: stack,
-        headers: { content_type: 'application/json'}
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
       )
       puts "Deploy Response: " + response
-      json_response(response)
+      json_response(response, :created)
     rescue RestClient::ExceptionWithResponse => e
-      puts "Error: " + e.response
+      puts e.response
       json_response({message: e.response}, :unprocessable_entity)
     end
   end
