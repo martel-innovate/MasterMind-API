@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Service, type: :model do
-
     # Association tests
     # ensure a service record belongs to a single service_type record
     it { should belong_to(:service_type) }
     it { should belong_to(:project) }
+    it { should have_many(:ngsi_subscriptions) }
 
     # Validation test
     # ensure columns are present before saving

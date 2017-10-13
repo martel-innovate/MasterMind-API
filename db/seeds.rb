@@ -25,6 +25,7 @@ if adminLevel.nil? then
   RoleLevel.create(name: "user")
 end
 
+# Some temporary mock data
 actor = Actor.create(email: "superadmin@hotmail.com", fullname: "SuperAdmin")
 project = Project.create(name: "SuperProject", description: "A super test Project")
 role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)
