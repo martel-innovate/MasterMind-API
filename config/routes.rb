@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   end
 
   get 'auth/login', to: 'authentication#authenticate'
+
+  get 'version', to: 'version#version'
 end
