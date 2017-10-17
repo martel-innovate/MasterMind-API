@@ -1,7 +1,7 @@
 class V1::ClustersController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
-  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack, :removeStack]
 
   # GET /projects/:project_id/clusters
   def index
@@ -62,40 +62,50 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     serviceName = params["service_name"]
-    service = Service.find(params["service_id"])
-    if service.nil? then
-      return
-    end
 
     serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/'+serviceName) || ('http://localhost:8081/v1/stack/'+serviceName)
-
-    serviceType = ServiceType.find(service.service_type_id)
-    serviceTypeName = serviceType.name
-    composeData = serviceType.deploy_template
-
-    envVariables = ""
-
-    begin
-      serviceConf = JSON.parse(service.configuration)
-      serviceConf.each do |k, v|
-        envVariables = envVariables + k + ": " + v.to_s + "\n"
-      end
-    rescue JSON::ParserError
-      json_response({message: "Invalid configuration"}, :unprocessable_entity)
-      return
-    end
-
-    envVariables = envVariables.chomp("\n")
 
     stack = {
       'name' => serviceName,
       'engine-url' => @cluster.endpoint,
-      'compose-file' => composeData,
-      'compose-vars' => envVariables,
       'ca-cert' => @cluster.ca,
       'cert' => @cluster.cert,
       'cert-key' => @cluster.key
     }.to_json
+
+    begin
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+      )
+      puts "Deploy Response: " + response
+      json_response(response, :created)
+    rescue RestClient::ExceptionWithResponse => e
+      puts e.response
+      json_response({message: e.response}, :unprocessable_entity)
+    end
+  end
+
+  # GET /projects/:project_id/clusters/:id/removeStack
+  def removeStack
+    require 'rest_client'
+    require 'uri'
+
+    serviceName = params["service_name"]
+
+    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/delete/'+serviceName) || ('http://localhost:8081/v1/stack/delete/'+serviceName)
+
+    stack = {
+      'name' => serviceName,
+      'engine-url' => @cluster.endpoint,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    puts stack
 
     begin
       response = RestClient.post(

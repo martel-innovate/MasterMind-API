@@ -20,8 +20,12 @@ Rails.application.routes.draw do
     get '/projects/:project_id/clusters/:id/getstack', to: 'clusters#getStack'
     get '/projects/:project_id/clusters/:id/deploy', to: 'clusters#deploy'
     get '/projects/:project_id/clusters/:id/deploywithdockerclient', to: 'clusters#deployWithDockerClient'
+    get '/projects/:project_id/clusters/:id/removestack', to: 'clusters#removeStack'
 
-    get '/projects/:project_id/ngsi_subscriptions/:id/register', to: 'ngsi_subscriptions#registerSubscriptionToBroker'
+    get '/projects/:project_id/ngsi_subscriptions/:id/register', to: 'ngsi_subscriptions#registerSubscription'
+    get '/projects/:project_id/ngsi_subscriptions/:id/activate', to: 'ngsi_subscriptions#activateSubscription'
+    get '/projects/:project_id/ngsi_subscriptions/:id/deactivate', to: 'ngsi_subscriptions#deactivateSubscription'
+    get '/projects/:project_id/ngsi_subscriptions/:id/remove', to: 'ngsi_subscriptions#removeSubscription'
   end
 
   get 'auth/login', to: 'authentication#authenticate'
