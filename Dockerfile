@@ -6,6 +6,6 @@ WORKDIR /mastermind
 ADD Gemfile /mastermind/Gemfile
 ADD Gemfile.lock /mastermind/Gemfile.lock
 RUN bundle install
-ENTRYPOINT rails db:setup && rails s
 ADD . /mastermind
 RUN git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services
+ENTRYPOINT rails db:setup && rails s -b0
