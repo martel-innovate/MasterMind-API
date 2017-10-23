@@ -7,6 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Initialising database with service types
+if (Dir["mastermind-services"]).length == 0 then
+  `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
 for path in Dir['mastermind-services/*/']
   mastermindConf = YAML::load(File.open(path+'mastermind.yml'))
   dockerCompose = YAML::load(File.open(path+'docker-compose.yml'))
