@@ -17,4 +17,7 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore mastermind-services folder
+/mastermind-services
+
 .byebug_history
