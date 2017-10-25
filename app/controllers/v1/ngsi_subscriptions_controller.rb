@@ -90,7 +90,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
     begin
       response = RestClient.delete(serviceURI)
-      @subscription.update(status: "inactive", subscription_id: "pending")
+      @subscription.update(status: "unregistered", subscription_id: "pending")
       json_response({message: "Subscription removed"})
     rescue RestClient::ExceptionWithResponse => e
       json_response({message: e.response}, :unprocessable_entity)
