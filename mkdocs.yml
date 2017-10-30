@@ -1,0 +1,7 @@
+site_name: MasterMind API
+repo_url: https://github.com/martel-innovate/MasterMind-API
+site_description: MasterMind API Documentation
+docs_dir: 'docs'
+theme: readthedocs
+pages:
+    - Home: 'index.md'
