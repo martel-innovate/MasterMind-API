@@ -26,6 +26,8 @@ gem "pundit"
 gem 'rack-cors', :require => 'rack/cors'
 # Handy client
 gem 'rest-client'
+# Use Swagger to generate API docs
+gem 'swagger-docs'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

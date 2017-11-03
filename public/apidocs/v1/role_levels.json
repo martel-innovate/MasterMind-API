@@ -1,0 +1,242 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:3000",
+  "resourcePath": "role_levels",
+  "apis": [
+    {
+      "path": "/v1/role_levels",
+      "operations": [
+        {
+          "summary": "Fetches all Role Levels",
+          "notes": "This lists all the active Role Levels",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "RoleLevel",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "nickname": "V1::RoleLevels#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/role_levels",
+      "operations": [
+        {
+          "summary": "Creates a Role Level",
+          "notes": "This creates a new Role Level",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "The name associated to this Role Level",
+              "required": true
+            }
+          ],
+          "nickname": "V1::RoleLevels#create",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/role_levels/{id}",
+      "operations": [
+        {
+          "summary": "Fetches a specific Role Level",
+          "notes": "This fetches the Role Level matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "RoleLevel",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Role Level not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Role Level Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::RoleLevels#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/role_levels/{id}",
+      "operations": [
+        {
+          "summary": "Updates a Role Level",
+          "notes": "This updates the Role Level matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "RoleLevel",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Role Level not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Role Level Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "The name associated to this Role Level",
+              "required": true
+            }
+          ],
+          "nickname": "V1::RoleLevels#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/role_levels/{id}",
+      "operations": [
+        {
+          "summary": "Deletes a Role Level",
+          "notes": "This deletes the Role Level matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Role Level not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Role Level Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::RoleLevels#destroy",
+          "method": "delete"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}

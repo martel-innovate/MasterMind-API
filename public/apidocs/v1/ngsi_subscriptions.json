@@ -1,0 +1,656 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:3000",
+  "resourcePath": "ngsi_subscriptions",
+  "apis": [
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions",
+      "operations": [
+        {
+          "summary": "Fetches NSGI Subscriptions",
+          "notes": "This lists all the NGSI Subscriptions belonging to a given Project",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions",
+      "operations": [
+        {
+          "summary": "Register a new NSGI Subscription",
+          "notes": "This registers a new NSGI Subscription in the given Project",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "A name for the NSGI Subscription",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "description",
+              "type": "string",
+              "description": "A description for the NSGI Subscription",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "throttling",
+              "type": "integer",
+              "description": "The throttling in seconds",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "service_id",
+              "type": "integer",
+              "description": "The ID of the service this Subscription belongs to",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "subscription_id",
+              "type": "string",
+              "description": "The ID of the Subscription as given by the Context Broker",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "subject",
+              "type": "string",
+              "description": "The Subject Object of the Subscription in JSON format",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "notification",
+              "type": "string",
+              "description": "The Notification Object of the Subscription in JSON format",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "expires",
+              "type": "string",
+              "description": "The expiration date of the Subscription",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "status",
+              "type": "string",
+              "description": "The status of the Subscription (e.g. active or inactive)",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#create",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
+          "summary": "Fetches a specific NSGI Subscription",
+          "notes": "This fetches the NSGI Subscription matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "NSGI Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
+          "summary": "Updates a NSGI Subscription",
+          "notes": "This updates the NSGI Subscription matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Subscription not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "A name for the NSGI Subscription",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "description",
+              "type": "string",
+              "description": "A description for the NSGI Subscription",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "throttling",
+              "type": "integer",
+              "description": "The throttling in seconds",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "service_id",
+              "type": "integer",
+              "description": "The ID of the service this Subscription belongs to",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "subscription_id",
+              "type": "string",
+              "description": "The ID of the Subscription as given by the Context Broker",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "subject",
+              "type": "string",
+              "description": "The Subject Object of the Subscription in JSON format",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "notification",
+              "type": "string",
+              "description": "The Notification Object of the Subscription in JSON format",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "expires",
+              "type": "string",
+              "description": "The expiration date of the Subscription",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "status",
+              "type": "string",
+              "description": "The status of the Subscription (e.g. active or inactive)",
+              "required": false
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
+          "summary": "Deletes a Subscription",
+          "notes": "This deletes the Subscription matching the given id",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#destroy",
+          "method": "delete"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/register",
+      "operations": [
+        {
+          "summary": "Registers the Subscription to the Broker",
+          "notes": "This registers this NSGI Subscription to its associated Context Broker",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "NGSI Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#registerSubscription",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/activate",
+      "operations": [
+        {
+          "summary": "Activates the Subscription on the Broker",
+          "notes": "This activates this already registered NSGI Subscription on its associated Context Broker",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "NGSI Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#activateSubscription",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/deactivate",
+      "operations": [
+        {
+          "summary": "Deactivates the Subscription on the Broker",
+          "notes": "This deactivates this already registered NSGI Subscription on its associated Context Broker",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "NGSI Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#deactivateSubscription",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/remove",
+      "operations": [
+        {
+          "summary": "Removes the Subscription from the Broker",
+          "notes": "This removes this NSGI Subscription from its associated Context Broker",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "NGSI Subscription Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::NgsiSubscriptions#removeSubscription",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}
