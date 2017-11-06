@@ -8,12 +8,10 @@
       "path": "/v1/projects/{project_id}/roles",
       "operations": [
         {
-          "summary": "Fetches Roles",
-          "notes": "This lists all the Roles belonging to a given Project",
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": "Cluster",
+              "responseModel": "Role",
               "message": "Success"
             },
             {
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches Roles",
+          "notes": "This lists all the Roles belonging to a given Project",
           "parameters": [
             {
               "paramType": "header",
@@ -57,8 +57,6 @@
       "path": "/v1/projects/{project_id}/roles",
       "operations": [
         {
-          "summary": "Register a new Role",
-          "notes": "This registers a new Role in the given Project",
           "responseMessages": [
             {
               "code": 200,
@@ -86,6 +84,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Register a new Role",
+          "notes": "This registers a new Role in the given Project",
           "parameters": [
             {
               "paramType": "header",
@@ -125,8 +125,6 @@
       "path": "/v1/projects/{project_id}/roles/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific Role",
-          "notes": "This fetches the Role matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -154,6 +152,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific Role",
+          "notes": "This fetches the Role matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -186,8 +186,6 @@
       "path": "/v1/projects/{project_id}/roles/{id}",
       "operations": [
         {
-          "summary": "Updates a Role",
-          "notes": "This updates the Role matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -220,6 +218,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates a Role",
+          "notes": "This updates the Role matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -266,8 +266,6 @@
       "path": "/v1/projects/{project_id}/roles/{id}",
       "operations": [
         {
-          "summary": "Deletes a Role",
-          "notes": "This deletes the Role matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -295,6 +293,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes a Role",
+          "notes": "This deletes the Role matching the given id",
           "parameters": [
             {
               "paramType": "header",

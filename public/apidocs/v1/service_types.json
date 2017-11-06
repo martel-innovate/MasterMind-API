@@ -8,8 +8,6 @@
       "path": "/v1/service_types",
       "operations": [
         {
-          "summary": "Fetches all Service Types",
-          "notes": "This lists all the Service Types",
           "responseMessages": [
             {
               "code": 200,
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches all Service Types",
+          "notes": "This lists all the Service Types",
           "nickname": "V1::ServiceTypes#index",
           "method": "get"
         }
@@ -41,8 +41,6 @@
       "path": "/v1/service_types",
       "operations": [
         {
-          "summary": "Creates a Service Type",
-          "notes": "This creates a new Service Type",
           "responseMessages": [
             {
               "code": 200,
@@ -70,6 +68,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Creates a Service Type",
+          "notes": "This creates a new Service Type",
           "parameters": [
             {
               "paramType": "form",
@@ -116,8 +116,6 @@
       "path": "/v1/service_types/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific Service Type",
-          "notes": "This fetches the Service Type matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -145,6 +143,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific Service Type",
+          "notes": "This fetches the Service Type matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -163,8 +163,6 @@
       "path": "/v1/service_types/{id}",
       "operations": [
         {
-          "summary": "Updates a Service Type",
-          "notes": "This updates the Service Type matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -197,6 +195,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates a Service Type",
+          "notes": "This updates the Service Type matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -250,8 +250,6 @@
       "path": "/v1/service_types/{id}",
       "operations": [
         {
-          "summary": "Deletes a Service Type",
-          "notes": "This deletes the Service Type matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -279,6 +277,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes a Service Type",
+          "notes": "This deletes the Service Type matching the given id",
           "parameters": [
             {
               "paramType": "path",

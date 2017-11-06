@@ -8,8 +8,6 @@
       "path": "/version",
       "operations": [
         {
-          "summary": "Obtains MasterMind version",
-          "notes": "This gets the version of MasterMind",
           "responseMessages": [
             {
               "code": 200,
@@ -22,6 +20,8 @@
               "message": "This resource cannot be accessed"
             }
           ],
+          "summary": "Obtains MasterMind version",
+          "notes": "This gets the version of MasterMind",
           "nickname": "Version#version",
           "method": "get"
         }

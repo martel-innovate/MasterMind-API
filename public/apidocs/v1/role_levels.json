@@ -8,8 +8,6 @@
       "path": "/v1/role_levels",
       "operations": [
         {
-          "summary": "Fetches all Role Levels",
-          "notes": "This lists all the active Role Levels",
           "responseMessages": [
             {
               "code": 200,
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches all Role Levels",
+          "notes": "This lists all the active Role Levels",
           "nickname": "V1::RoleLevels#index",
           "method": "get"
         }
@@ -41,12 +41,10 @@
       "path": "/v1/role_levels",
       "operations": [
         {
-          "summary": "Creates a Role Level",
-          "notes": "This creates a new Role Level",
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": "Actor",
+              "responseModel": "RoleLevel",
               "message": "Success"
             },
             {
@@ -70,6 +68,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Creates a Role Level",
+          "notes": "This creates a new Role Level",
           "parameters": [
             {
               "paramType": "form",
@@ -88,8 +88,6 @@
       "path": "/v1/role_levels/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific Role Level",
-          "notes": "This fetches the Role Level matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -117,6 +115,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific Role Level",
+          "notes": "This fetches the Role Level matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -135,8 +135,6 @@
       "path": "/v1/role_levels/{id}",
       "operations": [
         {
-          "summary": "Updates a Role Level",
-          "notes": "This updates the Role Level matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -169,6 +167,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates a Role Level",
+          "notes": "This updates the Role Level matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -194,12 +194,10 @@
       "path": "/v1/role_levels/{id}",
       "operations": [
         {
-          "summary": "Deletes a Role Level",
-          "notes": "This deletes the Role Level matching the given id",
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": "Actor",
+              "responseModel": "RoleLevel",
               "message": "Success"
             },
             {
@@ -223,6 +221,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes a Role Level",
+          "notes": "This deletes the Role Level matching the given id",
           "parameters": [
             {
               "paramType": "path",

@@ -8,8 +8,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions",
       "operations": [
         {
-          "summary": "Fetches NSGI Subscriptions",
-          "notes": "This lists all the NGSI Subscriptions belonging to a given Project",
           "responseMessages": [
             {
               "code": 200,
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches NSGI Subscriptions",
+          "notes": "This lists all the NGSI Subscriptions belonging to a given Project",
           "parameters": [
             {
               "paramType": "header",
@@ -57,8 +57,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions",
       "operations": [
         {
-          "summary": "Register a new NSGI Subscription",
-          "notes": "This registers a new NSGI Subscription in the given Project",
           "responseMessages": [
             {
               "code": 200,
@@ -86,6 +84,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Register a new NSGI Subscription",
+          "notes": "This registers a new NSGI Subscription in the given Project",
           "parameters": [
             {
               "paramType": "header",
@@ -174,8 +174,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific NSGI Subscription",
-          "notes": "This fetches the NSGI Subscription matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -203,6 +201,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific NSGI Subscription",
+          "notes": "This fetches the NSGI Subscription matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -235,8 +235,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
       "operations": [
         {
-          "summary": "Updates a NSGI Subscription",
-          "notes": "This updates the NSGI Subscription matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -269,6 +267,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates a NSGI Subscription",
+          "notes": "This updates the NSGI Subscription matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -357,8 +357,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
       "operations": [
         {
-          "summary": "Deletes a Subscription",
-          "notes": "This deletes the Subscription matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -386,6 +384,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes a Subscription",
+          "notes": "This deletes the Subscription matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -411,8 +411,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/register",
       "operations": [
         {
-          "summary": "Registers the Subscription to the Broker",
-          "notes": "This registers this NSGI Subscription to its associated Context Broker",
           "responseMessages": [
             {
               "code": 200,
@@ -440,6 +438,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Registers the Subscription to the Broker",
+          "notes": "This registers this NSGI Subscription to its associated Context Broker",
           "parameters": [
             {
               "paramType": "header",
@@ -472,8 +472,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/activate",
       "operations": [
         {
-          "summary": "Activates the Subscription on the Broker",
-          "notes": "This activates this already registered NSGI Subscription on its associated Context Broker",
           "responseMessages": [
             {
               "code": 200,
@@ -501,6 +499,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Activates the Subscription on the Broker",
+          "notes": "This activates this already registered NSGI Subscription on its associated Context Broker",
           "parameters": [
             {
               "paramType": "header",
@@ -533,8 +533,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/deactivate",
       "operations": [
         {
-          "summary": "Deactivates the Subscription on the Broker",
-          "notes": "This deactivates this already registered NSGI Subscription on its associated Context Broker",
           "responseMessages": [
             {
               "code": 200,
@@ -562,6 +560,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deactivates the Subscription on the Broker",
+          "notes": "This deactivates this already registered NSGI Subscription on its associated Context Broker",
           "parameters": [
             {
               "paramType": "header",
@@ -594,8 +594,6 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/remove",
       "operations": [
         {
-          "summary": "Removes the Subscription from the Broker",
-          "notes": "This removes this NSGI Subscription from its associated Context Broker",
           "responseMessages": [
             {
               "code": 200,
@@ -623,6 +621,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Removes the Subscription from the Broker",
+          "notes": "This removes this NSGI Subscription from its associated Context Broker",
           "parameters": [
             {
               "paramType": "header",

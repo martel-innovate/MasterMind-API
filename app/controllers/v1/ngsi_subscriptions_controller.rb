@@ -6,18 +6,23 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   swagger_controller :ngsi_subscriptions, "NGSI Subscriptions Management"
 
-  swagger_api :index do
+  def self.add_common_params(api)
+    api.response :unauthorized, "The actor does not have permission to perform this action"
+    api.response :invalid_token, "The provided API token is invalid"
+    api.response :forbidden, "This resource cannot be accessed"
+  end
+
+  swagger_api :index do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Fetches NSGI Subscriptions"
     notes "This lists all the NGSI Subscriptions belonging to a given Project"
     param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     response :ok, "Success", :NgsiSubscription
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :show do
+  swagger_api :show do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Fetches a specific NSGI Subscription"
     notes "This fetches the NSGI Subscription matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -25,12 +30,10 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :path, :id, :integer, :required, "NSGI Subscription Id"
     response :ok, "Success", :NgsiSubscription
     response :not_found, "Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :create do
+  swagger_api :create do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Register a new NSGI Subscription"
     notes "This registers a new NSGI Subscription in the given Project"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -45,13 +48,11 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :form, :expires, :string, :required, "The expiration date of the Subscription"
     param :form, :status, :string, :required, "The status of the Subscription (e.g. active or inactive)"
     response :ok, "Success", :NgsiSubscription
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :update do
+  swagger_api :update do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Updates a NSGI Subscription"
     notes "This updates the NSGI Subscription matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -67,25 +68,21 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :form, :status, :string, :optional, "The status of the Subscription (e.g. active or inactive)"
     response :ok, "Success", :NgsiSubscription
     response :not_found, "Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :destroy do
+  swagger_api :destroy do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Deletes a Subscription"
     notes "This deletes the Subscription matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :id, :integer, :required, "Subscription Id"
     response :ok, "Success", :NgsiSubscription
     response :not_found, "Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :registerSubscription do
+  swagger_api :registerSubscription do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Registers the Subscription to the Broker"
     notes "This registers this NSGI Subscription to its associated Context Broker"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -93,12 +90,10 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :path, :id, :integer, :required, "NGSI Subscription Id"
     response :ok, "Success"
     response :not_found, "NGSI Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :activateSubscription do
+  swagger_api :activateSubscription do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Activates the Subscription on the Broker"
     notes "This activates this already registered NSGI Subscription on its associated Context Broker"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -106,12 +101,10 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :path, :id, :integer, :required, "NGSI Subscription Id"
     response :ok, "Success"
     response :not_found, "NGSI Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :deactivateSubscription do
+  swagger_api :deactivateSubscription do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Deactivates the Subscription on the Broker"
     notes "This deactivates this already registered NSGI Subscription on its associated Context Broker"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -119,12 +112,10 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :path, :id, :integer, :required, "NGSI Subscription Id"
     response :ok, "Success"
     response :not_found, "NGSI Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :removeSubscription do
+  swagger_api :removeSubscription do |api|
+    V1::NgsiSubscriptionsController::add_common_params(api)
     summary "Removes the Subscription from the Broker"
     notes "This removes this NSGI Subscription from its associated Context Broker"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -132,9 +123,6 @@ class V1::NgsiSubscriptionsController < ApplicationController
     param :path, :id, :integer, :required, "NGSI Subscription Id"
     response :ok, "Success"
     response :not_found, "NGSI Subscription not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
   # GET /projects/:project_id/ngsi_subscriptions

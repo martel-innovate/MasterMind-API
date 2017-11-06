@@ -8,8 +8,6 @@
       "path": "/v1/projects",
       "operations": [
         {
-          "summary": "Fetches Projects",
-          "notes": "This lists all the Projects",
           "responseMessages": [
             {
               "code": 200,
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches Projects",
+          "notes": "This lists all the Projects",
           "parameters": [
             {
               "paramType": "header",
@@ -50,8 +50,6 @@
       "path": "/v1/projects",
       "operations": [
         {
-          "summary": "Register a new Project",
-          "notes": "This registers a new Project",
           "responseMessages": [
             {
               "code": 200,
@@ -79,6 +77,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Register a new Project",
+          "notes": "This registers a new Project",
           "parameters": [
             {
               "paramType": "header",
@@ -111,8 +111,6 @@
       "path": "/v1/projects/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific Project",
-          "notes": "This fetches the Project matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -140,6 +138,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific Project",
+          "notes": "This fetches the Project matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -165,8 +165,6 @@
       "path": "/v1/projects/{id}",
       "operations": [
         {
-          "summary": "Updates a Project",
-          "notes": "This updates the Project matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -199,6 +197,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates a Project",
+          "notes": "This updates the Project matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -238,8 +238,6 @@
       "path": "/v1/projects/{id}",
       "operations": [
         {
-          "summary": "Deletes a Project",
-          "notes": "This deletes the Project matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -267,6 +265,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes a Project",
+          "notes": "This deletes the Project matching the given id",
           "parameters": [
             {
               "paramType": "header",

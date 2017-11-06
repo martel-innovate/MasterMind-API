@@ -4,39 +4,40 @@ class V1::ActorsController < ApplicationController
 
   swagger_controller :actors, "Actors Management"
 
-  swagger_api :index do
+  def self.add_common_params(api)
+    api.response :unauthorized, "The actor does not have permission to perform this action"
+    api.response :invalid_token, "The provided API token is invalid"
+    api.response :forbidden, "This resource cannot be accessed"
+  end
+
+  swagger_api :index do |api|
+    V1::ActorsController::add_common_params(api)
     summary "Fetches all Actors"
     notes "This lists all the active actors"
     response :ok, "Success", :Actor
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :show do
+  swagger_api :show do |api|
+    V1::ActorsController::add_common_params(api)
     summary "Fetches a specific Actor"
     notes "This fetches the Actor matching the given id"
     param :path, :id, :integer, :required, "Actor Id"
     response :ok, "Success", :Actor
     response :not_found, "Actor not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :create do
+  swagger_api :create do |api|
+    V1::ActorsController::add_common_params(api)
     summary "Creates an Actor"
     notes "This creates a new Actor"
     param :form, :fullname, :string, :required, "The full name of the actor"
     param :form, :email, :string, :required, "The Actor's email address"
     response :ok, "Success", :Actor
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :update do
+  swagger_api :update do |api|
+    V1::ActorsController::add_common_params(api)
     summary "Updates an Actor"
     notes "This updates the Actor matching the given id"
     param :path, :id, :integer, :required, "Actor Id"
@@ -44,21 +45,16 @@ class V1::ActorsController < ApplicationController
     param :form, :email, :string, :optional, "The Actor's email address"
     response :ok, "Success", :Actor
     response :not_found, "Actor not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :destroy do
+  swagger_api :destroy do |api|
+    V1::ActorsController::add_common_params(api)
     summary "Deletes an Actor"
     notes "This deletes the Actor matching the given id"
     response :ok, "Success", :Actor
     param :path, :id, :integer, :required, "Actor Id"
     response :not_found, "Actor not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
   # GET /actors

@@ -8,8 +8,6 @@
       "path": "/v1/actors",
       "operations": [
         {
-          "summary": "Fetches all Actors",
-          "notes": "This lists all the active actors",
           "responseMessages": [
             {
               "code": 200,
@@ -32,6 +30,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches all Actors",
+          "notes": "This lists all the active actors",
           "nickname": "V1::Actors#index",
           "method": "get"
         }
@@ -41,8 +41,6 @@
       "path": "/v1/actors",
       "operations": [
         {
-          "summary": "Creates an Actor",
-          "notes": "This creates a new Actor",
           "responseMessages": [
             {
               "code": 200,
@@ -70,6 +68,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Creates an Actor",
+          "notes": "This creates a new Actor",
           "parameters": [
             {
               "paramType": "form",
@@ -95,8 +95,6 @@
       "path": "/v1/actors/{id}",
       "operations": [
         {
-          "summary": "Fetches a specific Actor",
-          "notes": "This fetches the Actor matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -124,6 +122,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Fetches a specific Actor",
+          "notes": "This fetches the Actor matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -142,8 +142,6 @@
       "path": "/v1/actors/{id}",
       "operations": [
         {
-          "summary": "Updates an Actor",
-          "notes": "This updates the Actor matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -176,6 +174,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Updates an Actor",
+          "notes": "This updates the Actor matching the given id",
           "parameters": [
             {
               "paramType": "path",
@@ -208,8 +208,6 @@
       "path": "/v1/actors/{id}",
       "operations": [
         {
-          "summary": "Deletes an Actor",
-          "notes": "This deletes the Actor matching the given id",
           "responseMessages": [
             {
               "code": 200,
@@ -237,6 +235,8 @@
               "message": "The provided API token is invalid"
             }
           ],
+          "summary": "Deletes an Actor",
+          "notes": "This deletes the Actor matching the given id",
           "parameters": [
             {
               "paramType": "path",

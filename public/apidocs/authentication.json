@@ -8,8 +8,6 @@
       "path": "/auth/login",
       "operations": [
         {
-          "summary": "Obtains auth token",
-          "notes": "This authenticates an Actor against the API and returns a token",
           "responseMessages": [
             {
               "code": 200,
@@ -22,6 +20,8 @@
               "message": "This resource cannot be accessed"
             }
           ],
+          "summary": "Obtains auth token",
+          "notes": "This authenticates an Actor against the API and returns a token",
           "parameters": [
             {
               "paramType": "query",

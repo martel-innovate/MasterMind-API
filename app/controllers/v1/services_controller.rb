@@ -5,18 +5,23 @@ class V1::ServicesController < ApplicationController
 
   swagger_controller :services, "Service Management"
 
-  swagger_api :index do
+  def self.add_common_params(api)
+    api.response :unauthorized, "The actor does not have permission to perform this action"
+    api.response :invalid_token, "The provided API token is invalid"
+    api.response :forbidden, "This resource cannot be accessed"
+  end
+
+  swagger_api :index do |api|
+    V1::ServicesController::add_common_params(api)
     summary "Fetches Services"
     notes "This lists all the Services belonging to a given Project"
     param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     response :ok, "Success", :Service
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :show do
+  swagger_api :show do |api|
+    V1::ServicesController::add_common_params(api)
     summary "Fetches a specific Service"
     notes "This fetches the Service matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -24,12 +29,10 @@ class V1::ServicesController < ApplicationController
     param :path, :id, :integer, :required, "Service Id"
     response :ok, "Success", :Service
     response :not_found, "Service not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
-  swagger_api :create do
+  swagger_api :create do |api|
+    V1::ServicesController::add_common_params(api)
     summary "Register a new Service"
     notes "This registers a new Service in the given Project"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -45,13 +48,11 @@ class V1::ServicesController < ApplicationController
     param :form, :docker_service_id, :string, :required, "The id of the service inside Docker"
     param :form, :cluster_id, :integer, :required, "The id of the Cluster this Service belongs to"
     response :ok, "Success", :Service
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :update do
+  swagger_api :update do |api|
+    V1::ServicesController::add_common_params(api)
     summary "Updates a Service"
     notes "This updates the Service matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -69,13 +70,11 @@ class V1::ServicesController < ApplicationController
     param :form, :cluster_id, :integer, :required, "The id of the Cluster this Service belongs to"
     response :ok, "Success", :Service
     response :not_found, "Service not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
     response :unprocessable_entity, "Invalid entity provided"
   end
 
-  swagger_api :destroy do
+  swagger_api :destroy do |api|
+    V1::ServicesController::add_common_params(api)
     summary "Deletes a Service"
     notes "This deletes the Service matching the given id"
     param :header, 'Authorization', :string, :required, 'Authentication token'
@@ -83,9 +82,6 @@ class V1::ServicesController < ApplicationController
     param :path, :id, :integer, :required, "Service Id"
     response :ok, "Success", :Service
     response :not_found, "Service not found"
-    response :unauthorized, "The actor does not have permission to perform this action"
-    response :invalid_token, "The provided API token is invalid"
-    response :forbidden, "This resource cannot be accessed"
   end
 
   # GET /projects/:project_id/services
