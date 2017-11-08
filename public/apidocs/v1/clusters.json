@@ -1,0 +1,595 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:3000",
+  "resourcePath": "clusters",
+  "apis": [
+    {
+      "path": "/v1/projects/{project_id}/clusters",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Cluster",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Fetches Clusters",
+          "notes": "This lists all the Clusters belonging to a given Project",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Register a new Cluster",
+          "notes": "This registers a new Cluster in the given Project",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "A name for the Cluster",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "description",
+              "type": "string",
+              "description": "A description for the Cluster",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "endpoint",
+              "type": "string",
+              "description": "The Cluster's endpoint",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "cert",
+              "type": "string",
+              "description": "The cert certificate for TLS",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "ca",
+              "type": "string",
+              "description": "The ca certificate for TLS",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "key",
+              "type": "string",
+              "description": "The key for TLS",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#create",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Fetches a specific Cluster",
+          "notes": "This fetches the Cluster matching the given id",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Updates a Cluster",
+          "notes": "This updates the Cluster matching the given id",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "name",
+              "type": "string",
+              "description": "A name for the Cluster",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "description",
+              "type": "string",
+              "description": "A description for the Cluster",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "endpoint",
+              "type": "string",
+              "description": "The Cluster's endpoint",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "cert",
+              "type": "string",
+              "description": "The cert certificate for TLS",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "ca",
+              "type": "string",
+              "description": "The ca certificate for TLS",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "key",
+              "type": "string",
+              "description": "The key for TLS",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Deletes a Cluster",
+          "notes": "This deletes the Cluster matching the given id",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#destroy",
+          "method": "delete"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/getstack",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Gets info on the Service from Docker",
+          "notes": "This retrieves info on the Service (defined as a Docker Stack) from Docker",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "service_name",
+              "type": "string",
+              "description": "Name of the Service",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#getStack",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/deploy",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Deploys the Service",
+          "notes": "This deploys the Service on its associated Docker Swarm Cluster",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "service_id",
+              "type": "string",
+              "description": "ID of the Service to deploy",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "service_name",
+              "type": "string",
+              "description": "Name of the Service to deploy",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#deploy",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/removestack",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service not found"
+            },
+            {
+              "code": 500,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Removes the Service from Docker",
+          "notes": "This undeploys the Service from its associated Docker Swarm Cluster",
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "service_name",
+              "type": "string",
+              "description": "Name of the Service to remove",
+              "required": true
+            }
+          ],
+          "nickname": "V1::Clusters#removeStack",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}

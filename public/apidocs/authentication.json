@@ -1,0 +1,41 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://localhost:3000",
+  "resourcePath": "authentication",
+  "apis": [
+    {
+      "path": "/auth/login",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            }
+          ],
+          "summary": "Obtains auth token",
+          "notes": "This authenticates an Actor against the API and returns a token",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "code",
+              "type": "string",
+              "description": "OAUTH2 Fiware Lab code",
+              "required": true
+            }
+          ],
+          "nickname": "Authentication#authenticate",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}
