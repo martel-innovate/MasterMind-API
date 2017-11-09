@@ -1,5 +1,5 @@
 FROM ruby:2.4.1
-ENV MASTERMIND_VERSION Undefined
+ENV MASTERMIND_VERSION=0.1.0
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs git
 RUN mkdir /mastermind
 WORKDIR /mastermind
