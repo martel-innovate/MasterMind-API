@@ -1,6 +1,5 @@
 class Service < ApplicationRecord
   belongs_to :project
-  belongs_to :cluster
   belongs_to :service_type
   has_many :ngsi_subscriptions, dependent: :destroy
 
