@@ -15,7 +15,7 @@ for path in Dir['mastermind-services/*/*/']
   dockerCompose = YAML::load(File.open(path+'docker-compose.yml'))
   serviceType = ServiceType.find_by(name: mastermindConf["name"])
   if serviceType.nil? then
-    ServiceType.create(name: mastermindConf["name"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(path+'mastermind.yml'), deploy_template: File.read(path+'docker-compose.yml'))
+    ServiceType.create(name: mastermindConf["name"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(path+'mastermind.yml'), deploy_template: File.read(path+'docker-compose.yml'))
   end
 end
 # Initialising database with role levels

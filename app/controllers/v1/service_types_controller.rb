@@ -31,6 +31,7 @@ class V1::ServiceTypesController < ApplicationController
     summary "Creates a Service Type"
     notes "This creates a new Service Type"
     param :form, :name, :string, :required, "The name of this Service Type"
+    param :form, :version, :string, :required, "The version of this Service Type"
     param :form, :service_protocol_type, :string, :required, "The protcol type of this Service Type"
     param :form, :ngsi_version, :string, :required, "The NGSI Version of this Service Type"
     param :form, :configuration_template, :string, :required, "The configuration template (the mastermind.yml file) of this Service Type"
@@ -45,6 +46,7 @@ class V1::ServiceTypesController < ApplicationController
     notes "This updates the Service Type matching the given id"
     param :path, :id, :integer, :required, "Service Type Id"
     param :form, :name, :string, :optional, "The name of this Service Type"
+    param :form, :version, :string, :optional, "The version of this Service Type"
     param :form, :service_protocol_type, :string, :optional, "The protcol type of this Service Type"
     param :form, :ngsi_version, :string, :optional, "The NGSI Version of this Service Type"
     param :form, :configuration_template, :string, :optional, "The configuration template (the mastermind.yml file) of this Service Type"
@@ -90,7 +92,7 @@ class V1::ServiceTypesController < ApplicationController
   private
 
   def service_type_params
-    params.permit(:name, :service_protocol_type, :ngsi_version, :configuration_template, :deploy_template)
+    params.permit(:name, :version, :service_protocol_type, :ngsi_version, :configuration_template, :deploy_template)
   end
 
   def set_service_type

@@ -247,7 +247,17 @@ class V1::ClustersController < ApplicationController
 
     serviceType = ServiceType.find(service.service_type_id)
     serviceTypeName = serviceType.name
+    serviceTypeVersion = serviceType.version
     composeData = serviceType.deploy_template
+
+    externalFiles = []
+    for path in Dir['./mastermind-services/'+serviceTypeName+'/'+serviceTypeVersion+'/*']
+      externalFileName = File.basename(path)
+      if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml")
+        externalFileContents = File.read(path)
+        externalFiles.append({"#{externalFileName}" => externalFileContents})
+      end
+    end
 
     envVariables = ""
 
@@ -268,6 +278,7 @@ class V1::ClustersController < ApplicationController
       'engine-url' => @cluster.endpoint,
       'compose-file' => composeData,
       'compose-vars' => envVariables,
+      'external_files' => externalFiles,
       'ca-cert' => @cluster.ca,
       'cert' => @cluster.cert,
       'cert-key' => @cluster.key

@@ -52,7 +52,7 @@ RSpec.describe 'Service Types API' do
   # Test suite for POST /service_types
   describe 'POST /v1/service_types' do
     # valid payload
-    let!(:valid_attributes) { { name: 'Orion', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test'} }
+    let!(:valid_attributes) { { name: 'Orion', version: '1.0', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test'} }
 
     context 'when the request is valid' do
       before { post '/v1/service_types', params: valid_attributes }
@@ -69,7 +69,7 @@ RSpec.describe 'Service Types API' do
 
   # Test suite for PUT /service_types/:id
   describe 'PUT /v1/service_types/:id' do
-    let!(:valid_attributes) { { name: 'Orion2', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test'} }
+    let!(:valid_attributes) { { name: 'Orion2', version: '2.0', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test'} }
 
     context 'when the record exists' do
       before { put "/v1/service_types/#{service_type_id}", params: valid_attributes }
