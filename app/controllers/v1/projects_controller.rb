@@ -1,5 +1,5 @@
 class V1::ProjectsController < ApplicationController
-  #skip_before_action :authorize_request
+  #skip_before_action :authorize_request, only: :index
   before_action :set_project, only: [:show, :update, :destroy]
 
   swagger_controller :projects, "Project Management"
