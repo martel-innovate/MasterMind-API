@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  skip_before_action :authorize_request, only: [:authenticate, :login]
+  skip_before_action :authorize_request, only: [:authenticate]
 
   swagger_controller :authentication, "Actors Authentication"
 
