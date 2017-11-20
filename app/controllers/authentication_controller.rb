@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  skip_before_action :authorize_request, only: :authenticate
+  skip_before_action :authorize_request, only: [:authenticate, :login]
 
   swagger_controller :authentication, "Actors Authentication"
 
@@ -13,16 +13,15 @@ class AuthenticationController < ApplicationController
 
   # return auth token once actor is authenticated
   def authenticate
-    #auth_token = AuthenticateActor.new(auth_params[:code]).call
-    auth_token = JsonWebToken.encode(actor_id: "1")
-    #Warning.warn("WARNING: OAUTH CURRENTLY DISABLED\n")
-    logger.debug "WARNING: OAUTH CURRENTLY DISABLED"
-    json_response(auth_token: auth_token)
+    #logger.debug 'code: ' + auth_params[:code]
+    auth_token = AuthenticateActor.new(auth_params[:code]).call
+    #json_response(auth_token: auth_token)
+    redirect_to 'http://localhost:8080/#/login?token=' + auth_token
   end
 
   private
 
   def auth_params
-    params.permit(:code)
+    params.permit(:code, :state)
   end
 end

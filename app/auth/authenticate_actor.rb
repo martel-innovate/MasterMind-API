@@ -5,14 +5,19 @@ class AuthenticateActor
 
   # Service entry point
   def call
+    client_id = 'f856da058c20414db0e946d234a5b9b1'
+    secret_id = '08eaae80ae544d66ba858de71adb7421'
+    encodedData = 'Basic ' + Base64.strict_encode64(client_id + ':' + secret_id)
+    #logger.debug 'Encoded data: ' + encodedData
     client = OAuth2::Client.new(
-      "88c5dd13710847f79a22e2df37fe2691",
-      "b73b11fe7c4f4808a2e01c361a93c8f0",
-      :authorize_url => "/oauth2/authorize",
-      :token_url => "/oauth2/token",
-      :site => "https://account.lab.fiware.org"
+        client_id,
+        secret_id,
+        :authorize_url => "/oauth2/authorize",
+        :token_url => "/oauth2/token",
+        :site => "https://account.lab.fiware.org"
     )
-    token = client.auth_code.get_token(code, :redirect_uri => 'http://localhost:8080/', :headers => {'Authorization' => 'Basic ODhjNWRkMTM3MTA4NDdmNzlhMjJlMmRmMzdmZTI2OTE6YjczYjExZmU3YzRmNDgwOGEyZTAxYzM2MWE5M2M4ZjA='})
+    token = client.auth_code.get_token(code, :redirect_uri => 'http://localhost:3000/auth/login', :headers => {'Authorization' => encodedData})
+    #logger.debug "token " + token.token
     response = token.get('/user', :params => { 'access_token' => token.token })
     email = JSON.parse(response.body)["email"]
     fullname = JSON.parse(response.body)["displayName"]
