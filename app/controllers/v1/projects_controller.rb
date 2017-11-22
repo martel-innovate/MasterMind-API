@@ -65,7 +65,15 @@ class V1::ProjectsController < ApplicationController
   # GET /projects
   def index
     @projects = Project.all
-    json_response(@projects)
+    @filteredProjects = []
+    @projects.each do |project|
+      begin
+        authorize project
+        @filteredProjects.push(project)
+      rescue Pundit::NotAuthorizedError
+      end
+    end
+    json_response(@filteredProjects)
   end
 
   # POST /projects

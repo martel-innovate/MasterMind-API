@@ -2,12 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'Actors API' do
   # Initialize the test data
-  let!(:actors) { create_list(:actor, 20) }
+  let(:actor) { create(:actor, superadmin: true) }
+  let!(:actors) { create_list(:actor, 19, superadmin: false) }
   let(:id) { actors.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /actors
   describe 'GET /v1/actors' do
-    before { get "/v1/actors" }
+    before { get "/v1/actors", headers: headers }
 
     context 'when actors exists' do
       it 'returns status code 200' do
@@ -22,7 +24,7 @@ RSpec.describe 'Actors API' do
 
   # Test suite for GET /v1/actors/:id
   describe 'GET /v1/actors/:id' do
-    before { get "/v1/actors/#{id}" }
+    before { get "/v1/actors/#{id}", headers: headers }
 
     context 'when actor exists' do
       it 'returns status code 200' do
@@ -49,10 +51,12 @@ RSpec.describe 'Actors API' do
 
   # Test suite for POST /actors
   describe 'POST /v1/actors' do
-    let(:valid_attributes) { { email: 'someone@hotmail.com', fullname: 'Someone' } }
+    let(:valid_attributes) do
+      { email: 'someone@hotmail.com', fullname: 'someone', superadmin: true }.to_json
+    end
 
     context 'when request attributes are valid' do
-      before { post "/v1/actors", params: valid_attributes }
+      before { post '/v1/actors', params: valid_attributes, headers: headers }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -60,7 +64,7 @@ RSpec.describe 'Actors API' do
     end
 
     context 'when an invalid request' do
-      before { post "/v1/actors", params: {} }
+      before { post "/v1/actors", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -74,9 +78,11 @@ RSpec.describe 'Actors API' do
 
   # Test suite for PUT /actors/:id
   describe 'PUT /v1/actors/:id' do
-    let(:valid_attributes) { { email: 'someoneElse@hotmail.com' } }
+    let(:valid_attributes) do
+      { email: 'someoneElse@hotmail.com' }.to_json
+    end
 
-    before { put "/v1/actors/#{id}", params: valid_attributes }
+    before { put "/v1/actors/#{id}", params: valid_attributes, headers: headers }
 
     context 'when actor exists' do
       it 'returns status code 204' do
@@ -104,7 +110,7 @@ RSpec.describe 'Actors API' do
 
   # Test suite for DELETE /actors/:id
   describe 'DELETE /v1/actors/:id' do
-    before { delete "/v1/actors/#{id}" }
+    before { delete "/v1/actors/#{id}", headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

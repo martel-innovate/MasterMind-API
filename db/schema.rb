@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171113095133) do
+ActiveRecord::Schema.define(version: 20171122135324) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
     t.string "fullname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "superadmin"
   end
 
   create_table "clusters", force: :cascade do |t|
@@ -47,6 +48,8 @@ ActiveRecord::Schema.define(version: 20171113095133) do
     t.string "notification"
     t.string "expires"
     t.string "status"
+    t.integer "project_id"
+    t.index ["project_id"], name: "index_ngsi_subscriptions_on_project_id"
     t.index ["service_id"], name: "index_ngsi_subscriptions_on_service_id"
   end
 

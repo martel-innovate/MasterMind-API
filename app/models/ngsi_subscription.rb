@@ -1,5 +1,6 @@
 class NgsiSubscription < ApplicationRecord
   belongs_to :service
+  belongs_to :project
   validates_presence_of :subscription_id
   validates_presence_of :name
   validates_presence_of :description

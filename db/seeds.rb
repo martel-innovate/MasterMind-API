@@ -18,17 +18,22 @@ for path in Dir['mastermind-services/*/*/']
     ServiceType.create(name: mastermindConf["name"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(path+'mastermind.yml'), deploy_template: File.read(path+'docker-compose.yml'))
   end
 end
+
 # Initialising database with role levels
 adminLevel = RoleLevel.find_by(name: "admin")
 if adminLevel.nil? then
   RoleLevel.create(name: "admin")
 end
 userLevel = RoleLevel.find_by(name: "user")
-if adminLevel.nil? then
+if userLevel.nil? then
   RoleLevel.create(name: "user")
 end
+superAdminLevel = RoleLevel.find_by(name: "superadmin")
+if superAdminLevel.nil? then
+  RoleLevel.create(name: "superadmin")
+end
 
-# Some temporary mock data
-actor = Actor.create(email: "superadmin@hotmail.com", fullname: "SuperAdmin")
+# Setting test superadmin
+actor = Actor.create(email: "gabrielecerfoglio225@gmail.com", fullname: "cerfoglg", superadmin: true)
 project = Project.create(name: "SuperProject", description: "A super test Project")
 role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)

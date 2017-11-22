@@ -128,11 +128,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   # GET /projects/:project_id/ngsi_subscriptions
   def index
     authorize @project
-    if params[:service_id] then
-      json_response(Service.find(params[:service_id]).ngsi_subscriptions)
-    else
-      json_response(NgsiSubscription.all)
-    end
+    json_response(@project.ngsi_subscriptions)
   end
 
   # GET /projects/:project_id/ngsi_subscriptions/:id
@@ -225,7 +221,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   private
 
   def subscription_params
-    params.permit(:service_id, :subscription_id, :name, :description, :subject, :notification, :expires, :throttling, :status)
+    params.permit(:project_id, :service_id, :subscription_id, :name, :description, :subject, :notification, :expires, :throttling, :status)
   end
 
   def set_subscription

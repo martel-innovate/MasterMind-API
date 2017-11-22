@@ -1,5 +1,6 @@
 class V1::ActorsController < ApplicationController
-  skip_before_action :authorize_request
+  #skip_before_action :authorize_request
+  before_action :check_if_superadmin
   before_action :set_actor, only: [:show, :update, :destroy]
 
   swagger_controller :actors, "Actors Management"
@@ -89,7 +90,14 @@ class V1::ActorsController < ApplicationController
   private
 
   def actor_params
-    params.permit(:email, :fullname)
+    params.permit(:email, :fullname, :superadmin)
+  end
+
+  def check_if_superadmin
+    if !current_user().superadmin
+      json_response({ message: "Not authorized" }, :unauthorized)
+      return
+    end
   end
 
   def set_actor

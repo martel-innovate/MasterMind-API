@@ -23,7 +23,7 @@ class AuthenticateActor
     fullname = JSON.parse(response.body)["displayName"]
     actor = Actor.find_by(email: email)
     if actor.nil?
-      actor = Actor.create!(email: email, fullname: fullname)
+      actor = Actor.create!(email: email, fullname: fullname, superadmin: false)
     end
     return JsonWebToken.encode(actor_id: actor.id)
   rescue ActiveRecord::RecordNotFound => e

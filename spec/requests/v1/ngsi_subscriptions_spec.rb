@@ -12,8 +12,8 @@ RSpec.describe 'Services API' do
   let!(:service_unathorised) { create(:service, project_id: project_unathorised.id, service_type_id: service_type.id, cluster_id: cluster.id) }
   let(:service_id) {service.id}
   let(:service_id_unathorised) {service_unathorised.id}
-  let!(:ngsi_subscription) { create_list(:ngsi_subscription, 10, service_id: service_id) }
-  let!(:ngsi_subscription_unathorised) { create_list(:ngsi_subscription, 10, service_id: service_id_unathorised) }
+  let!(:ngsi_subscription) { create_list(:ngsi_subscription, 10, service_id: service_id, project_id: project.id) }
+  let!(:ngsi_subscription_unathorised) { create_list(:ngsi_subscription, 10, service_id: service_id_unathorised, project_id: project_unathorised.id) }
   let(:id) {ngsi_subscription.first.id}
   let(:id_unathorised) {ngsi_subscription_unathorised.first.id}
   let(:service_type_id) { service_type.id }
@@ -24,7 +24,7 @@ RSpec.describe 'Services API' do
 
   # Test suite for GET /projects/:project_id/ngsi_subscriptions
   describe 'GET /v1/projects/:project_id/ngsi_subscriptions?service_id=service_id' do
-    before { get "/v1/projects/#{project_id}/ngsi_subscriptions?service_id="+service_id.to_s, headers: headers }
+    before { get "/v1/projects/#{project_id}/ngsi_subscriptions", headers: headers }
 
     context 'when project exists' do
       it 'returns status code 200' do

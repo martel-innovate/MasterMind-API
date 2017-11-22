@@ -7,23 +7,23 @@ class ProjectPolicy
   end
 
   def index?
-    currentActorRole() == "user" or currentActorRole() == "admin"
+    currentActorRole() == "user" or currentActorRole() == "admin" or actor.superadmin
   end
 
   def show?
-    currentActorRole() == "user" or currentActorRole() == "admin"
+    currentActorRole() == "user" or currentActorRole() == "admin" or actor.superadmin
   end
 
   def create?
-    currentActorRole() == "admin"
+    currentActorRole() == "admin" or actor.superadmin
   end
 
   def update?
-    currentActorRole() == "admin"
+    currentActorRole() == "admin" or actor.superadmin
   end
 
   def destroy?
-    currentActorRole() == "admin"
+    currentActorRole() == "admin" or actor.superadmin
   end
 
   def currentActorRole
