@@ -237,7 +237,9 @@ class V1::ClustersController < ApplicationController
     require 'rest_client'
     require 'uri'
 
-    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack') || 'http://localhost:8081/v1/stack'
+    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
+    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack'
 
     serviceName = params["service_name"]
     service = Service.find(params["service_id"])
