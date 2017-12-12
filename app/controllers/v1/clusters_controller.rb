@@ -172,8 +172,8 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     serviceName = params["service_name"]
-
-    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/'+serviceName) || ('http://localhost:8081/v1/stack/'+serviceName)
+    managerUri = ENV['SERVICE_MANAGER_URI'] || 'http://localhost:8081'
+    serviceManagerURI = managerUri+'/v1/stack/'+serviceName
 
     stack = {
       'name' => serviceName,
