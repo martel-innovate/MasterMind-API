@@ -172,8 +172,8 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     serviceName = params["service_name"]
-
-    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/'+serviceName) || ('http://localhost:8081/v1/stack/'+serviceName)
+    managerUri = ENV['SERVICE_MANAGER_URI'] || 'http://localhost:8081'
+    serviceManagerURI = managerUri+'/v1/stack/'+serviceName
 
     stack = {
       'name' => serviceName,
@@ -192,9 +192,9 @@ class V1::ClustersController < ApplicationController
       )
       puts "Deploy Response: " + response
       json_response(response, :created)
-    rescue RestClient::ExceptionWithResponse => e
-      puts e.response
-      json_response({message: e.response}, :unprocessable_entity)
+    rescue Exception => e
+      puts e
+      json_response({message: e}, :unprocessable_entity)
     end
   end
 
@@ -226,9 +226,9 @@ class V1::ClustersController < ApplicationController
       )
       puts "Deploy Response: " + response
       json_response(response, :created)
-    rescue RestClient::ExceptionWithResponse => e
-      puts e.response
-      json_response({message: e.response}, :unprocessable_entity)
+    rescue Exception => e
+      puts e
+      json_response({message: e}, :unprocessable_entity)
     end
   end
 
@@ -296,9 +296,9 @@ class V1::ClustersController < ApplicationController
       puts "Deploy Response: " + response
       json_response(response, :created)
       service.update({endpoint: URI.parse(@cluster.endpoint).host, status: "Active", docker_service_id: serviceName})
-    rescue RestClient::ExceptionWithResponse => e
-      puts e.response
-      json_response({message: e.response}, :unprocessable_entity)
+    rescue Exception => e
+      puts e
+      json_response({message: e}, :unprocessable_entity)
     end
   end
 
