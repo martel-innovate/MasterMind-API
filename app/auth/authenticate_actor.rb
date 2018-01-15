@@ -5,6 +5,8 @@ class AuthenticateActor
 
   # Service entry point
   def call
+    # OAUTH2 credentials for a Fiware app
+    # TODO: Move this to a configuration elsewhere
     client_id = 'f856da058c20414db0e946d234a5b9b1'
     secret_id = '08eaae80ae544d66ba858de71adb7421'
     encodedData = 'Basic ' + Base64.strict_encode64(client_id + ':' + secret_id)
@@ -16,6 +18,7 @@ class AuthenticateActor
         :token_url => "/oauth2/token",
         :site => "https://account.lab.fiware.org"
     )
+    # TODO: move the redirect_uri to a configuration elsewhere
     token = client.auth_code.get_token(code, :redirect_uri => 'http://localhost:3000/auth/login', :headers => {'Authorization' => encodedData})
     #logger.debug "token " + token.token
     response = token.get('/user', :params => { 'access_token' => token.token })

@@ -4,6 +4,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   before_action :set_service, only: [:create]
   before_action :set_subscription, only: [:show, :update, :destroy, :registerSubscription, :deactivateSubscription, :activateSubscription, :removeSubscription]
 
+  # Swagger specs
   swagger_controller :ngsi_subscriptions, "NGSI Subscriptions Management"
 
   def self.add_common_params(api)
@@ -159,12 +160,14 @@ class V1::NgsiSubscriptionsController < ApplicationController
   end
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/register
+  # Register Subscription to context broker
   def registerSubscription
     require 'json'
 
     service_id = @subscription.service_id
     service = Service.find(service_id)
 
+    # Prepare subscription JSON
     subscriptionJSON = {
       'description' => @subscription.description,
       'subject' => JSON.parse(@subscription.subject),
@@ -173,6 +176,8 @@ class V1::NgsiSubscriptionsController < ApplicationController
       'throttling' => @subscription.throttling
     }.to_json
 
+    # Send it to context broker endpoint for Subscriptions
+    # TODO: Move path in configuration elsewhere
     serviceURI = service.endpoint+":1026/v2/subscriptions"
 
     begin
@@ -181,10 +186,12 @@ class V1::NgsiSubscriptionsController < ApplicationController
         subscriptionJSON,
         'Content-Type' => 'application/json'
       )
+      # Update sub ID if successful and set as active
       subId = URI(response.headers[:location]).path.split('/').last
       @subscription.update(status: "active", subscription_id: subId)
       json_response({subId: subId}, :created)
     rescue RestClient::ExceptionWithResponse => e
+      # If error, report to the client
       json_response({message: e.response}, :unprocessable_entity)
     end
   end
@@ -200,6 +207,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   end
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/remove
+  # Remove a subscription from the broker
   def removeSubscription
     require 'json'
 
@@ -207,35 +215,44 @@ class V1::NgsiSubscriptionsController < ApplicationController
     service_id = @subscription.service_id
     service = Service.find(service_id)
 
+    # Send it to context broker endpoint for Subscriptions
+    # TODO: Move path in configuration elsewhere
     serviceURI = service.endpoint+":1026/v2/subscriptions/"+sub_id
 
     begin
       response = RestClient.delete(serviceURI)
+      # Set sub as unregistered and remove ID if successful
       @subscription.update(status: "unregistered", subscription_id: "pending")
       json_response({message: "Subscription removed"})
     rescue RestClient::ExceptionWithResponse => e
+      # If errored, report to client
       json_response({message: e.response}, :unprocessable_entity)
     end
   end
 
   private
 
+  # Allowed params for subs
   def subscription_params
     params.permit(:project_id, :service_id, :subscription_id, :name, :description, :subject, :notification, :expires, :throttling, :status)
   end
 
+  # Set sub if needed
   def set_subscription
     @subscription = NgsiSubscription.find(params[:id]) if @project
   end
 
+  # Set project if needed
   def set_project
     @project = Project.find(params[:project_id])
   end
 
+  # Set service if needed
   def set_service
     @service = Service.find(params[:service_id])
   end
 
+  # Switch sub status to active or inactive
   def changeSubscriptionStatus(status)
     require 'json'
 
@@ -243,13 +260,14 @@ class V1::NgsiSubscriptionsController < ApplicationController
     service_id = @subscription.service_id
     service = Service.find(service_id)
 
+    # Only change sub status
     subscriptionJSON = {
       'status' => status
     }.to_json
 
+    # Send it to context broker endpoint for Subscriptions
+    # TODO: Move path in configuration elsewhere
     serviceURI = service.endpoint+":1026/v2/subscriptions/"+sub_id
-
-    puts serviceURI
 
     begin
       response = RestClient.patch(
@@ -257,9 +275,11 @@ class V1::NgsiSubscriptionsController < ApplicationController
         subscriptionJSON,
         'Content-Type' => 'application/json'
       )
+      # Change status of sub if successful
       @subscription.update(status: status)
       json_response({status: status})
     rescue RestClient::ExceptionWithResponse => e
+      # If errored, report to client
       json_response({message: e.response}, :unprocessable_entity)
     end
   end

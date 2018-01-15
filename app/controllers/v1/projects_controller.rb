@@ -2,6 +2,7 @@ class V1::ProjectsController < ApplicationController
   #skip_before_action :authorize_request, only: :index
   before_action :set_project, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :projects, "Project Management"
 
   def self.add_common_params(api)
@@ -105,11 +106,13 @@ class V1::ProjectsController < ApplicationController
 
   private
 
+  # Allowed project params
   def project_params
     # whitelist params
     params.permit(:name, :description)
   end
 
+  # Set project if needed
   def set_project
     @project = Project.find(params[:id])
   end

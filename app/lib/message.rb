@@ -1,4 +1,6 @@
 class Message
+  # Messages for errors
+
   def self.not_found(record = 'record')
     "Sorry, #{record} not found."
   end

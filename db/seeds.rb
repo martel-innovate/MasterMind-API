@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# Initialising database with service types
+# Initialising database with service types from Catalog repo
 if (Dir["mastermind-services"]).length == 0 then
   `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
 end

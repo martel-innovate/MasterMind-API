@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   include ExceptionHandler
   include Pundit
 
-  # called before every action on controllers
+  # Called before every action on controllers
   before_action :authorize_request
   attr_reader :current_actor
 

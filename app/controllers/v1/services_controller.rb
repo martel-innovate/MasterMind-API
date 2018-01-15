@@ -3,6 +3,7 @@ class V1::ServicesController < ApplicationController
   before_action :set_project
   before_action :set_service, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :services, "Service Management"
 
   def self.add_common_params(api)
@@ -119,15 +120,18 @@ class V1::ServicesController < ApplicationController
 
   private
 
+  # Allowed service params
   def service_params
     params.permit(:name, :configuration, :status, :managed, :endpoint,
     :docker_service_id, :latitude, :longitude, :service_type_id, :cluster_id)
   end
 
+  # Set service when needed
   def set_service
     @service = Service.find(params[:id]) if @project
   end
 
+  # Set project when needed
   def set_project
     @project = Project.find(params[:project_id])
   end

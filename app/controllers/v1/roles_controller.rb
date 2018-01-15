@@ -3,6 +3,7 @@ class V1::RolesController < ApplicationController
   before_action :set_project
   before_action :set_project_role, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :roles, "Roles Management"
 
   def self.add_common_params(api)
@@ -103,14 +104,17 @@ class V1::RolesController < ApplicationController
 
   private
 
+  # Allowed role params
   def role_params
     params.permit(:actor_id, :role_level_id)
   end
 
+  # Set project when needed
   def set_project
     @project = Project.find(params[:project_id])
   end
 
+  # Set project role when needed
   def set_project_role
     @role = @project.roles.find_by!(id: params[:id]) if @project
   end
