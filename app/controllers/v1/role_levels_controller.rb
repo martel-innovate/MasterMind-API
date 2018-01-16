@@ -2,6 +2,7 @@ class V1::RoleLevelsController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_role_level, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :role_levels, "Role Levels Management"
 
   def self.add_common_params(api)
@@ -86,11 +87,12 @@ class V1::RoleLevelsController < ApplicationController
 
   private
 
+  # Allowed params
   def role_level_params
-    # whitelist params
     params.permit(:name)
   end
 
+  # Set role level when needed
   def set_role_level
     @role_level = RoleLevel.find(params[:id])
   end

@@ -3,6 +3,7 @@ class V1::ClustersController < ApplicationController
   before_action :set_project
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack, :removeStack]
 
+  # Swagger specs
   swagger_controller :clusters, "Cluster Management"
 
   def self.add_common_params(api)
@@ -147,6 +148,7 @@ class V1::ClustersController < ApplicationController
   end
 
   # GET /projects/:project_id/clusters/:id/info
+  # TODO: Remove this
   def info
     tempdir = set_tls_certs_dir()
 
@@ -157,6 +159,7 @@ class V1::ClustersController < ApplicationController
   end
 
   # GET /projects/:project_id/clusters/:id/version
+  # TODO: Remove this
   def version
     tempdir = set_tls_certs_dir()
 
@@ -167,14 +170,19 @@ class V1::ClustersController < ApplicationController
   end
 
   # GET /projects/:project_id/clusters/:id/getstack
+  # Retrieve informations about a given stack
   def getStack
     require 'rest_client'
     require 'uri'
 
+    # Service name in the query
     serviceName = params["service_name"]
-    managerUri = ENV['SERVICE_MANAGER_URI'] || 'http://localhost:8081'
-    serviceManagerURI = managerUri+'/v1/stack/'+serviceName
+    # Env variables for Manager host and port
+    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
+    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/'+serviceName
 
+    # Create request for Service Manager
     stack = {
       'name' => serviceName,
       'engine-url' => @cluster.endpoint,
@@ -193,20 +201,27 @@ class V1::ClustersController < ApplicationController
       puts "Deploy Response: " + response
       json_response(response, :created)
     rescue Exception => e
+      # If error, respond with it
       puts e
       json_response({message: e}, :unprocessable_entity)
     end
   end
 
   # GET /projects/:project_id/clusters/:id/removeStack
+  # Remove the given stack from the cluster
   def removeStack
     require 'rest_client'
     require 'uri'
 
+    # Service name in query
     serviceName = params["service_name"]
 
-    serviceManagerURI = (ENV['SERVICE_MANAGER_URI']+'/v1/stack/delete/'+serviceName) || ('http://localhost:8081/v1/stack/delete/'+serviceName)
+    # Env variables for Manager host and port
+    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
+    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/delete/'+serviceName
 
+    # Create request for Service Manager
     stack = {
       'name' => serviceName,
       'engine-url' => @cluster.endpoint,
@@ -227,31 +242,37 @@ class V1::ClustersController < ApplicationController
       puts "Deploy Response: " + response
       json_response(response, :created)
     rescue Exception => e
+      # If error, send it as response
       puts e
       json_response({message: e}, :unprocessable_entity)
     end
   end
 
   # GET /projects/:project_id/clusters/:id/deploy
+  # Deploys a stack on the cluster
   def deploy
     require 'rest_client'
     require 'uri'
 
+    # Env variables for Manager host and port
     serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
     serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack'
 
+    # Service name in query
     serviceName = params["service_name"]
     service = Service.find(params["service_id"])
     if service.nil? then
       return
     end
 
+    # Find Service type to retrieve deploy template
     serviceType = ServiceType.find(service.service_type_id)
     serviceTypeName = serviceType.name
     serviceTypeVersion = serviceType.version
     composeData = serviceType.deploy_template
 
+    # Getting external files needed by the compose
     externalFiles = []
     for path in Dir['./mastermind-services/'+serviceTypeName+'/'+serviceTypeVersion+'/*']
       externalFileName = File.basename(path)
@@ -261,8 +282,8 @@ class V1::ClustersController < ApplicationController
       end
     end
 
+    # Making env variable string for Service Manager (YAML format)
     envVariables = ""
-
     begin
       serviceConf = JSON.parse(service.configuration)
       serviceConf.each do |k, v|
@@ -272,9 +293,9 @@ class V1::ClustersController < ApplicationController
       json_response({message: "Invalid configuration"}, :unprocessable_entity)
       return
     end
-
     envVariables = envVariables.chomp("\n")
 
+    # Preparing message for Service Manager
     stack = {
       'name' => serviceName,
       'engine-url' => @cluster.endpoint,
@@ -295,13 +316,17 @@ class V1::ClustersController < ApplicationController
       )
       puts "Deploy Response: " + response
       json_response(response, :created)
+      # Update service as Active if successfully deployed
+      # TODO: Perhaps make a better check
       service.update({endpoint: URI.parse(@cluster.endpoint).host, status: "Active", docker_service_id: serviceName})
     rescue Exception => e
+      # If error, return it to the client
       puts e
       json_response({message: e}, :unprocessable_entity)
     end
   end
 
+  # TODO: Remove this in the future
   def deployWithDockerClient
     service = Service.find(params["service_id"])
     if service.nil? then
@@ -332,18 +357,22 @@ class V1::ClustersController < ApplicationController
 
   private
 
+  # Allowed params for cluster
   def cluster_params
     params.permit(:name, :description, :endpoint, :cert, :key, :ca)
   end
 
+  # Set project if needed
   def set_project
     @project = Project.find(params[:project_id])
   end
 
+  # Set specific cluster if needed
   def set_project_cluster
     @cluster = @project.clusters.find_by!(id: params[:id]) if @project
   end
 
+  # TODO: Remove this in the future
   def set_tls_certs_dir()
     tempdir = Dir.mktmpdir()
 
@@ -362,6 +391,7 @@ class V1::ClustersController < ApplicationController
     return tempdir
   end
 
+  # TODO: Remove this in the future
   def remove_tls_certs_dir(tempdir)
     FileUtils.remove_entry_secure(tempdir+"/cert.pem")
     FileUtils.remove_entry_secure(tempdir+"/key.pem")

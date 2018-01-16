@@ -2,6 +2,7 @@ class V1::ServiceTypesController < ApplicationController
   skip_before_action :authorize_request
   before_action :set_service_type, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :service_types, "Service Types Management"
 
   def self.add_common_params(api)
@@ -65,25 +66,30 @@ class V1::ServiceTypesController < ApplicationController
     response :not_found, "Service Type not found"
   end
 
+  # GET /service_types
   def index
     @service_types = ServiceType.all
     json_response(@service_types)
   end
 
+  # POST /service_types
   def create
     @service_type = ServiceType.create!(service_type_params)
     json_response(@service_type, :created)
   end
 
+  # GET /service_types/:id
   def show
     json_response(@service_type)
   end
 
+  # PUT /service_types/:id
   def update
     @service_type.update(service_type_params)
     head :no_content
   end
 
+  # DELETE /service_types/:id
   def destroy
     @service_type.destroy
     head :no_content
@@ -91,10 +97,12 @@ class V1::ServiceTypesController < ApplicationController
 
   private
 
+  # Allowed service type params
   def service_type_params
     params.permit(:name, :version, :service_protocol_type, :ngsi_version, :configuration_template, :deploy_template)
   end
 
+  # Set service type when needed
   def set_service_type
     @service_type = ServiceType.find(params[:id])
   end

@@ -1,6 +1,7 @@
 class VersionController < ApplicationController
   skip_before_action :authorize_request, only: :version
 
+  # Swagger specs
   swagger_controller :version, "Version Endpoint"
 
   swagger_api :version do
@@ -10,6 +11,7 @@ class VersionController < ApplicationController
     response :forbidden, "This resource cannot be accessed"
   end
 
+  # GET /version
   def version
     ver = ENV['MASTERMIND_VERSION'] || 'Undefined'
     json_response({version: ver})

@@ -3,6 +3,7 @@ class V1::ActorsController < ApplicationController
   before_action :check_if_superadmin
   before_action :set_actor, only: [:show, :update, :destroy]
 
+  # Swagger specs
   swagger_controller :actors, "Actors Management"
 
   def self.add_common_params(api)
@@ -89,10 +90,12 @@ class V1::ActorsController < ApplicationController
 
   private
 
+  # Permitted params
   def actor_params
     params.permit(:email, :fullname, :superadmin)
   end
 
+  # Check if current user is superadmin (can alter actors)
   def check_if_superadmin
     if !current_user().superadmin
       json_response({ message: "Not authorized" }, :unauthorized)
@@ -100,6 +103,7 @@ class V1::ActorsController < ApplicationController
     end
   end
 
+  # Set actor for actions on specific actor
   def set_actor
     @actor = Actor.find(params[:id])
   end

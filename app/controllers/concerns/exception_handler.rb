@@ -1,11 +1,13 @@
 module ExceptionHandler
   extend ActiveSupport::Concern
 
+  # Error classes for the errors
   class AuthenticationError < StandardError; end
   class MissingToken < StandardError; end
   class InvalidToken < StandardError; end
   class ExpiredSignature < StandardError; end
 
+  # Rescue from errors with json responses
   included do
     rescue_from ActiveRecord::RecordInvalid, with: :four_twenty_two
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
