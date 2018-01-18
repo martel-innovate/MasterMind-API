@@ -215,6 +215,10 @@ class V1::ClustersController < ApplicationController
 
     # Service name in query
     serviceName = params["service_name"]
+    service = Service.find(params["service_id"])
+    if service.nil? then
+      return
+    end
 
     # Env variables for Manager host and port
     serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
@@ -240,6 +244,9 @@ class V1::ClustersController < ApplicationController
         'Content-Type' => 'application/json'
       )
       puts "Deploy Response: " + response
+      # Update Service to inactive status
+      # TODO: Perhaps make a better check
+      service.update({endpoint: "Not Deployed", status: "Inactive", docker_service_id: "Not Deployed"})
       json_response(response, :created)
     rescue Exception => e
       # If error, send it as response

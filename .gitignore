@@ -21,3 +21,5 @@
 /mastermind-services
 
 .byebug_history
+
+.DS_Store
