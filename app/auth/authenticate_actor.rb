@@ -6,10 +6,18 @@ class AuthenticateActor
   # Service entry point
   def call
     # OAUTH2 credentials for a Fiware app
-    oauth_uri = ENV['MASTERMIND_OAUTH_URI'] || 'https://account.lab.fiware.org'
+    oauth_uri = ('https://' + ENV['MASTERMIND_OAUTH_URI']) || 'https://account.lab.fiware.org'
     client_id = ENV['MASTERMIND_OAUTH_CLIENT_ID'] || 'f856da058c20414db0e946d234a5b9b1'
     secret_id = ENV['MASTERMIND_OAUTH_SECRET_ID'] || '08eaae80ae544d66ba858de71adb7421'
-    redirect_uri = ENV['MASTERMIND_OAUTH_REDIRECT_URI'] || 'http://localhost:3000/auth/login'
+    if ENV['MASTERMIND_API_HOST'] && ENV['MASTERMIND_API_PORT']
+      redirect_uri = 'http://' + ENV['MASTERMIND_API_HOST'] + ':' + ENV['MASTERMIND_API_PORT'] + '/auth/login'
+    else
+      redirect_uri = 'http://localhost:3000/auth/login'
+    end
+    puts redirect_uri
+    puts oauth_uri
+    puts client_id
+    puts secret_id
     encodedData = 'Basic ' + Base64.strict_encode64(client_id + ':' + secret_id)
     #logger.debug 'Encoded data: ' + encodedData
     client = OAuth2::Client.new(
