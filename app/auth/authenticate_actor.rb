@@ -14,10 +14,6 @@ class AuthenticateActor
     else
       redirect_uri = 'http://localhost:3000/auth/login'
     end
-    puts redirect_uri
-    puts oauth_uri
-    puts client_id
-    puts secret_id
     encodedData = 'Basic ' + Base64.strict_encode64(client_id + ':' + secret_id)
     #logger.debug 'Encoded data: ' + encodedData
     client = OAuth2::Client.new(

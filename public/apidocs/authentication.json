@@ -20,8 +20,8 @@
               "message": "This resource cannot be accessed"
             }
           ],
-          "summary": "Obtains auth token",
-          "notes": "This authenticates an Actor against the API and returns a token",
+          "summary": "Obtains auth token and redirects to UI endpoint",
+          "notes": "This authenticates an Actor against the API and redirects to UI endpoint with token",
           "parameters": [
             {
               "paramType": "query",
@@ -32,6 +32,38 @@
             }
           ],
           "nickname": "Authentication#authenticate",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/auth/token",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "This resource cannot be accessed"
+            }
+          ],
+          "summary": "Obtains auth token",
+          "notes": "This authenticates an Actor against the API and returns a token if oauth not enabled",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "code",
+              "type": "string",
+              "description": "OAUTH2 Fiware Lab code",
+              "required": true
+            }
+          ],
+          "nickname": "Authentication#authenticateNoOauth",
           "method": "get"
         }
       ]

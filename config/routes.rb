@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   # Login route
   get 'auth/login', to: 'authentication#authenticate'
+  get 'auth/token', to: 'authentication#authenticateNoOauth'
 
   # Version route
   get 'version', to: 'version#version'

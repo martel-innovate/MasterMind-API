@@ -80,6 +80,13 @@
             },
             {
               "paramType": "form",
+              "name": "version",
+              "type": "string",
+              "description": "The version of this Service Type",
+              "required": true
+            },
+            {
+              "paramType": "form",
               "name": "service_protocol_type",
               "type": "string",
               "description": "The protcol type of this Service Type",
@@ -210,6 +217,13 @@
               "name": "name",
               "type": "string",
               "description": "The name of this Service Type",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "version",
+              "type": "string",
+              "description": "The version of this Service Type",
               "required": false
             },
             {
