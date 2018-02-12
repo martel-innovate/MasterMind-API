@@ -25,7 +25,7 @@ class AuthenticationController < ApplicationController
     #logger.debug 'code: ' + auth_params[:code]
     auth_token = AuthenticateActor.new(auth_params[:code]).call
     #json_response(auth_token: auth_token)
-    redirect_to 'http://' + ENV['MASTERMIND_UI_HOST'] + ':' + ENV['MASTERMIND_UI_PORT'] + '/#/login?token=' + auth_token
+    redirect_to 'http://' + ENV['MASTERMIND_UI_HOST'] + ':' + ENV['MASTERMIND_UI_PORT'] + '/auth/#/login?token=' + auth_token
   end
 
   # Return auth token once actor is authenticated
