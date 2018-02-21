@@ -6,7 +6,11 @@ class AuthenticateActor
   # Service entry point
   def call
     # OAUTH2 credentials for a Fiware app
-    oauth_uri = ('https://' + ENV['MASTERMIND_OAUTH_URI']) || 'https://account.lab.fiware.org'
+    if ENV['MASTERMIND_OAUTH_URI'].nil?
+      oauth_uri = 'https://account.lab.fiware.org'
+    else
+      oauth_uri = 'https://' + ENV['MASTERMIND_OAUTH_URI']
+    end
     client_id = ENV['MASTERMIND_OAUTH_CLIENT_ID'] || 'f856da058c20414db0e946d234a5b9b1'
     secret_id = ENV['MASTERMIND_OAUTH_SECRET_ID'] || '08eaae80ae544d66ba858de71adb7421'
     if ENV['MASTERMIND_API_HOST'] && ENV['MASTERMIND_API_PORT']
