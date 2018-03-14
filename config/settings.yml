@@ -1,0 +1,15 @@
+mastermind_version: <%= ENV["MASTERMIND_VERSION"] || "undefined" %>
+
+mastermind_ui_host: <%= ENV["MASTERMIND_UI_HOST"] || "localhost" %>
+mastermind_ui_port: <%= ENV["MASTERMIND_UI_PORT"] || "8080" %>
+
+mastermind_api_host: <%= ENV["MASTERMIND_API_HOST"] || "localhost" %>
+mastermind_api_port: <%= ENV["MASTERMIND_API_PORT"] || "3000" %>
+
+oauth_enabled: <%= ENV["OAUTH_ENABLED"] || true %>
+mastermind_oauth_uri: <%= ENV["MASTERMIND_OAUTH_URI"] || "account.lab.fiware.org" %>
+mastermind_oauth_client_id: <%= ENV["MASTERMIND_OAUTH_CLIENT_ID"] || "f856da058c20414db0e946d234a5b9b1" %>
+mastermind_oauth_client_secret: <%= ENV["MASTERMIND_OAUTH_CLIENT_SECRET"] || "08eaae80ae544d66ba858de71adb7421" %>
+
+service_manager_host: <%= ENV["SERVICE_MANAGER_HOST"] || "localhost" %>
+service_manager_port: <%= ENV["SERVICE_MANAGER_PORT"] || "8081" %>

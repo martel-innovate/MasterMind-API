@@ -178,8 +178,8 @@ class V1::ClustersController < ApplicationController
     # Service name in the query
     serviceName = params["service_name"]
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/'+serviceName
 
     # Create request for Service Manager
@@ -221,8 +221,8 @@ class V1::ClustersController < ApplicationController
     end
 
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/delete/'+serviceName
 
     # Create request for Service Manager
@@ -262,8 +262,8 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack'
 
     # Service name in query
