@@ -118,8 +118,86 @@ class V1::ServicesController < ApplicationController
     head :no_content
   end
 
-  private
+  def secure_service
+    api = params[:payload][:api]
+    api_key = api[:'X-Api-Key']
+    admin_auth_token = api[:'X-Admin-Auth-Token']
+    host = api[:host]
+    payload =
+          {
+            'api': {
+              'name': api[:name],
+              'sort_order': 100000,
+              'backend_protocol': 'http',
+              'frontend_host': api[:frontend_host],
+              'backend_host': api[:backend_host],
+              'servers': [
+                {
+                  'host': api[:servers][0][:host],
+                  'port': Integer(api[:servers][0][:port])
+                }
+              ],
+              'url_matches': [
+                {
+                  'frontend_prefix': api[:url_matches][0][:frontend_prefix],
+                  'backend_prefix': api[:url_matches][0][:backend_prefix]
+                }
+              ],
+              'balance_algorithm': 'least_conn',
+              'settings': {
+                'require_https': 'required_return_error',
+                'require_idp': 'fiware-oauth2',
+                'disable_api_key': 'true',
+                'api_key_verification_level': 'none',
+                'rate_limit_mode': 'unlimited',
+                'error_templates': {},
+                'error_data': {}
+              }
+            }
+          }
+    headers = {
+      'Accept' => 'application/json',
+      'X-Api-Key' => api_key,
+      'X-Admin-Auth-Token' => admin_auth_token
+    }
+    # puts JSON.pretty_generate(payload) 
+    begin
+        response = RestClient::Request.execute(
+          :url => host + '/api-umbrella/v1/apis', 
+          :method => :post, 
+          :headers => headers,
+          :verify_ssl => false, #TODO implement the ssl mechanism
+          :payload => payload
+        )
+        id = JSON(response.body)['api']['id']
+        puts 'API backend id: ' + id  
+        #json_response(JSON(response.body)['api']['id'], :created)
+        publish_data = {
+        "config": {
+          "apis": {
+            :"#{JSON(response.body)['api']['id']}" => {
+              "publish": "1"
+            }
+          }
+        }
+      }
+        response = RestClient::Request.execute(
+          :url => host + '/api-umbrella/v1/config/publish', 
+          :method => :post, 
+          :headers => headers,
+          :verify_ssl => false, #TODO implement the ssl mechanism
+          :payload => publish_data      
+        )
+    rescue Exception => e
+      # If error, return it to the client
+      puts e
+      json_response({message: e}, :unprocessable_entity)
+    end    
 
+
+  end
+
+  private
   # Allowed service params
   def service_params
     params.permit(:name, :configuration, :status, :managed, :endpoint,
