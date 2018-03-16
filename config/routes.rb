@@ -27,6 +27,9 @@ Rails.application.routes.draw do
     get '/projects/:project_id/ngsi_subscriptions/:id/activate', to: 'ngsi_subscriptions#activateSubscription'
     get '/projects/:project_id/ngsi_subscriptions/:id/deactivate', to: 'ngsi_subscriptions#deactivateSubscription'
     get '/projects/:project_id/ngsi_subscriptions/:id/remove', to: 'ngsi_subscriptions#removeSubscription'
+
+    post '/projects/:project_id/services/secureservice', to: 'services#secure_service'
+    
   end
 
   # Login route
