@@ -13,7 +13,7 @@ class VersionController < ApplicationController
 
   # GET /version
   def version
-    ver = ENV['MASTERMIND_VERSION'] || 'Undefined'
+    ver = Settings.mastermind_version.to_s
     json_response({version: ver})
   end
 end

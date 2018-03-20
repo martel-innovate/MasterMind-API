@@ -28,6 +28,8 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'rest-client'
 # Use Swagger to generate API docs
 gem 'swagger-docs'
+# Config gem
+gem 'config'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

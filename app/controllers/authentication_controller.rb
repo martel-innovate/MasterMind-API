@@ -22,26 +22,15 @@ class AuthenticationController < ApplicationController
 
   # Gets auth token once actor is authenticated and redirects to UI
   def authenticate
-    #logger.debug 'code: ' + auth_params[:code]
     auth_token = AuthenticateActor.new(auth_params[:code]).call
-    #json_response(auth_token: auth_token)
-    if ENV['MASTERMIND_UI_HOST'].nil?
-      ui_host = "localhost"
-    else
-      ui_host = ENV['MASTERMIND_UI_HOST']
-    end
-    if ENV['MASTERMIND_UI_PORT'].nil?
-      ui_port = "8080"
-    else
-      ui_port = ENV['MASTERMIND_UI_PORT']
-    end
+    ui_host = Settings.mastermind_ui_host
+    ui_port = Settings.mastermind_ui_port.to_s
     redirect_to 'http://' + ui_host + ':' + ui_port + '/auth/#/login?token=' + auth_token
   end
 
   # Return auth token once actor is authenticated
   def authenticateNoOauth
-    #logger.debug 'code: ' + auth_params[:code]
-    if ENV['OAUTH_ENABLED'] && ENV['OAUTH_ENABLED'] == 'false'
+    if !Settings.oauth_enabled
       auth_token = JsonWebToken.encode(actor_id: 1)
     end
     json_response(auth_token: auth_token)

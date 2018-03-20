@@ -147,28 +147,6 @@ class V1::ClustersController < ApplicationController
     head :no_content
   end
 
-  # GET /projects/:project_id/clusters/:id/info
-  # TODO: Remove this
-  def info
-    tempdir = set_tls_certs_dir()
-
-    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker info`
-
-    remove_tls_certs_dir(tempdir)
-    json_response({status: status})
-  end
-
-  # GET /projects/:project_id/clusters/:id/version
-  # TODO: Remove this
-  def version
-    tempdir = set_tls_certs_dir()
-
-    status = `DOCKER_TLS_VERIFY="1" DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker version`
-
-    remove_tls_certs_dir(tempdir)
-    json_response({status: status})
-  end
-
   # GET /projects/:project_id/clusters/:id/getstack
   # Retrieve informations about a given stack
   def getStack
@@ -178,8 +156,8 @@ class V1::ClustersController < ApplicationController
     # Service name in the query
     serviceName = params["service_name"]
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/'+serviceName
 
     # Create request for Service Manager
@@ -221,8 +199,8 @@ class V1::ClustersController < ApplicationController
     end
 
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/delete/'+serviceName
 
     # Create request for Service Manager
@@ -262,8 +240,8 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     # Env variables for Manager host and port
-    serviceManagerHost = ENV['SERVICE_MANAGER_HOST'] || 'localhost'
-    serviceManagerPort = ENV['SERVICE_MANAGER_PORT'] || '8081'
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
     serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack'
 
     # Service name in query
@@ -333,35 +311,6 @@ class V1::ClustersController < ApplicationController
     end
   end
 
-  # TODO: Remove this in the future
-  def deployWithDockerClient
-    service = Service.find(params["service_id"])
-    if service.nil? then
-      return
-    end
-
-    envVariables = ""
-
-    begin
-      serviceConf = JSON.parse(service.configuration)
-      serviceConf.each do |k, v|
-        envVariables = envVariables + k + "=" + v + " "
-      end
-    rescue JSON::ParserError
-      json_response({status: "Invalid configuration"}, :unprocessable_entity)
-    end
-
-    tempdir = set_tls_certs_dir()
-
-    serviceTypeName = ServiceType.find(service.service_type_id).name
-    cmd = envVariables + "DOCKER_TLS_VERIFY=1 DOCKER_HOST=#{@cluster.endpoint} DOCKER_CERT_PATH=#{tempdir} docker stack deploy --compose-file ./mastermind-services/" + serviceTypeName + "/docker-compose.yml " + ServiceType.find(service.service_type_id).name
-    status = `#{cmd}`
-
-    remove_tls_certs_dir(tempdir)
-    service.update({endpoint: @cluster.endpoint, status: "Active", docker_service_id: serviceTypeName})
-    json_response({status: status})
-  end
-
   private
 
   # Allowed params for cluster
@@ -377,33 +326,6 @@ class V1::ClustersController < ApplicationController
   # Set specific cluster if needed
   def set_project_cluster
     @cluster = @project.clusters.find_by!(id: params[:id]) if @project
-  end
-
-  # TODO: Remove this in the future
-  def set_tls_certs_dir()
-    tempdir = Dir.mktmpdir()
-
-    cert = File.new(File.join(tempdir, "cert.pem"), "w+")
-    cert.puts(@cluster.cert.gsub("\\n", "\n"))
-    cert.close
-
-    key = File.new(File.join(tempdir, "/key.pem"), "w+")
-    key.puts(@cluster.key.gsub("\\n", "\n"))
-    key.close
-
-    ca = File.new(File.join(tempdir, "/ca.pem"), "w+")
-    ca.puts(@cluster.ca.gsub("\\n", "\n"))
-    ca.close
-
-    return tempdir
-  end
-
-  # TODO: Remove this in the future
-  def remove_tls_certs_dir(tempdir)
-    FileUtils.remove_entry_secure(tempdir+"/cert.pem")
-    FileUtils.remove_entry_secure(tempdir+"/key.pem")
-    FileUtils.remove_entry_secure(tempdir+"/ca.pem")
-    FileUtils.remove_entry_secure(tempdir)
   end
 
 end

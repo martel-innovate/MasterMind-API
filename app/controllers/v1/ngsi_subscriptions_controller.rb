@@ -172,9 +172,13 @@ class V1::NgsiSubscriptionsController < ApplicationController
       'description' => @subscription.description,
       'subject' => JSON.parse(@subscription.subject),
       'notification' => JSON.parse(@subscription.notification),
-      'expires' => @subscription.expires,
       'throttling' => @subscription.throttling
-    }.to_json
+    }
+
+    # Add expiration unless is 'never'
+    if @subscription.expires != 'never'
+      subscriptionJSON["expires"] = @subscription.expires
+    end
 
     # Send it to context broker endpoint for Subscriptions
     # TODO: Move path in configuration elsewhere
@@ -183,7 +187,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
     begin
       response = RestClient.post(
         serviceURI,
-        subscriptionJSON,
+        subscriptionJSON.to_json,
         'Content-Type' => 'application/json'
       )
       # Update sub ID if successful and set as active
