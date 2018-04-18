@@ -201,7 +201,7 @@ class V1::ServicesController < ApplicationController
   # Allowed service params
   def service_params
     params.permit(:name, :configuration, :status, :managed, :endpoint,
-    :docker_service_id, :latitude, :longitude, :service_type_id, :cluster_id)
+    :docker_service_id, :latitude, :longitude, :service_type_id, :cluster_id, :secured)
   end
 
   # Set service when needed

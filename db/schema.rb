@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122135324) do
+ActiveRecord::Schema.define(version: 20180418141031) do
 
   create_table "actors", force: :cascade do |t|
     t.string "email"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20171122135324) do
     t.string "docker_service_id"
     t.integer "cluster_id"
     t.string "name"
+    t.boolean "secured", default: false, null: false
     t.index ["cluster_id"], name: "index_services_on_cluster_id"
     t.index ["project_id"], name: "index_services_on_project_id"
     t.index ["service_type_id"], name: "index_services_on_service_type_id"
