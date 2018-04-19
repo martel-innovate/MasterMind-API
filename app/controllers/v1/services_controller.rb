@@ -147,7 +147,7 @@ class V1::ServicesController < ApplicationController
               'settings': {
                 'require_https': 'required_return_error',
                 'require_idp': 'fiware-oauth2',
-                'disable_api_key': 'true',
+                'disable_api_key': 'false',
                 'api_key_verification_level': 'none',
                 'rate_limit_mode': 'unlimited',
                 'error_templates': {},
@@ -160,17 +160,17 @@ class V1::ServicesController < ApplicationController
       'X-Api-Key' => api_key,
       'X-Admin-Auth-Token' => admin_auth_token
     }
-    # puts JSON.pretty_generate(payload) 
+    # puts JSON.pretty_generate(payload)
     begin
         response = RestClient::Request.execute(
-          :url => host + '/api-umbrella/v1/apis', 
-          :method => :post, 
+          :url => host + '/api-umbrella/v1/apis',
+          :method => :post,
           :headers => headers,
           :verify_ssl => false, #TODO implement the ssl mechanism
           :payload => payload
         )
         id = JSON(response.body)['api']['id']
-        puts 'API backend id: ' + id  
+        puts 'API backend id: ' + id
         #json_response(JSON(response.body)['api']['id'], :created)
         publish_data = {
         "config": {
@@ -182,17 +182,17 @@ class V1::ServicesController < ApplicationController
         }
       }
         response = RestClient::Request.execute(
-          :url => host + '/api-umbrella/v1/config/publish', 
-          :method => :post, 
+          :url => host + '/api-umbrella/v1/config/publish',
+          :method => :post,
           :headers => headers,
           :verify_ssl => false, #TODO implement the ssl mechanism
-          :payload => publish_data      
+          :payload => publish_data
         )
     rescue Exception => e
       # If error, return it to the client
       puts e
       json_response({message: e}, :unprocessable_entity)
-    end    
+    end
 
 
   end
@@ -201,7 +201,7 @@ class V1::ServicesController < ApplicationController
   # Allowed service params
   def service_params
     params.permit(:name, :configuration, :status, :managed, :endpoint,
-    :docker_service_id, :latitude, :longitude, :service_type_id, :cluster_id)
+    :docker_service_id, :latitude, :longitude, :service_type_id, :cluster_id, :secured)
   end
 
   # Set service when needed

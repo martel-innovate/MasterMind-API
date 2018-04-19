@@ -5,4 +5,5 @@ class Service < ApplicationRecord
 
   validates_presence_of :name, :configuration, :status, :endpoint, :docker_service_id, :latitude, :longitude
   validates_inclusion_of :managed, :in => [true, false]
+  validates_inclusion_of :secured, :in => [true, false]
 end

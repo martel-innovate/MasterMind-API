@@ -1,6 +1,6 @@
 class V1::ActorsController < ApplicationController
   #skip_before_action :authorize_request
-  before_action :check_if_superadmin
+  before_action :check_if_superadmin, only: [:index, :create, :update, :destroy]
   before_action :set_actor, only: [:show, :update, :destroy]
 
   # Swagger specs
