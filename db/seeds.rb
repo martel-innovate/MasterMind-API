@@ -31,6 +31,6 @@ if superAdminLevel.nil? then
 end
 
 # Setting test superadmin
-#actor = Actor.create(email: "gabrielecerfoglio225@gmail.com", fullname: "cerfoglg", superadmin: true)
-#project = Project.create(name: "SuperProject", description: "A super test Project")
-#role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)
+actor = Actor.create(email: "superadmintest@gmail.com", fullname: "superadmintest", superadmin: true)
+project = Project.create(name: "SuperProject", description: "A super test Project")
+role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)
