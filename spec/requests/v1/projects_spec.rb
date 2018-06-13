@@ -4,7 +4,9 @@ RSpec.describe 'Projects API', type: :request do
   # initialize test data
   let(:actor) { create(:actor) }
   let!(:projects) { create_list(:project, 10) }
+  let(:project_unathorized) { create(:project) }
   let(:project_id) { projects.first.id }
+  let(:project_unathorized_id) { project_unathorized.id }
   let(:role_level) { create(:role_level, name: "admin") }
   let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id) }
   let(:headers) { valid_headers }
@@ -53,7 +55,7 @@ RSpec.describe 'Projects API', type: :request do
     end
 
     context 'when the actor does not have permission' do
-      let(:project_id) { 2 }
+      let(:project_id) { project_unathorized_id }
 
       it 'returns status code 403' do
         expect(response).to have_http_status(403)
@@ -112,7 +114,7 @@ RSpec.describe 'Projects API', type: :request do
     end
 
     context 'when the actor does not have permission' do
-      let(:project_id) { 2 }
+      let(:project_id) { project_unathorized_id }
       before { put "/v1/projects/#{project_id}", params: valid_attributes, headers: headers }
 
       it 'returns status code 403' do
@@ -132,7 +134,7 @@ RSpec.describe 'Projects API', type: :request do
     end
 
     context 'when the actor does not have permission' do
-      let(:project_id) { 2 }
+      let(:project_id) { project_unathorized_id }
       before { put "/v1/projects/#{project_id}", headers: headers }
 
       it 'returns status code 403' do
