@@ -10,11 +10,15 @@ addons:
       - mysql-server
       - mysql-client
 
+dist: trusty
+
+sudo: true
+
 before_install:
   - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
   - sudo mysql_upgrade
   - sudo service mysql restart
-  - mysql -e 'CREATE DATABASE mastermind_test;'
+  - sudo mysql -e 'CREATE DATABASE mastermind_test;'
 
 script:
   - RAILS_ENV=test bundle exec rake db:migrate
