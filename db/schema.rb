@@ -22,11 +22,11 @@ ActiveRecord::Schema.define(version: 20180418141031) do
 
   create_table "clusters", force: :cascade do |t|
     t.string "name"
-    t.string "description"
+    t.text "description"
     t.string "endpoint"
-    t.string "cert"
-    t.string "key"
-    t.string "ca"
+    t.text "cert"
+    t.text "key"
+    t.text "ca"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20180418141031) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "subscription_id"
-    t.string "description"
+    t.text "description"
     t.string "subject"
     t.string "notification"
     t.string "expires"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20180418141031) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
-    t.string "description"
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
