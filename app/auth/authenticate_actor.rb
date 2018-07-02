@@ -26,6 +26,15 @@ class AuthenticateActor
     if actor.nil?
       actor = Actor.create!(email: email, fullname: fullname, superadmin: false)
     end
+    roles = JSON.parse(response.body)["roles"]
+    roles.each do |role|
+      if role['name'] == 'Admin' || role['name'] == 'admin' then
+        if !actor.superadmin then
+          actor.superadmin = true
+          actor.save
+        end
+      end
+    end
     return JsonWebToken.encode(actor_id: actor.id)
   rescue ActiveRecord::RecordNotFound => e
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
