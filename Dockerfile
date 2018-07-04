@@ -25,4 +25,4 @@ RUN bundle install
 ADD . /mastermind
 RUN git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services
 
-ENTRYPOINT rails db:setup && rails s -b0
+ENTRYPOINT sleep 60 && rails db:setup && rails s -b0
