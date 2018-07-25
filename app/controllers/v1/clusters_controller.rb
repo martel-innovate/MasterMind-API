@@ -1,6 +1,7 @@
 class V1::ClustersController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
+  before_action :set_role
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack, :removeStack]
 
   # Swagger specs
@@ -116,33 +117,48 @@ class V1::ClustersController < ApplicationController
 
   # GET /projects/:project_id/clusters
   def index
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      return
+    end
     json_response(@project.clusters)
   end
 
   # GET /projects/:project_id/clusters/:id
   def show
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      return
+    end
     json_response(@cluster)
   end
 
   # POST /projects/:project_id/clusters
   def create
-    authorize @project
+    if @role.nil? or !(@role.clusters_permissions)
+      json_response({ message: "You don't have permission to create a cluster in this project" }, :forbidden)
+      return
+    end
     @project.clusters.create!(cluster_params)
     json_response(@project, :created)
   end
 
   # PUT /projects/:project_id/clusters/:id
   def update
-    authorize @project
+    if @role.nil? or !(@role.clusters_permissions)
+      json_response({ message: "You don't have permission to edit clusters in this project" }, :forbidden)
+      return
+    end
     @cluster.update(cluster_params)
     head :no_content
   end
 
   # DELETE /projects/:project_id/clusters/:id
   def destroy
-    authorize @project
+    if @role.nil? or !(@role.clusters_permissions)
+      json_response({ message: "You don't have permission to delete clusters in this project" }, :forbidden)
+      return
+    end
     @cluster.destroy
     head :no_content
   end
@@ -152,6 +168,11 @@ class V1::ClustersController < ApplicationController
   def getStack
     require 'rest_client'
     require 'uri'
+
+    if @role.nil?
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      return
+    end
 
     # Service name in the query
     serviceName = params["service_name"]
@@ -190,6 +211,11 @@ class V1::ClustersController < ApplicationController
   def removeStack
     require 'rest_client'
     require 'uri'
+
+    if @role.nil? or !(@role.services_permissions)
+      json_response({ message: "You don't have permission to undeploy services in this project" }, :forbidden)
+      return
+    end
 
     # Service name in query
     serviceName = params["service_name"]
@@ -238,6 +264,11 @@ class V1::ClustersController < ApplicationController
   def deploy
     require 'rest_client'
     require 'uri'
+
+    if @role.nil? or !(@role.services_permissions)
+      json_response({ message: "You don't have permission to deploy services in this project" }, :forbidden)
+      return
+    end
 
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
@@ -321,6 +352,11 @@ class V1::ClustersController < ApplicationController
   # Set project if needed
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  # Set role if needed
+  def set_role
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
   end
 
   # Set specific cluster if needed

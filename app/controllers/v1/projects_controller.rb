@@ -1,6 +1,7 @@
 class V1::ProjectsController < ApplicationController
   #skip_before_action :authorize_request, only: :index
   before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_role, only: [:show, :update, :destroy]
 
   # Swagger specs
   swagger_controller :projects, "Project Management"
@@ -68,10 +69,9 @@ class V1::ProjectsController < ApplicationController
     @projects = Project.all
     @filteredProjects = []
     @projects.each do |project|
-      begin
-        authorize project
+      role = Role.find_by_actor_id_and_project_id(current_actor.id, project.id)
+      if !role.nil? or current_actor.superadmin
         @filteredProjects.push(project)
-      rescue Pundit::NotAuthorizedError
       end
     end
     json_response(@filteredProjects)
@@ -80,26 +80,35 @@ class V1::ProjectsController < ApplicationController
   # POST /projects
   def create
     @project = Project.create!(project_params)
-    @role = Role.create(project_id: @project.id, actor_id: current_actor.id, role_level_id: "1")
+    @role = Role.create(project_id: @project.id, actor_id: current_actor.id, role_level_id: "1", clusters_permissions: true, services_permissions: true, subscriptions_permissions: true)
     json_response(@project, :created)
   end
 
   # GET /projects/:id
   def show
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view this project" }, :forbidden)
+      return
+    end
     json_response(@project)
   end
 
   # PUT /projects/:id
   def update
-    authorize @project
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to edit this project" }, :forbidden)
+      return
+    end
     @project.update(project_params)
     head :no_content
   end
 
   # DELETE /projects/:id
   def destroy
-    authorize @project
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to delete this project" }, :forbidden)
+      return
+    end
     @project.destroy
     head :no_content
   end
@@ -115,5 +124,15 @@ class V1::ProjectsController < ApplicationController
   # Set project if needed
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  # Set role if needed
+  def set_role
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+    if @role
+      @role_level = (RoleLevel.find(@role.role_level_id)).name
+    else
+      @role_level = ''
+    end
   end
 end

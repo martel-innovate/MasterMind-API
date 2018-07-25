@@ -1,6 +1,7 @@
 class V1::RolesController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
+  before_action :set_role
   before_action :set_project_role, only: [:show, :update, :destroy]
 
   # Swagger specs
@@ -71,47 +72,101 @@ class V1::RolesController < ApplicationController
 
   # GET /projects/:project_id/roles
   def index
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view the roles in this project" }, :forbidden)
+      return
+    end
     json_response(@project.roles)
   end
 
   # GET /projects/:project_id/roles/:id
   def show
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view the roles in this project" }, :forbidden)
+      return
+    end
     json_response(@role)
   end
 
   # POST /projects/:project_id/roles
   def create
-    authorize @project
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to create roles for this project" }, :forbidden)
+      return
+    end
     @project.roles.create!(role_params)
     json_response(@project, :created)
   end
 
   # PUT /projects/:project_id/roles/:id
   def update
-    authorize @project
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to edit this project's roles" }, :forbidden)
+      return
+    end
     @role.update(role_params)
     head :no_content
   end
 
   # DELETE /projects/:project_id/actors/:id
   def destroy
-    authorize @project
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to delete roles for this project" }, :forbidden)
+      return
+    end
     @role.destroy
     head :no_content
+  end
+
+  # Lists the actors registered in this project.
+  def getProjectActorByRole
+    if @role.nil?
+      json_response({ message: "You don't have permission to view roles for this project" }, :forbidden)
+      return
+    end
+    r = @project.roles.find(params["role_id"])
+    json_response(Actor.find(r.actor_id))
+  end
+
+  # Registers a role for an actor within a project, given their fullname
+  def registerRoleByFullname
+    if @role.nil? or @role_level != 'admin'
+      json_response({ message: "You don't have permission to create roles for this project" }, :forbidden)
+      return
+    end
+    if params["fullname"].nil?
+      json_response({ message: "No fullname provided" }, :forbidden)
+      return
+    end
+    actor = Actor.find_by fullname: params["fullname"]
+    if actor.nil?
+      json_response({ message: "No actor found with that fullname" }, 404)
+      return
+    end
+    @created_role = Role.create(project_id: @project.id, actor_id: actor.id, role_level_id: "2", clusters_permissions: true, services_permissions: true, subscriptions_permissions: true)
+    json_response(@created_role, :created)
   end
 
   private
 
   # Allowed role params
   def role_params
-    params.permit(:actor_id, :role_level_id)
+    params.permit(:actor_id, :role_level_id, :clusters_permissions, :services_permissions, :subscriptions_permissions, :fullname, :role_id)
   end
 
   # Set project when needed
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  # Set role if needed
+  def set_role
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+    if @role
+      @role_level = (RoleLevel.find(@role.role_level_id)).name
+    else
+      @role_level = ''
+    end
   end
 
   # Set project role when needed

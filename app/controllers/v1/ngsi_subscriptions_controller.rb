@@ -1,6 +1,7 @@
 class V1::NgsiSubscriptionsController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
+  before_action :set_role
   before_action :set_service, only: [:create]
   before_action :set_subscription, only: [:show, :update, :destroy, :registerSubscription, :deactivateSubscription, :activateSubscription, :removeSubscription]
 
@@ -128,33 +129,48 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions
   def index
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view this project's subscriptions" }, :forbidden)
+      return
+    end
     json_response(@project.ngsi_subscriptions)
   end
 
   # GET /projects/:project_id/ngsi_subscriptions/:id
   def show
-    authorize @project
+    if @role.nil?
+      json_response({ message: "You don't have permission to view this project's subscriptions" }, :forbidden)
+      return
+    end
     json_response(@subscription)
   end
 
   # POST /projects/:project_id/ngsi_subscriptions
   def create
-    authorize @project
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to create a subscription in this project" }, :forbidden)
+      return
+    end
     subscription = @service.ngsi_subscriptions.create!(subscription_params)
     json_response(subscription, :created)
   end
 
   # PUT /projects/:project_id/ngsi_subscriptions/:id
   def update
-    authorize @project
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to edit subscriptions in this project" }, :forbidden)
+      return
+    end
     @subscription.update(subscription_params)
     head :no_content
   end
 
   # DELETE /projects/:project_id/ngsi_subscriptions/:id
   def destroy
-    authorize @project
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to delete subscriptions in this project" }, :forbidden)
+      return
+    end
     @subscription.destroy
     head :no_content
   end
@@ -163,6 +179,11 @@ class V1::NgsiSubscriptionsController < ApplicationController
   # Register Subscription to context broker
   def registerSubscription
     require 'json'
+
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to register subscriptions in this project" }, :forbidden)
+      return
+    end
 
     service_id = @subscription.service_id
     service = Service.find(service_id)
@@ -202,11 +223,19 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/deactivate
   def deactivateSubscription
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to deactivate subscriptions in this project" }, :forbidden)
+      return
+    end
     changeSubscriptionStatus('inactive')
   end
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/activate
   def activateSubscription
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to activate subscriptions in this project" }, :forbidden)
+      return
+    end
     changeSubscriptionStatus('active')
   end
 
@@ -214,6 +243,11 @@ class V1::NgsiSubscriptionsController < ApplicationController
   # Remove a subscription from the broker
   def removeSubscription
     require 'json'
+
+    if @role.nil? or !(@role.subscriptions_permissions)
+      json_response({ message: "You don't have permission to remove subscriptions in this project" }, :forbidden)
+      return
+    end
 
     sub_id = @subscription.subscription_id
     service_id = @subscription.service_id
@@ -249,6 +283,11 @@ class V1::NgsiSubscriptionsController < ApplicationController
   # Set project if needed
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  # Set role if needed
+  def set_role
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
   end
 
   # Set service if needed

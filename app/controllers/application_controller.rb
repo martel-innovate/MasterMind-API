@@ -11,7 +11,11 @@ class ApplicationController < ActionController::API
 
   # Check for valid request token and return actor
   def authorize_request
-    @current_actor = (AuthorizeApiRequest.new(request.headers).call)[:actor]
+    if !Settings.oauth_enabled
+      @current_actor = Actor.first
+    else
+      @current_actor = (AuthorizeApiRequest.new(request.headers).call)[:actor]
+    end
   end
 
   # Workaround for Pundit

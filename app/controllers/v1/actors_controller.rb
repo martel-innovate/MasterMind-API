@@ -61,29 +61,49 @@ class V1::ActorsController < ApplicationController
 
   # GET /actors
   def index
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to view the actors" }, :forbidden)
+      return
+    end
     @actors = Actor.all
     json_response(@actors)
   end
 
   # GET /actors/:id
   def show
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to view the actors" }, :forbidden)
+      return
+    end
     json_response(@actor)
   end
 
   # POST /actors
   def create
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to create actors" }, :forbidden)
+      return
+    end
     @actor = Actor.create!(actor_params)
     json_response(@actor, :created)
   end
 
   # PUT /actors/:id
   def update
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to edit actors" }, :forbidden)
+      return
+    end
     @actor.update(actor_params)
     head :no_content
   end
 
   # DELETE /actors/:id
   def destroy
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to delete actors" }, :forbidden)
+      return
+    end
     @actor.destroy
     head :no_content
   end

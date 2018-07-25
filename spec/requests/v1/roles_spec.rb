@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Roles API' do
   # Initialize the test data
   let!(:actor) { create(:actor) }
+  let!(:actor_unathorised) { create(:actor) }
   let!(:project) { create(:project) }
   let!(:project_unathorised) { create(:project) }
   let!(:role_level) { create(:role_level, name: "admin") }
   let!(:role_level_unathorised) { create(:role_level, name: "nobody") }
   let!(:roles) { create_list(:role, 20, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }
-  let!(:roles_unathorised) { create_list(:role, 20, project_id: project_unathorised.id, actor_id: actor.id, role_level_id: role_level_unathorised.id) }
+  let!(:roles_unathorised) { create_list(:role, 20, project_id: project_unathorised.id, actor_id: actor_unathorised.id, role_level_id: role_level_unathorised.id) }
   let(:project_id) { project.id }
   let(:actor_id) { actor.id }
   let(:role_level_id) { role_level.id }
@@ -75,21 +76,12 @@ RSpec.describe 'Roles API' do
         expect(response.body).to match(/Couldn't find Role/)
       end
     end
-
-    context 'when the actor does not have permission' do
-      let(:project_id) { project_unathorised.id }
-      let(:id) { roles_unathorised.first.id }
-
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
-      end
-    end
   end
 
   # Test suite for PUT /projects/:project_id/roles
   describe 'POST /v1/projects/:project_id/roles' do
     let(:valid_attributes) do
-      { actor_id: actor_id, role_level_id: role_level_id }.to_json
+      { actor_id: actor_id, role_level_id: role_level_id, clusters_permissions: true, services_permissions: true, subscriptions_permissions: true }.to_json
     end
 
     context 'when request attributes are valid' do

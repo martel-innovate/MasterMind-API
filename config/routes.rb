@@ -17,6 +17,10 @@ Rails.application.routes.draw do
       resources :clusters
     end
 
+    # Routes for registering roles
+    get '/projects/:project_id/getactorbyrole', to: 'roles#getProjectActorByRole'
+    get '/projects/:project_id/registerfullname', to: 'roles#registerRoleByFullname'
+
     # Cluster routes for deploying stacks, removing stacks, getting info
     get '/projects/:project_id/clusters/:id/getstack', to: 'clusters#getStack'
     get '/projects/:project_id/clusters/:id/deploy', to: 'clusters#deploy'
@@ -28,8 +32,9 @@ Rails.application.routes.draw do
     get '/projects/:project_id/ngsi_subscriptions/:id/deactivate', to: 'ngsi_subscriptions#deactivateSubscription'
     get '/projects/:project_id/ngsi_subscriptions/:id/remove', to: 'ngsi_subscriptions#removeSubscription'
 
+    # Routes for dealing with securing services
     post '/projects/:project_id/services/secureservice', to: 'services#secure_service'
-    
+
   end
 
   # Login route

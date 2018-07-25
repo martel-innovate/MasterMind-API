@@ -1,5 +1,4 @@
 class V1::RoleLevelsController < ApplicationController
-  skip_before_action :authorize_request
   before_action :set_role_level, only: [:show, :update, :destroy]
 
   # Swagger specs
@@ -58,29 +57,49 @@ class V1::RoleLevelsController < ApplicationController
 
   # GET /role_levels
   def index
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to view the role levels" }, :forbidden)
+      return
+    end
     @role_levels = RoleLevel.all
     json_response(@role_levels)
   end
 
   # POST /role_levels
   def create
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to create role levels" }, :forbidden)
+      return
+    end
     @role_level = RoleLevel.create!(role_level_params)
     json_response(@role_level, :created)
   end
 
   # GET /role_levels/:id
   def show
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to view the role levels" }, :forbidden)
+      return
+    end
     json_response(@role_level)
   end
 
   # PUT /role_levels/:id
   def update
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to edit role levels" }, :forbidden)
+      return
+    end
     @role_level.update(role_level_params)
     head :no_content
   end
 
   # DELETE /role_levels/:id
   def destroy
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to destroy role levels" }, :forbidden)
+      return
+    end
     @role_level.destroy
     head :no_content
   end

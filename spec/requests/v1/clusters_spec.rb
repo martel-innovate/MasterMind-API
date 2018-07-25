@@ -12,8 +12,8 @@ RSpec.describe 'Clusters API' do
   let(:project_id) { project.id }
   let(:actor_id) { actor.id }
   let(:id) { clusters.first.id }
-  let(:role_level) { create(:role_level, name: "admin") }
-  let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }
+  let(:role_level) { create(:role_level, name: "user") }
+  let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, clusters_permissions: true) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /projects/:project_id/clusters

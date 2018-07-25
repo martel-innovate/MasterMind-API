@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Actors API' do
+RSpec.describe 'Actors API', type: :request do
   # Initialize the test data
   let(:actor) { create(:actor, superadmin: true) }
   let!(:actors) { create_list(:actor, 19, superadmin: false) }
