@@ -129,7 +129,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions
   def index
-    if @role.nil?
+    if @role.nil? and !current_actor.superadmin
       json_response({ message: "You don't have permission to view this project's subscriptions" }, :forbidden)
       return
     end
@@ -138,7 +138,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions/:id
   def show
-    if @role.nil?
+    if @role.nil? and !current_actor.superadmin
       json_response({ message: "You don't have permission to view this project's subscriptions" }, :forbidden)
       return
     end
@@ -147,7 +147,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # POST /projects/:project_id/ngsi_subscriptions
   def create
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to create a subscription in this project" }, :forbidden)
       return
     end
@@ -157,7 +157,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # PUT /projects/:project_id/ngsi_subscriptions/:id
   def update
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to edit subscriptions in this project" }, :forbidden)
       return
     end
@@ -167,7 +167,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # DELETE /projects/:project_id/ngsi_subscriptions/:id
   def destroy
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to delete subscriptions in this project" }, :forbidden)
       return
     end
@@ -180,7 +180,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   def registerSubscription
     require 'json'
 
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to register subscriptions in this project" }, :forbidden)
       return
     end
@@ -223,7 +223,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/deactivate
   def deactivateSubscription
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to deactivate subscriptions in this project" }, :forbidden)
       return
     end
@@ -232,7 +232,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
 
   # GET /projects/:project_id/ngsi_subscriptions/:id/activate
   def activateSubscription
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to activate subscriptions in this project" }, :forbidden)
       return
     end
@@ -244,7 +244,7 @@ class V1::NgsiSubscriptionsController < ApplicationController
   def removeSubscription
     require 'json'
 
-    if @role.nil? or !(@role.subscriptions_permissions)
+    if (@role.nil? or !(@role.subscriptions_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to remove subscriptions in this project" }, :forbidden)
       return
     end

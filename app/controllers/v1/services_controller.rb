@@ -88,7 +88,7 @@ class V1::ServicesController < ApplicationController
 
   # GET /projects/:project_id/services
   def index
-    if @role.nil?
+    if @role.nil? and !current_actor.superadmin
       json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
       return
     end
@@ -97,7 +97,7 @@ class V1::ServicesController < ApplicationController
 
   # GET /projects/:project_id/services/:id
   def show
-    if @role.nil?
+    if @role.nil? and !current_actor.superadmin
       json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
       return
     end
@@ -106,7 +106,7 @@ class V1::ServicesController < ApplicationController
 
   # POST /projects/:project_id/services
   def create
-    if @role.nil? or !(@role.services_permissions)
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
       return
     end
@@ -116,7 +116,7 @@ class V1::ServicesController < ApplicationController
 
   # PUT /projects/:project_id/services/:id
   def update
-    if @role.nil? or !(@role.services_permissions)
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
       return
     end
@@ -126,7 +126,7 @@ class V1::ServicesController < ApplicationController
 
   # DELETE /projects/:project_id/services/:id
   def destroy
-    if @role.nil? or !(@role.services_permissions)
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
       return
     end
@@ -135,7 +135,7 @@ class V1::ServicesController < ApplicationController
   end
 
   def secure_service
-    if @role.nil? or !(@role.services_permissions)
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
       json_response({ message: "You don't have permission to secure a service in this project" }, :forbidden)
       return
     end
