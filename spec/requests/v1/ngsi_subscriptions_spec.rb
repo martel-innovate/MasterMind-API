@@ -18,8 +18,8 @@ RSpec.describe 'Services API' do
   let(:id_unathorised) {ngsi_subscription_unathorised.first.id}
   let(:service_type_id) { service_type.id }
   let(:cluster_id) { cluster.id }
-  let(:role_level) { create(:role_level, name: "admin") }
-  let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id) }
+  let(:role_level) { create(:role_level, name: "user") }
+  let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, subscriptions_permissions: true) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /projects/:project_id/ngsi_subscriptions

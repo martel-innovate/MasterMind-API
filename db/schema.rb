@@ -70,6 +70,9 @@ ActiveRecord::Schema.define(version: 20180418141031) do
     t.integer "role_level_id"
     t.integer "project_id"
     t.integer "actor_id"
+    t.boolean "clusters_permissions"
+    t.boolean "services_permissions"
+    t.boolean "subscriptions_permissions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["actor_id"], name: "index_roles_on_actor_id"

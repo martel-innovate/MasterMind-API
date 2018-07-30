@@ -1,6 +1,7 @@
 class V1::ServicesController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
+  before_action :set_role
   before_action :set_service, only: [:show, :update, :destroy]
 
   # Swagger specs
@@ -87,38 +88,57 @@ class V1::ServicesController < ApplicationController
 
   # GET /projects/:project_id/services
   def index
-    authorize @project
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
+      return
+    end
     json_response(@project.services)
   end
 
   # GET /projects/:project_id/services/:id
   def show
-    authorize @project
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
+      return
+    end
     json_response(@service)
   end
 
   # POST /projects/:project_id/services
   def create
-    authorize @project
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
+      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      return
+    end
     service = @project.services.create!(service_params)
     json_response(service, :created)
   end
 
   # PUT /projects/:project_id/services/:id
   def update
-    authorize @project
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
+      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      return
+    end
     @service.update(service_params)
     head :no_content
   end
 
   # DELETE /projects/:project_id/services/:id
   def destroy
-    authorize @project
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
+      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      return
+    end
     @service.destroy
     head :no_content
   end
 
   def secure_service
+    if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
+      json_response({ message: "You don't have permission to secure a service in this project" }, :forbidden)
+      return
+    end
     api = params[:payload][:api]
     api_key = api[:'X-Api-Key']
     admin_auth_token = api[:'X-Admin-Auth-Token']
@@ -212,6 +232,11 @@ class V1::ServicesController < ApplicationController
   # Set project when needed
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  # Set role if needed
+  def set_role
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
   end
 
 end

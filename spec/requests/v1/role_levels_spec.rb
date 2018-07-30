@@ -1,14 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe 'Role Levels API', type: :request do
+RSpec.describe 'Role Levels API' do
   # initialize test data
+  let(:actor) { create(:actor, superadmin: true) }
   let!(:role_levels) { create_list(:role_level, 3) }
   let(:role_level_id) { role_levels.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /role_levels
   describe 'GET /v1/role_levels' do
     # make HTTP get request before each example
-    before { get '/v1/role_levels' }
+    before { get '/v1/role_levels', headers: headers }
 
     it 'returns role_levels' do
       # Note `json` is a custom helper to parse JSON responses
@@ -23,7 +25,7 @@ RSpec.describe 'Role Levels API', type: :request do
 
   # Test suite for GET /role_levels/:id
   describe 'GET /v1/role_levels/:id' do
-    before { get "/v1/role_levels/#{role_level_id}" }
+    before { get "/v1/role_levels/#{role_level_id}", headers: headers }
 
     context 'when the record exists' do
       it 'returns the role levels' do
@@ -52,10 +54,12 @@ RSpec.describe 'Role Levels API', type: :request do
   # Test suite for POST /todos
   describe 'POST /v1/role_levels' do
     # valid payload
-    let(:valid_attributes) { { name: 'Admin'} }
+    let(:valid_attributes) do
+      { name: 'Admin'}.to_json
+    end
 
     context 'when the request is valid' do
-      before { post '/v1/role_levels', params: valid_attributes }
+      before { post '/v1/role_levels', params: valid_attributes, headers: headers }
 
       it 'creates a role level' do
         expect(json['name']).to eq('Admin')
@@ -69,10 +73,12 @@ RSpec.describe 'Role Levels API', type: :request do
 
   # Test suite for PUT /role_levels/:id
   describe 'PUT /v1/role_levels/:id' do
-    let(:valid_attributes) { { name: 'User' } }
+    let(:valid_attributes) do
+      { name: 'User'}.to_json
+    end
 
     context 'when the record exists' do
-      before { put "/v1/role_levels/#{role_level_id}", params: valid_attributes }
+      before { put "/v1/role_levels/#{role_level_id}", params: valid_attributes, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -86,7 +92,7 @@ RSpec.describe 'Role Levels API', type: :request do
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /v1/role_levels/:id' do
-    before { delete "/v1/role_levels/#{role_level_id}" }
+    before { delete "/v1/role_levels/#{role_level_id}", headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

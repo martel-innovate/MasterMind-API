@@ -36,6 +36,12 @@ class AuthenticationController < ApplicationController
     json_response(auth_token: auth_token)
   end
 
+  # Checks if auth token still valid
+  def inspectToken
+    # TODO: Token refresh?
+    json_response('')
+  end
+
   private
 
   # Allowed params

@@ -8,7 +8,7 @@ RSpec.describe 'Projects API', type: :request do
   let(:project_id) { projects.first.id }
   let(:project_unathorized_id) { project_unathorized.id }
   let(:role_level) { create(:role_level, name: "admin") }
-  let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id) }
+  let!(:role) { create(:role, project_id: projects.first.id, actor_id: actor.id, role_level_id: role_level.id, clusters_permissions: true, services_permissions: true, subscriptions_permissions: true) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /projects

@@ -14,7 +14,6 @@ module ExceptionHandler
     rescue_from ExceptionHandler::MissingToken, with: :not_permitted
     rescue_from ExceptionHandler::InvalidToken, with: :not_permitted
     rescue_from ExceptionHandler::ExpiredSignature, with: :four_ninety_eight
-    rescue_from Pundit::NotAuthorizedError, with: :not_permitted
 
     rescue_from ActiveRecord::RecordNotFound do |e|
       json_response({ message: e.message }, :not_found)

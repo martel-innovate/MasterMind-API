@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::API
   include Response
   include ExceptionHandler
-  include Pundit
 
   # Called before every action on controllers
   before_action :authorize_request
@@ -11,7 +10,11 @@ class ApplicationController < ActionController::API
 
   # Check for valid request token and return actor
   def authorize_request
-    @current_actor = (AuthorizeApiRequest.new(request.headers).call)[:actor]
+    if !Settings.oauth_enabled
+      @current_actor = Actor.first
+    else
+      @current_actor = (AuthorizeApiRequest.new(request.headers).call)[:actor]
+    end
   end
 
   # Workaround for Pundit

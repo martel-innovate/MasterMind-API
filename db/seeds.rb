@@ -33,4 +33,4 @@ end
 # Setting test superadmin
 actor = Actor.create(email: "superadmintest@gmail.com", fullname: "superadmintest", superadmin: true)
 project = Project.create(name: "SuperProject", description: "A super test Project")
-role = Role.create(project_id: project.id, actor_id: actor.id, role_level_id: 1)
+project.roles.create!(actor_id: actor.id, role_level_id: 1, clusters_permissions: true, services_permissions: true, subscriptions_permissions: true)
