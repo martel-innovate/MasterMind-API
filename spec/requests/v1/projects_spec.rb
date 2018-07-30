@@ -16,14 +16,29 @@ RSpec.describe 'Projects API', type: :request do
     # make HTTP get request before each example
     before { get '/v1/projects', params: {}, headers: headers }
 
-    it 'returns projects' do
-      # Note `json` is a custom helper to parse JSON responses
-      expect(json).not_to be_empty
-      expect(json.size).to eq(1)
+    context 'when not superadmin' do
+      it 'returns projects' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(1)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    context 'when superadmin' do
+      let(:actor) { create(:actor, superadmin: true) }
+      it 'returns projects' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(10)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
@@ -54,11 +69,20 @@ RSpec.describe 'Projects API', type: :request do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorized_id }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor is a superadmin' do
+      let(:project_id) { project_unathorized_id }
+      let(:actor) { create(:actor, superadmin: true) }
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
   end
@@ -117,8 +141,18 @@ RSpec.describe 'Projects API', type: :request do
       let(:project_id) { project_unathorized_id }
       before { put "/v1/projects/#{project_id}", params: valid_attributes, headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor is a superadmin' do
+      let(:project_id) { project_unathorized_id }
+      let(:actor) { create(:actor, superadmin: true) }
+      before { put "/v1/projects/#{project_id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
       end
     end
   end
@@ -137,8 +171,18 @@ RSpec.describe 'Projects API', type: :request do
       let(:project_id) { project_unathorized_id }
       before { put "/v1/projects/#{project_id}", headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor is a superadmin' do
+      let(:project_id) { project_unathorized_id }
+      let(:actor) { create(:actor, superadmin: true) }
+      before { put "/v1/projects/#{project_id}", headers: headers }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
       end
     end
   end

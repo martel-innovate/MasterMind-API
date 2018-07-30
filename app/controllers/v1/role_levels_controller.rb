@@ -58,7 +58,7 @@ class V1::RoleLevelsController < ApplicationController
   # GET /role_levels
   def index
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the role levels" }, :forbidden)
+      json_response({ message: "You don't have permission to view the role levels" }, :unauthorized)
       return
     end
     @role_levels = RoleLevel.all
@@ -68,7 +68,7 @@ class V1::RoleLevelsController < ApplicationController
   # POST /role_levels
   def create
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to create role levels" }, :forbidden)
+      json_response({ message: "You don't have permission to create role levels" }, :unauthorized)
       return
     end
     @role_level = RoleLevel.create!(role_level_params)
@@ -78,7 +78,7 @@ class V1::RoleLevelsController < ApplicationController
   # GET /role_levels/:id
   def show
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the role levels" }, :forbidden)
+      json_response({ message: "You don't have permission to view the role levels" }, :unauthorized)
       return
     end
     json_response(@role_level)
@@ -87,7 +87,7 @@ class V1::RoleLevelsController < ApplicationController
   # PUT /role_levels/:id
   def update
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to edit role levels" }, :forbidden)
+      json_response({ message: "You don't have permission to edit role levels" }, :unauthorized)
       return
     end
     @role_level.update(role_level_params)
@@ -97,7 +97,7 @@ class V1::RoleLevelsController < ApplicationController
   # DELETE /role_levels/:id
   def destroy
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to destroy role levels" }, :forbidden)
+      json_response({ message: "You don't have permission to destroy role levels" }, :unauthorized)
       return
     end
     @role_level.destroy

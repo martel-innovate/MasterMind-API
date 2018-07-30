@@ -48,11 +48,11 @@ RSpec.describe 'Services API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -83,12 +83,12 @@ RSpec.describe 'Services API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       let(:id) {id_unathorised}
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -107,12 +107,68 @@ RSpec.describe 'Services API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       before { post "/v1/projects/#{project_id}/ngsi_subscriptions", headers: headers, params: valid_attributes }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, subscriptions_permissions: false) }
+      before { post "/v1/projects/#{project_id}/ngsi_subscriptions", headers: headers, params: valid_attributes }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+  end
+
+  # Test suite for PUT /projects/:project_id/ngsi_subscriptions
+  describe 'PUT /v1/projects/:project_id/ngsi_subscriptions' do
+   let(:valid_attributes) do
+     { service_id: service_id, subscription_id: 'foobar', name: 'Test', description: 'Test', subject: '{}', notification: '{}', expires: 'sometime', throttling: '5', status: 'inactive'}.to_json
+   end
+
+    context 'when request attributes are valid' do
+      before { put "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers, params: valid_attributes }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when subscription does not exist' do
+      let(:id) { 0 }
+      before { put "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers, params: valid_attributes }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find NgsiSubscription/)
+      end
+    end
+
+    context 'when the actor does not have a role in the project' do
+      let(:project_id) { project_unathorised.id }
+      let(:id) {id_unathorised}
+      before { put "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers, params: valid_attributes }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, subscriptions_permissions: false) }
+      before { put "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers, params: valid_attributes }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -127,13 +183,22 @@ RSpec.describe 'Services API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       let(:id) {id_unathorised}
       before { delete "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, subscriptions_permissions: false) }
+      before { delete "/v1/projects/#{project_id}/ngsi_subscriptions/#{id}", headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end

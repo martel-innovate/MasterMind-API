@@ -87,7 +87,7 @@ class V1::ProjectsController < ApplicationController
   # GET /projects/:id
   def show
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view this project" }, :unauthorized)
       return
     end
     json_response(@project)
@@ -96,7 +96,7 @@ class V1::ProjectsController < ApplicationController
   # PUT /projects/:id
   def update
     if @role.nil? or @role_level != 'admin' and !current_actor.superadmin
-      json_response({ message: "You don't have permission to edit this project" }, :forbidden)
+      json_response({ message: "You don't have permission to edit this project" }, :unauthorized)
       return
     end
     @project.update(project_params)
@@ -106,7 +106,7 @@ class V1::ProjectsController < ApplicationController
   # DELETE /projects/:id
   def destroy
     if @role.nil? or @role_level != 'admin' and !current_actor.superadmin
-      json_response({ message: "You don't have permission to delete this project" }, :forbidden)
+      json_response({ message: "You don't have permission to delete this project" }, :unauthorized)
       return
     end
     @project.destroy

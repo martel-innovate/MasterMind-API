@@ -74,7 +74,7 @@ class V1::ServiceTypesController < ApplicationController
   # POST /service_types
   def create
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to create new service types" }, :forbidden)
+      json_response({ message: "You don't have permission to create new service types" }, :unauthorized)
       return
     end
     @service_type = ServiceType.create!(service_type_params)
@@ -89,7 +89,7 @@ class V1::ServiceTypesController < ApplicationController
   # PUT /service_types/:id
   def update
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to edit service types" }, :forbidden)
+      json_response({ message: "You don't have permission to edit service types" }, :unauthorized)
       return
     end
     @service_type.update(service_type_params)
@@ -99,7 +99,7 @@ class V1::ServiceTypesController < ApplicationController
   # DELETE /service_types/:id
   def destroy
     if !current_actor.superadmin
-      json_response({ message: "You don't have permission to delete service types" }, :forbidden)
+      json_response({ message: "You don't have permission to delete service types" }, :unauthorized)
       return
     end
     @service_type.destroy

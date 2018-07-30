@@ -89,7 +89,7 @@ class V1::ServicesController < ApplicationController
   # GET /projects/:project_id/services
   def index
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
+      json_response({ message: "You don't have permission to view this project's services" }, :unauthorized)
       return
     end
     json_response(@project.services)
@@ -98,7 +98,7 @@ class V1::ServicesController < ApplicationController
   # GET /projects/:project_id/services/:id
   def show
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view this project's services" }, :forbidden)
+      json_response({ message: "You don't have permission to view this project's services" }, :unauthorized)
       return
     end
     json_response(@service)
@@ -107,7 +107,7 @@ class V1::ServicesController < ApplicationController
   # POST /projects/:project_id/services
   def create
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create a service in this project" }, :unauthorized)
       return
     end
     service = @project.services.create!(service_params)
@@ -117,7 +117,7 @@ class V1::ServicesController < ApplicationController
   # PUT /projects/:project_id/services/:id
   def update
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create a service in this project" }, :unauthorized)
       return
     end
     @service.update(service_params)
@@ -127,7 +127,7 @@ class V1::ServicesController < ApplicationController
   # DELETE /projects/:project_id/services/:id
   def destroy
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create a service in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create a service in this project" }, :unauthorized)
       return
     end
     @service.destroy
@@ -136,7 +136,7 @@ class V1::ServicesController < ApplicationController
 
   def secure_service
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to secure a service in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to secure a service in this project" }, :unauthorized)
       return
     end
     api = params[:payload][:api]

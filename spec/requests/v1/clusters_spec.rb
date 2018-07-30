@@ -42,11 +42,11 @@ RSpec.describe 'Clusters API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -77,17 +77,17 @@ RSpec.describe 'Clusters API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       let(:id) { clusters_unathorised.first.id }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
 
-  # Test suite for PUT /projects/:project_id/roles
+  # Test suite for POST /projects/:project_id/clusters
   describe 'POST /v1/projects/:project_id/clusters' do
     let(:valid_attributes) do
       { name: 'TestCluster', description: 'Stuff', endpoint: 'tcp://0.0.0.0:2324', cert: 'ssdffsf', key: 'sffsdsfd', ca: 'adsadsads' }.to_json
@@ -109,12 +109,68 @@ RSpec.describe 'Clusters API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       before { post "/v1/projects/#{project_id}/clusters", params: {}, headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, clusters_permissions: false) }
+      before { post "/v1/projects/#{project_id}/clusters", params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+  end
+
+  # Test suite for PUT /projects/:project_id/clusters
+  describe 'PUT /v1/projects/:project_id/clusters' do
+    let(:valid_attributes) do
+      { name: 'TestCluster', description: 'Stuff', endpoint: 'tcp://0.0.0.0:2324', cert: 'ssdffsf', key: 'sffsdsfd', ca: 'adsadsads' }.to_json
+    end
+
+    context 'when request attributes are valid' do
+      before { put "/v1/projects/#{project_id}/clusters/#{id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when project cluster does not exist' do
+      let(:id) { 0 }
+      before { put "/v1/projects/#{project_id}/clusters/#{id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Cluster/)
+      end
+    end
+
+    context 'when the actor does not have a role in the project' do
+      let(:project_id) { project_unathorised.id }
+      let(:id) { clusters_unathorised.first.id }
+      before { put "/v1/projects/#{project_id}/clusters/#{id}", params: {}, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, clusters_permissions: false) }
+      before { put "/v1/projects/#{project_id}/clusters/#{id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -129,13 +185,22 @@ RSpec.describe 'Clusters API' do
       end
     end
 
-    context 'when the actor does not have permission' do
+    context 'when the actor does not have a role in the project' do
       let(:project_id) { project_unathorised.id }
       let(:id) { clusters_unathorised.first.id }
       before { delete "/v1/projects/#{project_id}/clusters/#{id}", headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor does not have permission' do
+      let!(:role) { create(:role, project_id: project.id, actor_id: actor.id, role_level_id: role_level.id, clusters_permissions: false) }
+      before { delete "/v1/projects/#{project_id}/clusters/#{id}", headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end

@@ -73,7 +73,7 @@ class V1::RolesController < ApplicationController
   # GET /projects/:project_id/roles
   def index
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the roles in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view the roles in this project" }, :unauthorized)
       return
     end
     json_response(@project.roles)
@@ -82,7 +82,7 @@ class V1::RolesController < ApplicationController
   # GET /projects/:project_id/roles/:id
   def show
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the roles in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view the roles in this project" }, :unauthorized)
       return
     end
     json_response(@role)
@@ -91,7 +91,7 @@ class V1::RolesController < ApplicationController
   # POST /projects/:project_id/roles
   def create
     if (@role.nil? or @role_level != 'admin') and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create roles for this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create roles for this project" }, :unauthorized)
       return
     end
     @project.roles.create!(role_params)
@@ -101,7 +101,7 @@ class V1::RolesController < ApplicationController
   # PUT /projects/:project_id/roles/:id
   def update
     if (@role.nil? or @role_level != 'admin') and !current_actor.superadmin
-      json_response({ message: "You don't have permission to edit this project's roles" }, :forbidden)
+      json_response({ message: "You don't have permission to edit this project's roles" }, :unauthorized)
       return
     end
     @role.update(role_params)
@@ -111,7 +111,7 @@ class V1::RolesController < ApplicationController
   # DELETE /projects/:project_id/actors/:id
   def destroy
     if (@role.nil? or @role_level != 'admin') and !current_actor.superadmin
-      json_response({ message: "You don't have permission to delete roles for this project" }, :forbidden)
+      json_response({ message: "You don't have permission to delete roles for this project" }, :unauthorized)
       return
     end
     @role.destroy
@@ -121,7 +121,7 @@ class V1::RolesController < ApplicationController
   # Lists the actors registered in this project.
   def getProjectActorByRole
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view roles for this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view roles for this project" }, :unauthorized)
       return
     end
     r = @project.roles.find(params["role_id"])
@@ -131,7 +131,7 @@ class V1::RolesController < ApplicationController
   # Registers a role for an actor within a project, given their fullname
   def registerRoleByFullname
     if (@role.nil? or @role_level != 'admin') and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create roles for this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create roles for this project" }, :unauthorized)
       return
     end
     if params["fullname"].nil?

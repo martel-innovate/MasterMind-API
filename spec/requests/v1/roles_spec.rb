@@ -41,14 +41,6 @@ RSpec.describe 'Roles API' do
         expect(response.body).to match(/Couldn't find Project/)
       end
     end
-
-    context 'when the actor does not have permission' do
-      let(:project_id) { project_unathorised.id }
-
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
-      end
-    end
   end
 
   # Test suite for GET /projects/:project_id/roles/:id
@@ -104,8 +96,18 @@ RSpec.describe 'Roles API' do
       let(:project_id) { project_unathorised.id }
       before { post "/v1/projects/#{project_id}/roles", params: valid_attributes, headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor is superadmin' do
+      let(:project_id) { project_unathorised.id }
+      let(:actor) { create(:actor, superadmin: true) }
+      before { post "/v1/projects/#{project_id}/roles", params: valid_attributes, headers: headers }
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
       end
     end
   end
@@ -125,8 +127,19 @@ RSpec.describe 'Roles API' do
       let(:id) { roles_unathorised.first.id }
       before { delete "/v1/projects/#{project_id}/roles/#{id}", headers: headers }
 
-      it 'returns status code 403' do
-        expect(response).to have_http_status(403)
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    context 'when the actor is superadmin' do
+      let(:project_id) { project_unathorised.id }
+      let(:id) { roles_unathorised.first.id }
+      let(:actor) { create(:actor, superadmin: true) }
+      before { delete "/v1/projects/#{project_id}/roles/#{id}", headers: headers }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
       end
     end
   end
