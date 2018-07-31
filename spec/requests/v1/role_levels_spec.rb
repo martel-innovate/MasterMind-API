@@ -12,14 +12,23 @@ RSpec.describe 'Role Levels API' do
     # make HTTP get request before each example
     before { get '/v1/role_levels', headers: headers }
 
-    it 'returns role_levels' do
-      # Note `json` is a custom helper to parse JSON responses
-      expect(json).not_to be_empty
-      expect(json.size).to eq(3)
+    context 'when the actor is superadmin' do
+      it 'returns role_levels' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(3)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
     end
   end
 
@@ -49,6 +58,13 @@ RSpec.describe 'Role Levels API' do
         expect(response.body).to match(/Couldn't find RoleLevel/)
       end
     end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for POST /todos
@@ -67,6 +83,15 @@ RSpec.describe 'Role Levels API' do
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { post '/v1/role_levels', params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -88,14 +113,33 @@ RSpec.describe 'Role Levels API' do
         expect(response).to have_http_status(204)
       end
     end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { put "/v1/role_levels/#{role_level_id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /v1/role_levels/:id' do
     before { delete "/v1/role_levels/#{role_level_id}", headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    context 'when the actor is superadmin' do
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
     end
   end
 end

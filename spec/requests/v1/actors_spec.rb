@@ -20,6 +20,13 @@ RSpec.describe 'Actors API', type: :request do
         expect(json.size).to eq(20)
       end
     end
+
+    context 'when not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for GET /v1/actors/:id
@@ -47,6 +54,13 @@ RSpec.describe 'Actors API', type: :request do
         expect(response.body).to match(/Couldn't find Actor/)
       end
     end
+
+    context 'when not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for POST /actors
@@ -72,6 +86,14 @@ RSpec.describe 'Actors API', type: :request do
 
       it 'returns a failure message' do
         expect(response.body).to match(/Validation failed: Email can't be blank/)
+      end
+    end
+
+    context 'when not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { post '/v1/actors', params: valid_attributes, headers: headers }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -106,14 +128,44 @@ RSpec.describe 'Actors API', type: :request do
         expect(response.body).to match(/Couldn't find Actor/)
       end
     end
+
+    context 'when not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for DELETE /actors/:id
   describe 'DELETE /v1/actors/:id' do
-    before { delete "/v1/actors/#{id}", headers: headers }
+    context 'when actor exists' do
+      before { delete "/v1/actors/#{id}", headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when actor does not exist' do
+      let(:id) { 0 }
+      before { delete "/v1/actors/#{id}", headers: headers }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Actor/)
+      end
+    end
+
+    context 'when not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { delete "/v1/actors/#{id}", headers: headers }
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
     end
   end
 end

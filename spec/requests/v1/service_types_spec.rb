@@ -69,6 +69,15 @@ RSpec.describe 'Service Types API' do
         expect(response).to have_http_status(201)
       end
     end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { post '/v1/service_types', params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for PUT /service_types/:id
@@ -88,14 +97,34 @@ RSpec.describe 'Service Types API' do
         expect(response).to have_http_status(204)
       end
     end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { put "/v1/service_types/#{service_type_id}", params: valid_attributes, headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # Test suite for DELETE /service_types/:id
   describe 'DELETE /v1/service_types/:id' do
-    before { delete "/v1/service_types/#{service_type_id}", headers: headers }
+    context 'when the record exists' do
+      before { delete "/v1/service_types/#{service_type_id}", headers: headers }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the actor is not superadmin' do
+      let(:actor) { create(:actor, superadmin: false) }
+      before { delete "/v1/service_types/#{service_type_id}", headers: headers }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
     end
   end
 

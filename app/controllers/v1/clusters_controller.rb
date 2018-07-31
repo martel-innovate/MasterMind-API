@@ -118,7 +118,7 @@ class V1::ClustersController < ApplicationController
   # GET /projects/:project_id/clusters
   def index
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :unauthorized)
       return
     end
     json_response(@project.clusters)
@@ -127,7 +127,7 @@ class V1::ClustersController < ApplicationController
   # GET /projects/:project_id/clusters/:id
   def show
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :unauthorized)
       return
     end
     json_response(@cluster)
@@ -136,7 +136,7 @@ class V1::ClustersController < ApplicationController
   # POST /projects/:project_id/clusters
   def create
     if (@role.nil? or !(@role.clusters_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to create a cluster in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to create a cluster in this project" }, :unauthorized)
       return
     end
     @project.clusters.create!(cluster_params)
@@ -146,7 +146,7 @@ class V1::ClustersController < ApplicationController
   # PUT /projects/:project_id/clusters/:id
   def update
     if (@role.nil? or !(@role.clusters_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to edit clusters in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to edit clusters in this project" }, :unauthorized)
       return
     end
     @cluster.update(cluster_params)
@@ -156,7 +156,7 @@ class V1::ClustersController < ApplicationController
   # DELETE /projects/:project_id/clusters/:id
   def destroy
     if (@role.nil? or !(@role.clusters_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to delete clusters in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to delete clusters in this project" }, :unauthorized)
       return
     end
     @cluster.destroy
@@ -170,7 +170,7 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     if @role.nil? and !current_actor.superadmin
-      json_response({ message: "You don't have permission to view the clusters in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :unauthorized)
       return
     end
 
@@ -213,7 +213,7 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to undeploy services in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to undeploy services in this project" }, :unauthorized)
       return
     end
 
@@ -266,7 +266,7 @@ class V1::ClustersController < ApplicationController
     require 'uri'
 
     if (@role.nil? or !(@role.services_permissions)) and !current_actor.superadmin
-      json_response({ message: "You don't have permission to deploy services in this project" }, :forbidden)
+      json_response({ message: "You don't have permission to deploy services in this project" }, :unauthorized)
       return
     end
 
@@ -363,5 +363,4 @@ class V1::ClustersController < ApplicationController
   def set_project_cluster
     @cluster = @project.clusters.find_by!(id: params[:id]) if @project
   end
-
 end
