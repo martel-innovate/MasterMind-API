@@ -459,7 +459,7 @@ class V1::ClustersController < ApplicationController
 
     # Getting external files needed by the compose
     externalFiles = []
-    for path in Dir['./mastermind-services/'+serviceTypeName+'/'+serviceTypeVersion+'/*']
+    for path in Dir['./'+serviceType.local_path+'/*']
       externalFileName = File.basename(path)
       if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml")
         externalFileContents = File.read(path)
