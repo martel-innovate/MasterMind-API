@@ -2,7 +2,8 @@ class V1::ClustersController < ApplicationController
   #skip_before_action :authorize_request
   before_action :set_project
   before_action :set_role
-  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version, :deploy, :deployWithDockerClient, :getStack, :removeStack]
+  before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version,
+    :deploy, :deployWithDockerClient, :getNetworks, :createNetwork, :getVolumes, :createVolume, :getStack, :removeStack]
 
   # Swagger specs
   swagger_controller :clusters, "Cluster Management"
@@ -161,6 +162,174 @@ class V1::ClustersController < ApplicationController
     end
     @cluster.destroy
     head :no_content
+  end
+
+  # GET /projects/:project_id/clusters/:id/getnetworks
+  # Retrieve networks of a given cluster
+  def getNetworks
+    require 'rest_client'
+    require 'uri'
+
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to view networks" }, :unauthorized)
+      return
+    end
+
+    # Env variables for Manager host and port
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/network'
+
+    # Create request for Service Manager
+    stack = {
+      'engine-url' => @cluster.endpoint,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    begin
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+      )
+      puts "Deploy Response: " + response
+      json_response(response, 200)
+    rescue Exception => e
+      # If error, respond with it
+      puts e
+      json_response({message: e}, :unprocessable_entity)
+    end
+  end
+
+  # GET /projects/:project_id/clusters/:id/getvolumes
+  # Retrieve volumes of a given cluster
+  def getVolumes
+    require 'rest_client'
+    require 'uri'
+
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to view volumes" }, :unauthorized)
+      return
+    end
+
+    # Env variables for Manager host and port
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/volume'
+
+    # Create request for Service Manager
+    stack = {
+      'engine-url' => @cluster.endpoint,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    begin
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+      )
+      puts "Deploy Response: " + response
+      json_response(response, 200)
+    rescue Exception => e
+      # If error, respond with it
+      puts e
+      json_response({message: e}, :unprocessable_entity)
+    end
+  end
+
+  # GET /projects/:project_id/clusters/:id/createnetwork
+  # Retrieve networks of a given stack
+  def createNetwork
+    require 'rest_client'
+    require 'uri'
+
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to create networks" }, :unauthorized)
+      return
+    end
+
+    # Service name in the query
+    networkName = params["network_name"]
+
+    # Env variables for Manager host and port
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/network'
+
+    # Create request for Service Manager
+    stack = {
+      'name' => networkName,
+      'engine-url' => @cluster.endpoint,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    begin
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+      )
+      puts "Deploy Response: " + response
+      json_response(response, :created)
+    rescue Exception => e
+      # If error, respond with it
+      puts e
+      json_response({message: e}, :unprocessable_entity)
+    end
+  end
+
+  # GET /projects/:project_id/clusters/:id/createvolume
+  # Retrieve networks of a given stack
+  def createVolume
+    require 'rest_client'
+    require 'uri'
+
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to view the clusters in this project" }, :unauthorized)
+      return
+    end
+
+    # Service name in the query
+    volumeName = params["volume_name"]
+
+    # Env variables for Manager host and port
+    serviceManagerHost = Settings.service_manager_host
+    serviceManagerPort = Settings.service_manager_port.to_s
+    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/volume'
+
+    # Create request for Service Manager
+    stack = {
+      'name' => volumeName,
+      'engine-url' => @cluster.endpoint,
+      'ca-cert' => @cluster.ca,
+      'cert' => @cluster.cert,
+      'cert-key' => @cluster.key
+    }.to_json
+
+    begin
+      response = RestClient.post(
+        serviceManagerURI,
+        stack,
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json'
+      )
+      puts "Deploy Response: " + response
+      json_response(response, :created)
+    rescue Exception => e
+      # If error, respond with it
+      puts e
+      json_response({message: e}, :unprocessable_entity)
+    end
   end
 
   # GET /projects/:project_id/clusters/:id/getstack
