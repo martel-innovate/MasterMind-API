@@ -367,7 +367,7 @@ class V1::ClustersController < ApplicationController
         'Content-Type' => 'application/json'
       )
       puts "Deploy Response: " + response
-      json_response(response, :created)
+      json_response(response, 200)
     rescue Exception => e
       # If error, respond with it
       puts e
