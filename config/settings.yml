@@ -1,5 +1,8 @@
 mastermind_version: <%= ENV["MASTERMIND_VERSION"] || "undefined" %>
 
+mastermind_catalog_repository: <%= ENV["MASTERMIND_CATALOG_REPOSITORY"] || "https://github.com/martel-innovate/MasterMind-Service-Catalog" %>
+mastermind_catalog_repository_branch: <%= ENV["MASTERMIND_CATALOG_REPOSITORY_BRANCH"] || "master" %>
+
 mastermind_ui_host: <%= ENV["MASTERMIND_UI_HOST"] || "localhost" %>
 mastermind_ui_port: <%= ENV["MASTERMIND_UI_PORT"] || "8080" %>
 
