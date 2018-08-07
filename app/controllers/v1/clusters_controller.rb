@@ -461,7 +461,7 @@ class V1::ClustersController < ApplicationController
     externalFiles = []
     for path in Dir['./' + serviceType.local_path + '/*']
       externalFileName = File.basename(path)
-      if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml" && externalFileName.end_with?('.md'))
+      if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml" && !externalFileName.end_with?('.md'))
         externalFileContents = File.read(path)
         externalFiles.append({"#{externalFileName}" => externalFileContents})
       end
