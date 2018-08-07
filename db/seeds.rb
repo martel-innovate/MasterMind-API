@@ -12,11 +12,7 @@ require 'find'
 if (Dir["mastermind-services"]).length == 0 then
   `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
 end
-#for path in Dir['mastermind-services/*/*/']
-#  mastermindConf = YAML::load(File.open(path+'mastermind.yml'))
-#  dockerCompose = YAML::load(File.open(path+'docker-compose.yml'))
-#  ServiceType.create(name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(path+'mastermind.yml'), deploy_template: File.read(path+'docker-compose.yml'))
-#end
+
 Find.find('mastermind-services') do |path|
   if path =~ /.*mastermind\.yml$/
     directory = File.dirname(path)

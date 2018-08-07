@@ -178,7 +178,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/network'
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/network'
 
     # Create request for Service Manager
     stack = {
@@ -218,7 +218,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/volume'
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/volume'
 
     # Create request for Service Manager
     stack = {
@@ -261,7 +261,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/network'
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/network'
 
     # Create request for Service Manager
     stack = {
@@ -305,7 +305,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/volume'
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/volume'
 
     # Create request for Service Manager
     stack = {
@@ -348,7 +348,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/'+serviceName
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/stack/' + serviceName
 
     # Create request for Service Manager
     stack = {
@@ -396,7 +396,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack/delete/'+serviceName
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/stack/delete/' + serviceName
 
     # Create request for Service Manager
     stack = {
@@ -442,7 +442,7 @@ class V1::ClustersController < ApplicationController
     # Env variables for Manager host and port
     serviceManagerHost = Settings.service_manager_host
     serviceManagerPort = Settings.service_manager_port.to_s
-    serviceManagerURI = 'http://'+serviceManagerHost+':'+serviceManagerPort+'/v1/stack'
+    serviceManagerURI = 'http://' + serviceManagerHost + ':' + serviceManagerPort + '/v1/stack'
 
     # Service name in query
     serviceName = params["service_name"]
@@ -459,9 +459,9 @@ class V1::ClustersController < ApplicationController
 
     # Getting external files needed by the compose
     externalFiles = []
-    for path in Dir['./'+serviceType.local_path+'/*']
+    for path in Dir['./' + serviceType.local_path + '/*']
       externalFileName = File.basename(path)
-      if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml")
+      if (externalFileName != "docker-compose.yml" && externalFileName != "mastermind.yml" && externalFileName.end_with?('.md'))
         externalFileContents = File.read(path)
         externalFiles.append({"#{externalFileName}" => externalFileContents})
       end
