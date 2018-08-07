@@ -106,6 +106,39 @@ class V1::ServiceTypesController < ApplicationController
     head :no_content
   end
 
+  # /service_types/update
+  # Update the service types from the catalog
+  def updateAll
+    require 'FileUtils'
+    require 'find'
+
+    if !current_actor.superadmin
+      json_response({ message: "You don't have permission to update service types" }, :unauthorized)
+      return
+    end
+
+    if (Dir["mastermind-services"]).length != 0 then
+      FileUtils.rm_rf('mastermind-services')
+    end
+    `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
+
+    Find.find('mastermind-services') do |path|
+      if path =~ /.*mastermind\.yml$/
+        directory = File.dirname(path)
+        mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
+        dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
+        serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
+        if serviceType.nil?
+          ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+        else
+          serviceType.update({local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+        end
+      end
+    end
+
+    json_response({ message: "Service Types Updated" }, 200)
+  end
+
   private
 
   # Allowed service type params

@@ -23,6 +23,10 @@ Rails.application.routes.draw do
 
     # Cluster routes for deploying stacks, removing stacks, getting info
     get '/projects/:project_id/clusters/:id/getstack', to: 'clusters#getStack'
+    get '/projects/:project_id/clusters/:id/getnetworks', to: 'clusters#getNetworks'
+    get '/projects/:project_id/clusters/:id/getvolumes', to: 'clusters#getVolumes'
+    post '/projects/:project_id/clusters/:id/createnetwork', to: 'clusters#createNetwork'
+    post '/projects/:project_id/clusters/:id/createvolume', to: 'clusters#createVolume'
     get '/projects/:project_id/clusters/:id/deploy', to: 'clusters#deploy'
     get '/projects/:project_id/clusters/:id/removestack', to: 'clusters#removeStack'
 
@@ -35,6 +39,8 @@ Rails.application.routes.draw do
     # Routes for dealing with securing services
     post '/projects/:project_id/services/secureservice', to: 'services#secure_service'
 
+    # Routes for catalog updating
+    get '/catalog/refresh', to: 'service_types#updateAll'
   end
 
   # Login route
