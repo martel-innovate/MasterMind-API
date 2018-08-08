@@ -7,19 +7,26 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 require 'find'
+require 'uri'
 
 # Initialising database with service types from Catalog repo
-if (Dir["mastermind-services"]).length == 0 then
-  `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
-end
-
-Find.find('mastermind-services') do |path|
-  if path =~ /.*mastermind\.yml$/
-    directory = File.dirname(path)
-    mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
-    dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
-    ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+begin
+  # Check URL for repo is valid
+  URI.parse(Settings.mastermind_catalog_repository)
+  if (Dir["mastermind-services"]).length == 0 then
+    system("git clone -b " + Settings.mastermind_catalog_repository_branch + " --single-branch " + Settings.mastermind_catalog_repository + " mastermind-services")
   end
+
+  Find.find('mastermind-services') do |path|
+    if path =~ /.*mastermind\.yml$/
+      directory = File.dirname(path)
+      mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
+      dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
+      ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+    end
+  end
+rescue
+  puts "Unable to import the Catalog, invalid repository URL or malformed repository"
 end
 
 # Initialising database with role levels

@@ -117,26 +117,31 @@ class V1::ServiceTypesController < ApplicationController
       return
     end
 
-    if (Dir["mastermind-services"]).length != 0 then
-      FileUtils.rm_rf('mastermind-services')
-    end
-    `git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services`
+    begin
+      URI.parse(Settings.mastermind_catalog_repository)
+      if (Dir["mastermind-services"]).length != 0 then
+        FileUtils.rm_rf('mastermind-services')
+      end
+      system("git clone -b " + Settings.mastermind_catalog_repository_branch + " --single-branch " + Settings.mastermind_catalog_repository + " mastermind-services")
 
-    Find.find('mastermind-services') do |path|
-      if path =~ /.*mastermind\.yml$/
-        directory = File.dirname(path)
-        mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
-        dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
-        serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
-        if serviceType.nil?
-          ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
-        else
-          serviceType.update({local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+      Find.find('mastermind-services') do |path|
+        if path =~ /.*mastermind\.yml$/
+          directory = File.dirname(path)
+          mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
+          dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
+          serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
+          if serviceType.nil?
+            ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+          else
+            serviceType.update({local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+          end
         end
       end
-    end
 
-    json_response({ message: "Service Types Updated" }, 200)
+      json_response({ message: "Service Types Updated" }, 200)
+    rescue
+      json_response({ message: "Invalid Catalog Repository URI or malformed Repository" }, 200)
+    end
   end
 
   private
