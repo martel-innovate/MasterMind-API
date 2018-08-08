@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 require 'find'
-require 'URI'
+require 'uri'
 
 # Initialising database with service types from Catalog repo
 begin
