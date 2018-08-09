@@ -55,7 +55,7 @@ RSpec.describe 'Service Types API' do
   describe 'POST /v1/service_types' do
     # valid payload
     let!(:valid_attributes) do
-      { name: 'Orion', version: '1.0', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test'}.to_json
+      { name: 'Orion', version: '1.0', service_protocol_type: 'HTTP', ngsi_version: '9', configuration_template: 'test', deploy_template: 'test', is_imported: false, project_id: 0}.to_json
     end
 
     context 'when the request is valid' do

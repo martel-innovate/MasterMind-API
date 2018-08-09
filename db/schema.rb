@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20180418141031) do
     t.text "description"
     t.string "version"
     t.string "local_path"
+    t.boolean "is_imported"
+    t.integer "project_id"
   end
 
   create_table "services", force: :cascade do |t|
