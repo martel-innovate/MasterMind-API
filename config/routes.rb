@@ -40,8 +40,9 @@ Rails.application.routes.draw do
     # Routes for dealing with securing services
     post '/projects/:project_id/services/secureservice', to: 'services#secure_service'
 
-    # Routes for catalog updating
+    # Routes for catalog
     get '/catalog/refresh', to: 'service_types#updateAll'
+    post '/catalog/importcustom', to: 'service_types#importCustomCatalog'
   end
 
   # Login route

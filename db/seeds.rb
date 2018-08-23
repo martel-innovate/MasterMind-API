@@ -22,7 +22,7 @@ begin
       directory = File.dirname(path)
       mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
       dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
-      ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+      ServiceType.create(is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
     end
   end
 rescue

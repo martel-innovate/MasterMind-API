@@ -14,4 +14,6 @@ RSpec.describe ServiceType, type: :model do
     it { should validate_presence_of(:ngsi_version) }
     it { should validate_presence_of(:configuration_template) }
     it { should validate_presence_of(:deploy_template) }
+    it { should validate_inclusion_of(:is_imported).in_array([true, false]) }
+    it { should validate_presence_of(:project_id) }
 end

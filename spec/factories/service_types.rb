@@ -6,5 +6,7 @@ FactoryGirl.define do
     ngsi_version { Faker::Lorem.word }
     configuration_template { Faker::Lorem.word }
     deploy_template { Faker::Lorem.word }
+    is_imported false
+    project_id 0
   end
 end

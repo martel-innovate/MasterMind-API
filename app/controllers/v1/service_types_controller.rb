@@ -67,12 +67,36 @@ class V1::ServiceTypesController < ApplicationController
 
   # GET /service_types
   def index
-    @service_types = ServiceType.all
+    if params["project_id"].present?
+      @project = Project.find(params["project_id"])
+      @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+      if @role.nil? and !current_actor.superadmin
+        json_response({ message: "You don't have permission to view the service types for this project" }, :unauthorized)
+        return
+      else
+        @service_types = ServiceType.where(is_imported: true, project_id: params["project_id"])
+        json_response(@service_types)
+        return
+      end
+    end
+    @service_types = ServiceType.where(is_imported: false)
     json_response(@service_types)
   end
 
   # POST /service_types
   def create
+    if params["is_imported"] and params["project_id"] != 0
+      @project = Project.find(params["project_id"])
+      @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+      if @role.nil? and !current_actor.superadmin
+        json_response({ message: "You don't have permission to create service types for this project" }, :unauthorized)
+        return
+      else
+        @service_type = ServiceType.create!(service_type_params)
+        json_response(@service_type, :created)
+        return
+      end
+    end
     if !current_actor.superadmin
       json_response({ message: "You don't have permission to create new service types" }, :unauthorized)
       return
@@ -83,11 +107,34 @@ class V1::ServiceTypesController < ApplicationController
 
   # GET /service_types/:id
   def show
+    if @service_type.is_imported and @service_type.project_id != 0
+      @project = Project.find(@service_type.project_id)
+      @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+      if @role.nil? and !current_actor.superadmin
+        json_response({ message: "You don't have permission to view this service type for this project" }, :unauthorized)
+        return
+      else
+        json_response(@service_type)
+        return
+      end
+    end
     json_response(@service_type)
   end
 
   # PUT /service_types/:id
   def update
+    if @service_type.is_imported and @service_type.project_id != 0
+      @project = Project.find(@service_type.project_id)
+      @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+      if @role.nil? and !current_actor.superadmin
+        json_response({ message: "You don't have permission to edit service types for this project" }, :unauthorized)
+        return
+      else
+        @service_type.update(service_type_params)
+        head :no_content
+        return
+      end
+    end
     if !current_actor.superadmin
       json_response({ message: "You don't have permission to edit service types" }, :unauthorized)
       return
@@ -98,6 +145,18 @@ class V1::ServiceTypesController < ApplicationController
 
   # DELETE /service_types/:id
   def destroy
+    if @service_type.is_imported and @service_type.project_id != 0
+      @project = Project.find(@service_type.project_id)
+      @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+      if @role.nil? and !current_actor.superadmin
+        json_response({ message: "You don't have permission to edit service types for this project" }, :unauthorized)
+        return
+      else
+        @service_type.destroy
+        head :no_content
+        return
+      end
+    end
     if !current_actor.superadmin
       json_response({ message: "You don't have permission to delete service types" }, :unauthorized)
       return
@@ -106,11 +165,12 @@ class V1::ServiceTypesController < ApplicationController
     head :no_content
   end
 
-  # /service_types/update
+  # /catalog/refresh
   # Update the service types from the catalog
   def updateAll
     require 'FileUtils'
     require 'find'
+    require 'uri'
 
     if !current_actor.superadmin
       json_response({ message: "You don't have permission to update service types" }, :unauthorized)
@@ -131,16 +191,65 @@ class V1::ServiceTypesController < ApplicationController
           dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
           serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
           if serviceType.nil?
-            ServiceType.create(local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+            ServiceType.create(is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
           else
-            serviceType.update({local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+            serviceType.update({is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
           end
         end
       end
 
       json_response({ message: "Service Types Updated" }, 200)
     rescue
-      json_response({ message: "Invalid Catalog Repository URI or malformed Repository" }, 200)
+      json_response({ message: "Invalid Catalog Repository URI or malformed Repository" }, 400)
+    end
+  end
+
+  # /catalog/import
+  # Import a custom set of recipes in the catalog to be used by a single project
+  def importCustomCatalog
+    require 'FileUtils'
+    require 'find'
+    require 'uri'
+    require 'tmpdir'
+
+    @project = Project.find(params["project_id"])
+    @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
+    if @role.nil? and !current_actor.superadmin
+      json_response({ message: "You don't have permission to update service types" }, :unauthorized)
+      return
+    end
+
+    temp_dir = Dir.mktmpdir
+
+    begin
+      URI.parse(params["custom_catalog_uri"])
+      if params["custom_catalog_branch"].present?
+        repo_branch = params["custom_catalog_branch"]
+      else
+        repo_branch = 'master'
+      end
+
+      system("git clone -b " + repo_branch + " --single-branch " + params["custom_catalog_uri"] + " " + temp_dir + "/mastermind-services")
+
+      Find.find(temp_dir + "/mastermind-services") do |path|
+        if path =~ /.*mastermind\.yml$/
+          directory = File.dirname(path)
+          mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
+          dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
+          serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"], is_imported: true, project_id: @project.id
+          if serviceType.nil?
+            ServiceType.create(is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+          else
+            serviceType.update({is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+          end
+        end
+      end
+
+      json_response({ message: "Service Types imported" }, 200)
+    rescue
+      json_response({ message: "Invalid Catalog Repository URI or malformed Repository" }, 400)
+    ensure
+      FileUtils.remove_entry_secure temp_dir
     end
   end
 
@@ -148,7 +257,7 @@ class V1::ServiceTypesController < ApplicationController
 
   # Allowed service type params
   def service_type_params
-    params.permit(:name, :version, :service_protocol_type, :ngsi_version, :configuration_template, :deploy_template)
+    params.permit(:name, :version, :service_protocol_type, :ngsi_version, :configuration_template, :deploy_template, :is_imported, :project_id)
   end
 
   # Set service type when needed
