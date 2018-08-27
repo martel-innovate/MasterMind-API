@@ -168,7 +168,7 @@ class V1::ServiceTypesController < ApplicationController
   # /catalog/refresh
   # Update the service types from the catalog
   def updateAll
-    require 'FileUtils'
+    require 'fileutils'
     require 'find'
     require 'uri'
 
@@ -190,10 +190,11 @@ class V1::ServiceTypesController < ApplicationController
           mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
           dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
           serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
+          # NOTE: The gsub done on the Docker Compose might be moved into the Service Manager instead. This fix is likely temporary
           if serviceType.nil?
-            ServiceType.create(is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+            ServiceType.create(is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}"))
           else
-            serviceType.update({is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+            serviceType.update({is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}")})
           end
         end
       end
@@ -207,10 +208,9 @@ class V1::ServiceTypesController < ApplicationController
   # /catalog/import
   # Import a custom set of recipes in the catalog to be used by a single project
   def importCustomCatalog
-    require 'FileUtils'
+    require 'fileutils'
     require 'find'
     require 'uri'
-    require 'tmpdir'
 
     @project = Project.find(params["project_id"])
     @role = Role.find_by_actor_id_and_project_id(current_actor.id, @project.id)
@@ -219,7 +219,7 @@ class V1::ServiceTypesController < ApplicationController
       return
     end
 
-    temp_dir = Dir.mktmpdir
+    temp_dir = FileUtils.mkdir_p("custom-recipes/"+@project.id.to_s)[0]
 
     begin
       URI.parse(params["custom_catalog_uri"])
@@ -237,10 +237,11 @@ class V1::ServiceTypesController < ApplicationController
           mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
           dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
           serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"], is_imported: true, project_id: @project.id
+          # NOTE: The gsub done on the Docker Compose might be moved into the Service Manager instead. This fix is likely temporary
           if serviceType.nil?
-            ServiceType.create(is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml'))
+            ServiceType.create(is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}"))
           else
-            serviceType.update({is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml')})
+            serviceType.update({is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}")})
           end
         end
       end
@@ -248,8 +249,6 @@ class V1::ServiceTypesController < ApplicationController
       json_response({ message: "Service Types imported" }, 200)
     rescue
       json_response({ message: "Invalid Catalog Repository URI or malformed Repository" }, 400)
-    ensure
-      FileUtils.remove_entry_secure temp_dir
     end
   end
 
