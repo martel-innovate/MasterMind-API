@@ -190,6 +190,7 @@ class V1::ServiceTypesController < ApplicationController
           mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
           dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
           serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"]
+          # NOTE: The gsub done on the Docker Compose might be moved into the Service Manager instead. This fix is likely temporary
           if serviceType.nil?
             ServiceType.create(is_imported: false, project_id: 0, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}"))
           else
@@ -236,6 +237,7 @@ class V1::ServiceTypesController < ApplicationController
           mastermindConf = YAML::load(File.open(directory+'/mastermind.yml'))
           dockerCompose = YAML::load(File.open(directory+'/docker-compose.yml'))
           serviceType = ServiceType.find_by name: mastermindConf["name"], version: mastermindConf["version"], is_imported: true, project_id: @project.id
+          # NOTE: The gsub done on the Docker Compose might be moved into the Service Manager instead. This fix is likely temporary
           if serviceType.nil?
             ServiceType.create(is_imported: true, project_id: @project.id, local_path: directory, name: mastermindConf["name"], description: mastermindConf["description"], version: mastermindConf["version"], service_protocol_type: mastermindConf["protocol_type"], ngsi_version: mastermindConf["ngsi_version"], configuration_template: File.read(directory+'/mastermind.yml'), deploy_template: File.read(directory+'/docker-compose.yml').gsub(/:-.+}/, "}"))
           else
