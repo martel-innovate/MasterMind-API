@@ -8,6 +8,22 @@
       "path": "/v1/projects/{project_id}/clusters",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -20,34 +36,18 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
-              "code": 403,
+              "code": 401,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "Signature has expired"
             },
             {
-              "code": 500,
+              "code": 403,
               "responseModel": null,
               "message": "The provided API token is invalid"
             }
           ],
           "summary": "Fetches Clusters",
-          "notes": "This lists all the Clusters belonging to a given Project",
-          "parameters": [
-            {
-              "paramType": "header",
-              "name": "Authorization",
-              "type": "string",
-              "description": "Authentication token",
-              "required": true
-            },
-            {
-              "paramType": "path",
-              "name": "project_id",
-              "type": "integer",
-              "description": "Project Id",
-              "required": true
-            }
-          ],
+          "notes": "This lists all the Clusters belonging to the given Project",
           "nickname": "V1::Clusters#index",
           "method": "get"
         }
@@ -57,35 +57,6 @@
       "path": "/v1/projects/{project_id}/clusters",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Actor",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Register a new Cluster",
-          "notes": "This registers a new Cluster in the given Project",
           "parameters": [
             {
               "paramType": "header",
@@ -144,6 +115,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            }
+          ],
+          "summary": "Register a new Cluster",
+          "notes": "This registers a new Cluster in the given Project",
           "nickname": "V1::Clusters#create",
           "method": "post"
         }
@@ -153,35 +153,6 @@
       "path": "/v1/projects/{project_id}/clusters/{id}",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Actor",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Cluster not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Fetches a specific Cluster",
-          "notes": "This fetches the Cluster matching the given id",
           "parameters": [
             {
               "paramType": "header",
@@ -205,15 +176,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::Clusters#show",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/clusters/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -226,28 +188,32 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Cluster not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
-          "summary": "Updates a Cluster",
-          "notes": "This updates the Cluster matching the given id",
+          "summary": "Fetches a specific Cluster",
+          "notes": "This fetches the Cluster matching the given id",
+          "nickname": "V1::Clusters#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}",
+      "operations": [
+        {
           "parameters": [
             {
               "paramType": "header",
@@ -313,15 +279,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::Clusters#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/clusters/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -334,9 +291,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -344,13 +306,22 @@
               "message": "Cluster not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes a Cluster",
-          "notes": "This deletes the Cluster matching the given id",
+          "summary": "Updates a Cluster",
+          "notes": "This updates the Cluster matching the given id",
+          "nickname": "V1::Clusters#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}",
+      "operations": [
+        {
           "parameters": [
             {
               "paramType": "header",
@@ -374,15 +345,67 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            }
+          ],
+          "summary": "Deletes a Cluster",
+          "notes": "This deletes the Cluster matching the given id",
           "nickname": "V1::Clusters#destroy",
           "method": "delete"
         }
       ]
     },
     {
-      "path": "/v1/projects/{project_id}/clusters/{id}/getstack",
+      "path": "/v1/projects/{project_id}/clusters/{id}/getswarm",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -395,23 +418,37 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
-              "message": "Service not found"
+              "message": "Cluster not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Could not get the specified Cluster"
             }
           ],
-          "summary": "Gets info on the Service from Docker",
-          "notes": "This retrieves info on the Service (defined as a Docker Stack) from Docker",
+          "summary": "Gets info on the Cluster",
+          "notes": "This retrieves info on the Swarm Cluster from Docker",
+          "nickname": "V1::Clusters#getSwarm",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/getstack",
+      "operations": [
+        {
           "parameters": [
             {
               "paramType": "header",
@@ -438,19 +475,10 @@
               "paramType": "query",
               "name": "service_name",
               "type": "string",
-              "description": "Name of the Service",
+              "description": "Name of the Service's Stack",
               "required": true
             }
           ],
-          "nickname": "V1::Clusters#getStack",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/clusters/{id}/deploy",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -463,9 +491,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -473,13 +506,300 @@
               "message": "Service not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Could not get the specified Stack"
             }
           ],
-          "summary": "Deploys the Service",
-          "notes": "This deploys the Service on its associated Docker Swarm Cluster",
+          "summary": "Gets info on the Service from Docker",
+          "notes": "This retrieves info on the Service (defined as a Docker Stack) from Docker",
+          "nickname": "V1::Clusters#getStack",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/getnetworks",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Could not get networks from the specified Cluster"
+            }
+          ],
+          "summary": "Gets networks on the Cluster",
+          "notes": "This retrieves the networks on the Swarm Cluster from Docker",
+          "nickname": "V1::Clusters#getNetworks",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/getvolumes",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Could not get volumes from the specified Cluster"
+            }
+          ],
+          "summary": "Gets the volumes on the Cluster",
+          "notes": "This retrieves the volumes on the Swarm Cluster from Docker",
+          "nickname": "V1::Clusters#getVolumes",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/createnetwork",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "network_name",
+              "type": "string",
+              "description": "A name for the network",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Could not create network on the specified Cluster"
+            }
+          ],
+          "summary": "Creates a network on the Cluster",
+          "notes": "This creates a new overlay network on the Docker Swarm Cluster",
+          "nickname": "V1::Clusters#createNetwork",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/createvolume",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "project_id",
+              "type": "integer",
+              "description": "Project Id",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Cluster Id",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "volume_name",
+              "type": "string",
+              "description": "A name for the volume",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Cluster not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Could not create volume on the specified Cluster"
+            }
+          ],
+          "summary": "Creates a volume on the Cluster",
+          "notes": "This creates a new volume on the Docker Swarm Cluster",
+          "nickname": "V1::Clusters#createVolume",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/deploy",
+      "operations": [
+        {
           "parameters": [
             {
               "paramType": "header",
@@ -506,26 +826,17 @@
               "paramType": "query",
               "name": "service_id",
               "type": "string",
-              "description": "ID of the Service to deploy",
+              "description": "ID of the Service's Stack to deploy",
               "required": true
             },
             {
               "paramType": "query",
               "name": "service_name",
               "type": "string",
-              "description": "Name of the Service to deploy",
+              "description": "Name of the Service's Stack to deploy",
               "required": true
             }
           ],
-          "nickname": "V1::Clusters#deploy",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/clusters/{id}/removestack",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -538,9 +849,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -548,13 +864,22 @@
               "message": "Service not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Could not deploy the specified Service"
             }
           ],
-          "summary": "Removes the Service from Docker",
-          "notes": "This undeploys the Service from its associated Docker Swarm Cluster",
+          "summary": "Deploys the Service",
+          "notes": "This deploys the Service on its associated Docker Swarm Cluster",
+          "nickname": "V1::Clusters#deploy",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/clusters/{id}/removestack",
+      "operations": [
+        {
           "parameters": [
             {
               "paramType": "header",
@@ -581,10 +906,44 @@
               "paramType": "query",
               "name": "service_name",
               "type": "string",
-              "description": "Name of the Service to remove",
+              "description": "Name of the Service's Stack to remove",
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service not found"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Could not remove the specified Stack"
+            }
+          ],
+          "summary": "Removes the Service from Docker",
+          "notes": "This undeploys the Service from its associated Docker Swarm Cluster",
           "nickname": "V1::Clusters#removeStack",
           "method": "get"
         }

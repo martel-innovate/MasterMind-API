@@ -8,6 +8,22 @@
       "path": "/v1/projects",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -20,27 +36,18 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
-              "code": 403,
+              "code": 401,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "Signature has expired"
             },
             {
-              "code": 500,
+              "code": 403,
               "responseModel": null,
               "message": "The provided API token is invalid"
             }
           ],
           "summary": "Fetches Projects",
           "notes": "This lists all the Projects",
-          "parameters": [
-            {
-              "paramType": "header",
-              "name": "Authorization",
-              "type": "string",
-              "description": "Authentication token",
-              "required": true
-            }
-          ],
           "nickname": "V1::Projects#index",
           "method": "get"
         }
@@ -50,36 +57,14 @@
       "path": "/v1/projects",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Project",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Register a new Project",
-          "notes": "This registers a new Project",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -102,15 +87,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::Projects#create",
-          "method": "post"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -123,24 +99,40 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Project not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
               "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Fetches a specific Project",
-          "notes": "This fetches the Project matching the given id",
+          "summary": "Register a new Project",
+          "notes": "This registers a new Project",
+          "nickname": "V1::Projects#create",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -156,15 +148,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::Projects#show",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -177,29 +160,40 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Project not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
-          "summary": "Updates a Project",
-          "notes": "This updates the Project matching the given id",
+          "summary": "Fetches a specific Project",
+          "notes": "This fetches the Project matching the given id",
+          "nickname": "V1::Projects#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -229,15 +223,6 @@
               "required": false
             }
           ],
-          "nickname": "V1::Projects#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -250,9 +235,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -260,14 +250,30 @@
               "message": "Project not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes a Project",
-          "notes": "This deletes the Project matching the given id",
+          "summary": "Updates a Project",
+          "notes": "This updates the Project matching the given id",
+          "nickname": "V1::Projects#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -283,6 +289,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Project",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Project not found"
+            }
+          ],
+          "summary": "Deletes a Project",
+          "notes": "This deletes the Project matching the given id",
           "nickname": "V1::Projects#destroy",
           "method": "delete"
         }

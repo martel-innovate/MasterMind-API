@@ -8,6 +8,15 @@
       "path": "/v1/service_types",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -20,12 +29,12 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
-              "code": 403,
+              "code": 401,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "Signature has expired"
             },
             {
-              "code": 500,
+              "code": 403,
               "responseModel": null,
               "message": "The provided API token is invalid"
             }
@@ -41,36 +50,14 @@
       "path": "/v1/service_types",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "ServiceType",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Creates a Service Type",
-          "notes": "This creates a new Service Type",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "form",
               "name": "name",
@@ -112,8 +99,58 @@
               "type": "string",
               "description": "The deploy template (the docker-compose.yml file) of this Service Type",
               "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "local_path",
+              "type": "string",
+              "description": "The local path of the Service Type's files in MasterMind's API server",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "is_imported",
+              "type": "string",
+              "description": "True if this is a custom Service Type that was imported in a Project",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "project_id",
+              "type": "integer",
+              "description": "The Id of the Project this Service Type belongs to if imported (0 otherwise)",
+              "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            }
+          ],
+          "summary": "Creates a Service Type",
+          "notes": "This creates a new Service Type",
           "nickname": "V1::ServiceTypes#create",
           "method": "post"
         }
@@ -123,6 +160,22 @@
       "path": "/v1/service_types/{id}",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Service Type Id",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -135,32 +188,23 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Service Type not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
           "summary": "Fetches a specific Service Type",
           "notes": "This fetches the Service Type matching the given id",
-          "parameters": [
-            {
-              "paramType": "path",
-              "name": "id",
-              "type": "integer",
-              "description": "Service Type Id",
-              "required": true
-            }
-          ],
           "nickname": "V1::ServiceTypes#show",
           "method": "get"
         }
@@ -170,41 +214,14 @@
       "path": "/v1/service_types/{id}",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "ServiceType",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Service Type not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Updates a Service Type",
-          "notes": "This updates the Service Type matching the given id",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "path",
               "name": "id",
@@ -253,17 +270,29 @@
               "type": "string",
               "description": "The deploy template (the docker-compose.yml file) of this Service Type",
               "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "local_path",
+              "type": "string",
+              "description": "The local path of the Service Type's files in MasterMind's API server",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "is_imported",
+              "type": "string",
+              "description": "True if this is a custom Service Type that was imported in a Project",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "project_id",
+              "type": "integer",
+              "description": "The Id of the Project this Service Type belongs to if imported (0 otherwise)",
+              "required": true
             }
           ],
-          "nickname": "V1::ServiceTypes#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/service_types/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -276,9 +305,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -286,14 +320,30 @@
               "message": "Service Type not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes a Service Type",
-          "notes": "This deletes the Service Type matching the given id",
+          "summary": "Updates a Service Type",
+          "notes": "This updates the Service Type matching the given id",
+          "nickname": "V1::ServiceTypes#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/service_types/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "path",
               "name": "id",
@@ -302,8 +352,167 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service Type not found"
+            }
+          ],
+          "summary": "Deletes a Service Type",
+          "notes": "This deletes the Service Type matching the given id",
           "nickname": "V1::ServiceTypes#destroy",
           "method": "delete"
+        }
+      ]
+    },
+    {
+      "path": "/v1/catalog/refresh",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Invalid Catalog Repository URI or malformed Repository"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service Type not found"
+            }
+          ],
+          "summary": "Deletes a Service Type",
+          "notes": "This deletes the Service Type matching the given id",
+          "nickname": "V1::ServiceTypes#updateAll",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/catalog/importcustom",
+      "operations": [
+        {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "project_id",
+              "type": "integer",
+              "description": "The If of the Project to import this Catalog into",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "custom_catalog_uri",
+              "type": "string",
+              "description": "The URI of the Github repo containing the Catalog",
+              "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "custom_catalog_branch",
+              "type": "string",
+              "description": "The branch of the Github repo containing the Catalog",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 200,
+              "responseModel": "ServiceType",
+              "message": "Success"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Invalid Catalog Repository URI or malformed Repository"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Deletes a Service Type",
+          "notes": "This deletes the Service Type matching the given id",
+          "nickname": "V1::ServiceTypes#importCustomCatalog",
+          "method": "post"
         }
       ]
     }

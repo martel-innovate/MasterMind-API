@@ -13,11 +13,6 @@
               "code": 200,
               "responseModel": null,
               "message": "Success"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
             }
           ],
           "summary": "Obtains MasterMind version",

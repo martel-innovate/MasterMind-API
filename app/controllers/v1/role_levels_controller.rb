@@ -5,9 +5,10 @@ class V1::RoleLevelsController < ApplicationController
   swagger_controller :role_levels, "Role Levels Management"
 
   def self.add_common_params(api)
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
     api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|

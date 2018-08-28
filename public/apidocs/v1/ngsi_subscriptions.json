@@ -8,31 +8,14 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "NgsiSubscription",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Fetches NSGI Subscriptions",
-          "notes": "This lists all the NGSI Subscriptions belonging to a given Project",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -48,15 +31,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::NgsiSubscriptions#index",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/ngsi_subscriptions",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -69,24 +43,35 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
               "responseModel": null,
               "message": "The provided API token is invalid"
             }
           ],
-          "summary": "Register a new NSGI Subscription",
-          "notes": "This registers a new NSGI Subscription in the given Project",
+          "summary": "Fetches NSGI Subscriptions",
+          "notes": "This lists all the NGSI Subscriptions belonging to a given Project",
+          "nickname": "V1::NgsiSubscriptions#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -165,15 +150,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::NgsiSubscriptions#create",
-          "method": "post"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -186,24 +162,40 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Subscription not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
               "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Fetches a specific NSGI Subscription",
-          "notes": "This fetches the NSGI Subscription matching the given id",
+          "summary": "Register a new NSGI Subscription",
+          "notes": "This registers a new NSGI Subscription in the given Project",
+          "nickname": "V1::NgsiSubscriptions#create",
+          "method": "post"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -226,15 +218,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::NgsiSubscriptions#show",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -247,29 +230,40 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Subscription not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
-          "summary": "Updates a NSGI Subscription",
-          "notes": "This updates the NSGI Subscription matching the given id",
+          "summary": "Fetches a specific NSGI Subscription",
+          "notes": "This fetches the NSGI Subscription matching the given id",
+          "nickname": "V1::NgsiSubscriptions#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -348,15 +342,6 @@
               "required": false
             }
           ],
-          "nickname": "V1::NgsiSubscriptions#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -369,9 +354,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -379,14 +369,30 @@
               "message": "Subscription not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes a Subscription",
-          "notes": "This deletes the Subscription matching the given id",
+          "summary": "Updates a NSGI Subscription",
+          "notes": "This updates the NSGI Subscription matching the given id",
+          "nickname": "V1::NgsiSubscriptions#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -402,6 +408,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "NgsiSubscription",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Subscription not found"
+            }
+          ],
+          "summary": "Deletes a Subscription",
+          "notes": "This deletes the Subscription matching the given id",
           "nickname": "V1::NgsiSubscriptions#destroy",
           "method": "delete"
         }
@@ -411,36 +446,14 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/register",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "NGSI Subscription not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Registers the Subscription to the Broker",
-          "notes": "This registers this NSGI Subscription to its associated Context Broker",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -463,6 +476,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            }
+          ],
+          "summary": "Registers the Subscription to the Broker",
+          "notes": "This registers this NSGI Subscription to its associated Context Broker",
           "nickname": "V1::NgsiSubscriptions#registerSubscription",
           "method": "get"
         }
@@ -472,36 +514,14 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/activate",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "NGSI Subscription not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Activates the Subscription on the Broker",
-          "notes": "This activates this already registered NSGI Subscription on its associated Context Broker",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -524,6 +544,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            }
+          ],
+          "summary": "Activates the Subscription on the Broker",
+          "notes": "This activates this already registered NSGI Subscription on its associated Context Broker",
           "nickname": "V1::NgsiSubscriptions#activateSubscription",
           "method": "get"
         }
@@ -533,36 +582,14 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/deactivate",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "NGSI Subscription not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Deactivates the Subscription on the Broker",
-          "notes": "This deactivates this already registered NSGI Subscription on its associated Context Broker",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -585,6 +612,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            }
+          ],
+          "summary": "Deactivates the Subscription on the Broker",
+          "notes": "This deactivates this already registered NSGI Subscription on its associated Context Broker",
           "nickname": "V1::NgsiSubscriptions#deactivateSubscription",
           "method": "get"
         }
@@ -594,36 +650,14 @@
       "path": "/v1/projects/{project_id}/ngsi_subscriptions/{id}/remove",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "NGSI Subscription not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Removes the Subscription from the Broker",
-          "notes": "This removes this NSGI Subscription from its associated Context Broker",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -646,6 +680,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "NGSI Subscription not found"
+            }
+          ],
+          "summary": "Removes the Subscription from the Broker",
+          "notes": "This removes this NSGI Subscription from its associated Context Broker",
           "nickname": "V1::NgsiSubscriptions#removeSubscription",
           "method": "get"
         }

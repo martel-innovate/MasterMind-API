@@ -10,16 +10,16 @@ class V1::ClustersController < ApplicationController
   swagger_controller :clusters, "Cluster Management"
 
   def self.add_common_params(api)
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
     api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|
     V1::ClustersController::add_common_params(api)
     summary "Fetches Clusters"
-    notes "This lists all the Clusters belonging to a given Project"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
+    notes "This lists all the Clusters belonging to the given Project"
     param :path, :project_id, :integer, :required, "Project Id"
     response :ok, "Success", :Cluster
   end
@@ -28,7 +28,6 @@ class V1::ClustersController < ApplicationController
     V1::ClustersController::add_common_params(api)
     summary "Fetches a specific Cluster"
     notes "This fetches the Cluster matching the given id"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
     response :ok, "Success", :Actor
@@ -39,7 +38,6 @@ class V1::ClustersController < ApplicationController
     V1::ClustersController::add_common_params(api)
     summary "Register a new Cluster"
     notes "This registers a new Cluster in the given Project"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :form, :name, :string, :required, "A name for the Cluster"
     param :form, :description, :string, :required, "A description for the Cluster"
@@ -55,7 +53,6 @@ class V1::ClustersController < ApplicationController
     V1::ClustersController::add_common_params(api)
     summary "Updates a Cluster"
     notes "This updates the Cluster matching the given id"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
     param :form, :name, :string, :required, "A name for the Cluster"
@@ -73,48 +70,104 @@ class V1::ClustersController < ApplicationController
     V1::ClustersController::add_common_params(api)
     summary "Deletes a Cluster"
     notes "This deletes the Cluster matching the given id"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
     response :ok, "Success", :Actor
     response :not_found, "Cluster not found"
   end
 
+  swagger_api :getSwarm do |api|
+    V1::ClustersController::add_common_params(api)
+    summary "Gets info on the Cluster"
+    notes "This retrieves info on the Swarm Cluster from Docker"
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Cluster Id"
+    response :ok, "Success"
+    response :not_found, "Cluster not found"
+    response :unprocessable_entity, "Could not get the specified Cluster"
+  end
+
+  swagger_api :getNetworks do |api|
+    V1::ClustersController::add_common_params(api)
+    summary "Gets networks on the Cluster"
+    notes "This retrieves the networks on the Swarm Cluster from Docker"
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Cluster Id"
+    response :ok, "Success"
+    response :not_found, "Cluster not found"
+    response :unprocessable_entity, "Could not get networks from the specified Cluster"
+  end
+
+  swagger_api :getVolumes do |api|
+    V1::ClustersController::add_common_params(api)
+    summary "Gets the volumes on the Cluster"
+    notes "This retrieves the volumes on the Swarm Cluster from Docker"
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Cluster Id"
+    response :ok, "Success"
+    response :not_found, "Cluster not found"
+    response :unprocessable_entity, "Could not get volumes from the specified Cluster"
+  end
+
+  swagger_api :createNetwork do |api|
+    V1::ClustersController::add_common_params(api)
+    summary "Creates a network on the Cluster"
+    notes "This creates a new overlay network on the Docker Swarm Cluster"
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Cluster Id"
+    param :form, :network_name, :string, :required, "A name for the network"
+    response :ok, "Success"
+    response :not_found, "Cluster not found"
+    response :unprocessable_entity, "Could not create network on the specified Cluster"
+  end
+
+  swagger_api :createVolume do |api|
+    V1::ClustersController::add_common_params(api)
+    summary "Creates a volume on the Cluster"
+    notes "This creates a new volume on the Docker Swarm Cluster"
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Cluster Id"
+    param :form, :volume_name, :string, :required, "A name for the volume"
+    response :ok, "Success"
+    response :not_found, "Cluster not found"
+    response :unprocessable_entity, "Could not create volume on the specified Cluster"
+  end
+
   swagger_api :deploy do |api|
     V1::ClustersController::add_common_params(api)
     summary "Deploys the Service"
     notes "This deploys the Service on its associated Docker Swarm Cluster"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
-    param :query, :service_id, :string, :required, "ID of the Service to deploy"
-    param :query, :service_name, :string, :required, "Name of the Service to deploy"
+    param :query, :service_id, :string, :required, "ID of the Service's Stack to deploy"
+    param :query, :service_name, :string, :required, "Name of the Service's Stack to deploy"
     response :ok, "Success"
     response :not_found, "Service not found"
+    response :unprocessable_entity, "Could not deploy the specified Service"
   end
 
   swagger_api :getStack do |api|
     V1::ClustersController::add_common_params(api)
     summary "Gets info on the Service from Docker"
     notes "This retrieves info on the Service (defined as a Docker Stack) from Docker"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
-    param :query, :service_name, :string, :required, "Name of the Service"
+    param :query, :service_name, :string, :required, "Name of the Service's Stack"
     response :ok, "Success"
     response :not_found, "Service not found"
+    response :unprocessable_entity, "Could not get the specified Stack"
   end
 
   swagger_api :removeStack do |api|
     V1::ClustersController::add_common_params(api)
     summary "Removes the Service from Docker"
     notes "This undeploys the Service from its associated Docker Swarm Cluster"
-    param :header, 'Authorization', :string, :required, 'Authentication token'
     param :path, :project_id, :integer, :required, "Project Id"
     param :path, :id, :integer, :required, "Cluster Id"
-    param :query, :service_name, :string, :required, "Name of the Service to remove"
+    param :query, :service_name, :string, :required, "Name of the Service's Stack to remove"
     response :ok, "Success"
     response :not_found, "Service not found"
+    response :unprocessable_entity, "Could not remove the specified Stack"
   end
 
   # GET /projects/:project_id/clusters
