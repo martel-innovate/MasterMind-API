@@ -7,7 +7,7 @@ class AuthenticationController < ApplicationController
   swagger_api :authenticate do
     summary "Obtains auth token and redirects to UI endpoint"
     notes "This authenticates an Actor against the API and redirects to UI endpoint with token"
-    param :query, :code, :string, :required, "OAUTH2 Fiware Lab code"
+    param :query, :code, :string, :required, "OAUTH2 Authorization Code Grant from Fiware Lab"
     response :ok, "Success"
     response :forbidden, "This resource cannot be accessed"
   end

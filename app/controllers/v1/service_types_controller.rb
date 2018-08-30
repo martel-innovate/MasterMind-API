@@ -74,11 +74,9 @@ class V1::ServiceTypesController < ApplicationController
 
   swagger_api :updateAll do |api|
     V1::ServiceTypesController::add_common_params(api)
-    summary "Deletes a Service Type"
-    notes "This deletes the Service Type matching the given id"
-    response :ok, "Success", :ServiceType
-    response :not_found, "Service Type not found"
-    response :ok, "Success", :ServiceType
+    summary "Updates Global Catalog"
+    notes "This updates the global, official Catalog from the GitHub repository specified in the MasterMind settings at deploy time"
+    response :ok, "Success"
     response 400, "Invalid Catalog Repository URI or malformed Repository"
   end
 
@@ -90,7 +88,7 @@ class V1::ServiceTypesController < ApplicationController
     param :form, :project_id, :integer, :optional, "The If of the Project to import this Catalog into"
     param :form, :custom_catalog_uri, :string, :optional, "The URI of the Github repo containing the Catalog"
     param :form, :custom_catalog_branch, :string, :optional, "The branch of the Github repo containing the Catalog"
-    response :ok, "Success", :ServiceType
+    response :ok, "Success"
     response 400, "Invalid Catalog Repository URI or malformed Repository"
   end
 

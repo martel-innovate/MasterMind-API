@@ -4,7 +4,7 @@ class V1::ClustersController < ApplicationController
   before_action :set_role
   before_action :set_project_cluster, only: [:show, :update, :destroy, :info, :version,
     :deploy, :deployWithDockerClient, :getNetworks, :createNetwork, :getVolumes,
-    :createVolume, :getSwarm, :getStack, :removeStack]
+    :createVolume, :getClusterInfo, :getStack, :removeStack]
 
   # Swagger specs
   swagger_controller :clusters, "Cluster Management"
@@ -76,7 +76,7 @@ class V1::ClustersController < ApplicationController
     response :not_found, "Cluster not found"
   end
 
-  swagger_api :getSwarm do |api|
+  swagger_api :getClusterInfo do |api|
     V1::ClustersController::add_common_params(api)
     summary "Gets info on the Cluster"
     notes "This retrieves info on the Swarm Cluster from Docker"
@@ -218,9 +218,9 @@ class V1::ClustersController < ApplicationController
     head :no_content
   end
 
-  # GET /projects/:project_id/clusters/:id/getswarm
+  # GET /projects/:project_id/clusters/:id/getclusterinfo
   # Retrieve informations about a given cluster's Swarm
-  def getSwarm
+  def getClusterInfo
     require 'rest_client'
     require 'uri'
 
