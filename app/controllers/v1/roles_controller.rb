@@ -8,9 +8,10 @@ class V1::RolesController < ApplicationController
   swagger_controller :roles, "Roles Management"
 
   def self.add_common_params(api)
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
     api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|
@@ -41,6 +42,9 @@ class V1::RolesController < ApplicationController
     param :path, :project_id, :integer, :required, "Project Id"
     param :form, :actor_id, :integer, :required, "Actor Id"
     param :form, :role_level_id, :integer, :required, "Role Level Id"
+    param :form, :clusters_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
+    param :form, :services_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
+    param :form, :subscriptions_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
     response :ok, "Success", :Role
     response :unprocessable_entity, "Invalid entity provided"
   end
@@ -54,6 +58,9 @@ class V1::RolesController < ApplicationController
     param :path, :id, :integer, :required, "Role Id"
     param :form, :actor_id, :integer, :optional, "Actor Id"
     param :form, :role_level_id, :integer, :optional, "Role Level Id"
+    param :form, :clusters_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
+    param :form, :services_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
+    param :form, :subscriptions_permissions, :boolean, :required, "True if the Role alllows an Actor to create, edit or delete. False if only view"
     response :ok, "Success", :Role
     response :not_found, "Role not found"
     response :unprocessable_entity, "Invalid entity provided"
@@ -68,6 +75,29 @@ class V1::RolesController < ApplicationController
     param :path, :id, :integer, :required, "Role Id"
     response :ok, "Success", :Role
     response :not_found, "Role not found"
+  end
+
+  swagger_api :getProjectActorByRole do |api|
+    V1::RolesController::add_common_params(api)
+    summary "Gets Actor by Role"
+    notes "Gets the Actor corresponding to the given Role"
+    param :header, 'Authorization', :string, :required, 'Authentication token'
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Role Id"
+    response :ok, "Success", :Role
+    response :not_found, "Actor not found"
+  end
+
+  swagger_api :registerRoleByFullname do |api|
+    V1::RolesController::add_common_params(api)
+    summary "Register Actor Role by Fullname"
+    notes "Registers a Role in the given Project for the Actor matching the given Fullname"
+    param :header, 'Authorization', :string, :required, 'Authentication token'
+    param :path, :project_id, :integer, :required, "Project Id"
+    param :path, :id, :integer, :required, "Role Id"
+    param :form, :fullname, :string, :required, "Actor Fullname"
+    response :ok, "Success", :Role
+    response :not_found, "Actor not found"
   end
 
   # GET /projects/:project_id/roles

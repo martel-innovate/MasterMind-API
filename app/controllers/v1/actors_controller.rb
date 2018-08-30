@@ -7,15 +7,16 @@ class V1::ActorsController < ApplicationController
   swagger_controller :actors, "Actors Management"
 
   def self.add_common_params(api)
-    api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
+    api.response :unauthorized, "The actor is not authorized to perform this action"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|
     V1::ActorsController::add_common_params(api)
     summary "Fetches all Actors"
-    notes "This lists all the active actors"
+    notes "This lists all the registered actors"
     response :ok, "Success", :Actor
   end
 
@@ -34,6 +35,7 @@ class V1::ActorsController < ApplicationController
     notes "This creates a new Actor"
     param :form, :fullname, :string, :required, "The full name of the actor"
     param :form, :email, :string, :required, "The Actor's email address"
+    param :form, :superadmin, :boolean, :required, "True if the Actor is a superadmin"
     response :ok, "Success", :Actor
     response :unprocessable_entity, "Invalid entity provided"
   end
@@ -45,6 +47,7 @@ class V1::ActorsController < ApplicationController
     param :path, :id, :integer, :required, "Actor Id"
     param :form, :fullname, :string, :optional, "The full name of the actor"
     param :form, :email, :string, :optional, "The Actor's email address"
+    param :form, :superadmin, :boolean, :required, "True if the Actor is a superadmin"
     response :ok, "Success", :Actor
     response :not_found, "Actor not found"
     response :unprocessable_entity, "Invalid entity provided"
@@ -98,7 +101,7 @@ class V1::ActorsController < ApplicationController
   # Check if current user is superadmin (can alter actors)
   def check_if_superadmin
     if !current_user().superadmin
-      json_response({ message: "Not authorized" }, :unauthorized)
+      json_response({ message: "The actor is not authorized to perform this action" }, :unauthorized)
       return
     end
   end

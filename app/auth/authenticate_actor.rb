@@ -19,7 +19,8 @@ class AuthenticateActor
         :site => oauth_uri
     )
     token = client.auth_code.get_token(code, :redirect_uri => redirect_uri, :headers => {'Authorization' => encodedData})
-    response = token.get('/user', :params => { 'access_token' => token.token })
+    #response = token.get('/user', :params => { 'access_token' => token.token })
+    response = RestClient.get(oauth_uri + '/user?access_token=' + token.token)
     email = JSON.parse(response.body)["email"]
     fullname = JSON.parse(response.body)["displayName"]
     actor = Actor.find_by(email: email)

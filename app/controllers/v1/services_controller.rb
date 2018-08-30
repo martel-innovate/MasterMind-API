@@ -8,9 +8,10 @@ class V1::ServicesController < ApplicationController
   swagger_controller :services, "Service Management"
 
   def self.add_common_params(api)
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
     api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|
@@ -49,6 +50,7 @@ class V1::ServicesController < ApplicationController
     param :form, :service_type_id, :integer, :required, "The id of the Service Type this Service belongs to"
     param :form, :docker_service_id, :string, :required, "The id of the service inside Docker"
     param :form, :cluster_id, :integer, :required, "The id of the Cluster this Service belongs to"
+    param :form, :secured, :boolean, :required, "True if the Service has been secured behind an API Umbrella"
     response :ok, "Success", :Service
     response :unprocessable_entity, "Invalid entity provided"
   end
@@ -70,6 +72,7 @@ class V1::ServicesController < ApplicationController
     param :form, :service_type_id, :integer, :required, "The id of the Service Type this Service belongs to"
     param :form, :docker_service_id, :string, :required, "The id of the service inside Docker"
     param :form, :cluster_id, :integer, :required, "The id of the Cluster this Service belongs to"
+    param :form, :secured, :boolean, :required, "True if the Service has been secured behind an API Umbrella"
     response :ok, "Success", :Service
     response :not_found, "Service not found"
     response :unprocessable_entity, "Invalid entity provided"

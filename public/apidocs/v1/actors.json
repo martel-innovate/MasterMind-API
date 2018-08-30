@@ -8,6 +8,15 @@
       "path": "/v1/actors",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -17,21 +26,21 @@
             {
               "code": 401,
               "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
+              "message": "The actor is not authorized to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
             },
             {
               "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 500,
               "responseModel": null,
               "message": "The provided API token is invalid"
             }
           ],
           "summary": "Fetches all Actors",
-          "notes": "This lists all the active actors",
+          "notes": "This lists all the registered actors",
           "nickname": "V1::Actors#index",
           "method": "get"
         }
@@ -41,36 +50,14 @@
       "path": "/v1/actors",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Actor",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Creates an Actor",
-          "notes": "This creates a new Actor",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "form",
               "name": "fullname",
@@ -84,8 +71,44 @@
               "type": "string",
               "description": "The Actor's email address",
               "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "superadmin",
+              "type": "boolean",
+              "description": "True if the Actor is a superadmin",
+              "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor is not authorized to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            }
+          ],
+          "summary": "Creates an Actor",
+          "notes": "This creates a new Actor",
           "nickname": "V1::Actors#create",
           "method": "post"
         }
@@ -95,6 +118,22 @@
       "path": "/v1/actors/{id}",
       "operations": [
         {
+          "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
+            {
+              "paramType": "path",
+              "name": "id",
+              "type": "integer",
+              "description": "Actor Id",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -104,35 +143,26 @@
             {
               "code": 401,
               "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
+              "message": "The actor is not authorized to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
             },
             {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Actor not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
           "summary": "Fetches a specific Actor",
           "notes": "This fetches the Actor matching the given id",
-          "parameters": [
-            {
-              "paramType": "path",
-              "name": "id",
-              "type": "integer",
-              "description": "Actor Id",
-              "required": true
-            }
-          ],
           "nickname": "V1::Actors#show",
           "method": "get"
         }
@@ -142,41 +172,14 @@
       "path": "/v1/actors/{id}",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Actor",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Actor not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Updates an Actor",
-          "notes": "This updates the Actor matching the given id",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "path",
               "name": "id",
@@ -197,17 +200,15 @@
               "type": "string",
               "description": "The Actor's email address",
               "required": false
+            },
+            {
+              "paramType": "form",
+              "name": "superadmin",
+              "type": "boolean",
+              "description": "True if the Actor is a superadmin",
+              "required": true
             }
           ],
-          "nickname": "V1::Actors#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/actors/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -217,12 +218,17 @@
             {
               "code": 401,
               "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
+              "message": "The actor is not authorized to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
             },
             {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -230,14 +236,30 @@
               "message": "Actor not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes an Actor",
-          "notes": "This deletes the Actor matching the given id",
+          "summary": "Updates an Actor",
+          "notes": "This updates the Actor matching the given id",
+          "nickname": "V1::Actors#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/actors/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "path",
               "name": "id",
@@ -246,6 +268,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Actor",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor is not authorized to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Actor not found"
+            }
+          ],
+          "summary": "Deletes an Actor",
+          "notes": "This deletes the Actor matching the given id",
           "nickname": "V1::Actors#destroy",
           "method": "delete"
         }

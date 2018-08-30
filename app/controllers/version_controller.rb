@@ -8,7 +8,6 @@ class VersionController < ApplicationController
     summary "Obtains MasterMind version"
     notes "This gets the version of MasterMind"
     response :ok, "Success"
-    response :forbidden, "This resource cannot be accessed"
   end
 
   # GET /version

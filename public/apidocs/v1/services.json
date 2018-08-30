@@ -8,31 +8,14 @@
       "path": "/v1/projects/{project_id}/services",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Service",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Fetches Services",
-          "notes": "This lists all the Services belonging to a given Project",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -48,6 +31,30 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Service",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            }
+          ],
+          "summary": "Fetches Services",
+          "notes": "This lists all the Services belonging to a given Project",
           "nickname": "V1::Services#index",
           "method": "get"
         }
@@ -57,36 +64,14 @@
       "path": "/v1/projects/{project_id}/services",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Service",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Register a new Service",
-          "notes": "This registers a new Service in the given Project",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -170,8 +155,44 @@
               "type": "integer",
               "description": "The id of the Cluster this Service belongs to",
               "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "secured",
+              "type": "boolean",
+              "description": "True if the Service has been secured behind an API Umbrella",
+              "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Service",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 422,
+              "responseModel": null,
+              "message": "Invalid entity provided"
+            }
+          ],
+          "summary": "Register a new Service",
+          "notes": "This registers a new Service in the given Project",
           "nickname": "V1::Services#create",
           "method": "post"
         }
@@ -181,36 +202,14 @@
       "path": "/v1/projects/{project_id}/services/{id}",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": "Service",
-              "message": "Success"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "The actor does not have permission to perform this action"
-            },
-            {
-              "code": 403,
-              "responseModel": null,
-              "message": "This resource cannot be accessed"
-            },
-            {
-              "code": 404,
-              "responseModel": null,
-              "message": "Service not found"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
-            }
-          ],
-          "summary": "Fetches a specific Service",
-          "notes": "This fetches the Service matching the given id",
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -233,15 +232,6 @@
               "required": true
             }
           ],
-          "nickname": "V1::Services#show",
-          "method": "get"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/services/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -254,29 +244,40 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
               "responseModel": null,
               "message": "Service not found"
-            },
-            {
-              "code": 422,
-              "responseModel": null,
-              "message": "Invalid entity provided"
-            },
-            {
-              "code": 500,
-              "responseModel": null,
-              "message": "The provided API token is invalid"
             }
           ],
-          "summary": "Updates a Service",
-          "notes": "This updates the Service matching the given id",
+          "summary": "Fetches a specific Service",
+          "notes": "This fetches the Service matching the given id",
+          "nickname": "V1::Services#show",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/services/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -367,17 +368,15 @@
               "type": "integer",
               "description": "The id of the Cluster this Service belongs to",
               "required": true
+            },
+            {
+              "paramType": "form",
+              "name": "secured",
+              "type": "boolean",
+              "description": "True if the Service has been secured behind an API Umbrella",
+              "required": true
             }
           ],
-          "nickname": "V1::Services#update",
-          "method": "patch"
-        }
-      ]
-    },
-    {
-      "path": "/v1/projects/{project_id}/services/{id}",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -390,9 +389,14 @@
               "message": "The actor does not have permission to perform this action"
             },
             {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
               "code": 403,
               "responseModel": null,
-              "message": "This resource cannot be accessed"
+              "message": "The provided API token is invalid"
             },
             {
               "code": 404,
@@ -400,14 +404,30 @@
               "message": "Service not found"
             },
             {
-              "code": 500,
+              "code": 422,
               "responseModel": null,
-              "message": "The provided API token is invalid"
+              "message": "Invalid entity provided"
             }
           ],
-          "summary": "Deletes a Service",
-          "notes": "This deletes the Service matching the given id",
+          "summary": "Updates a Service",
+          "notes": "This updates the Service matching the given id",
+          "nickname": "V1::Services#update",
+          "method": "patch"
+        }
+      ]
+    },
+    {
+      "path": "/v1/projects/{project_id}/services/{id}",
+      "operations": [
+        {
           "parameters": [
+            {
+              "paramType": "header",
+              "name": "Authorization",
+              "type": "string",
+              "description": "Authentication token",
+              "required": true
+            },
             {
               "paramType": "header",
               "name": "Authorization",
@@ -430,6 +450,35 @@
               "required": true
             }
           ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "Service",
+              "message": "Success"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "The actor does not have permission to perform this action"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Signature has expired"
+            },
+            {
+              "code": 403,
+              "responseModel": null,
+              "message": "The provided API token is invalid"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Service not found"
+            }
+          ],
+          "summary": "Deletes a Service",
+          "notes": "This deletes the Service matching the given id",
           "nickname": "V1::Services#destroy",
           "method": "delete"
         }

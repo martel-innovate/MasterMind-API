@@ -5,9 +5,10 @@ class V1::ServiceTypesController < ApplicationController
   swagger_controller :service_types, "Service Types Management"
 
   def self.add_common_params(api)
+    api.param :header, 'Authorization', :string, :required, 'Authentication token'
     api.response :unauthorized, "The actor does not have permission to perform this action"
-    api.response :invalid_token, "The provided API token is invalid"
-    api.response :forbidden, "This resource cannot be accessed"
+    api.response :unauthorized, "Signature has expired"
+    api.response :forbidden, "The provided API token is invalid"
   end
 
   swagger_api :index do |api|
@@ -36,6 +37,9 @@ class V1::ServiceTypesController < ApplicationController
     param :form, :ngsi_version, :string, :required, "The NGSI Version of this Service Type"
     param :form, :configuration_template, :string, :required, "The configuration template (the mastermind.yml file) of this Service Type"
     param :form, :deploy_template, :string, :required, "The deploy template (the docker-compose.yml file) of this Service Type"
+    param :form, :local_path, :string, :required, "The local path of the Service Type's files in MasterMind's API server"
+    param :form, :is_imported, :string, :required, "True if this is a custom Service Type that was imported in a Project"
+    param :form, :project_id, :integer, :required, "The Id of the Project this Service Type belongs to if imported (0 otherwise)"
     response :ok, "Success", :ServiceType
     response :unprocessable_entity, "Invalid entity provided"
   end
@@ -51,6 +55,9 @@ class V1::ServiceTypesController < ApplicationController
     param :form, :ngsi_version, :string, :optional, "The NGSI Version of this Service Type"
     param :form, :configuration_template, :string, :optional, "The configuration template (the mastermind.yml file) of this Service Type"
     param :form, :deploy_template, :string, :optional, "The deploy template (the docker-compose.yml file) of this Service Type"
+    param :form, :local_path, :string, :required, "The local path of the Service Type's files in MasterMind's API server"
+    param :form, :is_imported, :string, :required, "True if this is a custom Service Type that was imported in a Project"
+    param :form, :project_id, :integer, :required, "The Id of the Project this Service Type belongs to if imported (0 otherwise)"
     response :ok, "Success", :ServiceType
     response :not_found, "Service Type not found"
     response :unprocessable_entity, "Invalid entity provided"
@@ -63,6 +70,26 @@ class V1::ServiceTypesController < ApplicationController
     response :ok, "Success", :ServiceType
     param :path, :id, :integer, :required, "Service Type Id"
     response :not_found, "Service Type not found"
+  end
+
+  swagger_api :updateAll do |api|
+    V1::ServiceTypesController::add_common_params(api)
+    summary "Updates Global Catalog"
+    notes "This updates the global, official Catalog from the GitHub repository specified in the MasterMind settings at deploy time"
+    response :ok, "Success"
+    response 400, "Invalid Catalog Repository URI or malformed Repository"
+  end
+
+  swagger_api :importCustomCatalog do |api|
+    V1::ServiceTypesController::add_common_params(api)
+    summary "Deletes a Service Type"
+    notes "This deletes the Service Type matching the given id"
+    response :ok, "Success", :ServiceType
+    param :form, :project_id, :integer, :optional, "The If of the Project to import this Catalog into"
+    param :form, :custom_catalog_uri, :string, :optional, "The URI of the Github repo containing the Catalog"
+    param :form, :custom_catalog_branch, :string, :optional, "The branch of the Github repo containing the Catalog"
+    response :ok, "Success"
+    response 400, "Invalid Catalog Repository URI or malformed Repository"
   end
 
   # GET /service_types

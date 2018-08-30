@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get '/projects/:project_id/registerfullname', to: 'roles#registerRoleByFullname'
 
     # Cluster routes for deploying stacks, removing stacks, getting info
-    get '/projects/:project_id/clusters/:id/getswarm', to: 'clusters#getSwarm'
+    get '/projects/:project_id/clusters/:id/getclusterinfo', to: 'clusters#getClusterInfo'
     get '/projects/:project_id/clusters/:id/getstack', to: 'clusters#getStack'
     get '/projects/:project_id/clusters/:id/getnetworks', to: 'clusters#getNetworks'
     get '/projects/:project_id/clusters/:id/getvolumes', to: 'clusters#getVolumes'

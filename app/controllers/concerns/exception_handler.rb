@@ -13,7 +13,8 @@ module ExceptionHandler
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
     rescue_from ExceptionHandler::MissingToken, with: :not_permitted
     rescue_from ExceptionHandler::InvalidToken, with: :not_permitted
-    rescue_from ExceptionHandler::ExpiredSignature, with: :four_ninety_eight
+    rescue_from ExceptionHandler::ExpiredSignature, with: :unauthorized_request
+    rescue_from JWT::DecodeError, with: :invalid_token
 
     rescue_from ActiveRecord::RecordNotFound do |e|
       json_response({ message: e.message }, :not_found)
@@ -27,11 +28,6 @@ module ExceptionHandler
     json_response({ message: e.message }, :unprocessable_entity)
   end
 
-  # JSON response with message; Status code 498 - expired signature
-  def four_ninety_eight(e)
-    json_response({ message: e.message }, 498)
-  end
-
   # JSON response with message; Status code 401 - Unauthorized
   def unauthorized_request(e)
     json_response({ message: e.message }, :unauthorized)
@@ -40,5 +36,10 @@ module ExceptionHandler
   # JSON response with message; Status code 403 - Forbidden
   def not_permitted(e)
     json_response({ message: e.message }, :forbidden)
+  end
+
+  # JSON response with message; Status code 403 - Forbidden
+  def invalid_token(e)
+    json_response({ message: 'The provided API token is invalid' }, :forbidden)
   end
 end
