@@ -25,6 +25,5 @@ ADD Gemfile /mastermind/Gemfile
 ADD Gemfile.lock /mastermind/Gemfile.lock
 RUN bundle install
 ADD . /mastermind
-RUN git clone https://github.com/martel-innovate/MasterMind-Service-Catalog mastermind-services
 
 ENTRYPOINT sleep 60 && rails db:setup && rails s -b0
